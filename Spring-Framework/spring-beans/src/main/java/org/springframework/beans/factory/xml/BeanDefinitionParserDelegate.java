@@ -412,9 +412,10 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
-		String id = ele.getAttribute(ID_ATTRIBUTE);
-		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
+		String id = ele.getAttribute(ID_ATTRIBUTE);	// 获取bean标签中的id属性
+		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE); // 获取bean标签中的name属性
 
+		// 判断是否有别名（不重要）
 		List<String> aliases = new ArrayList<>();
 		if (StringUtils.hasLength(nameAttr)) {
 			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
@@ -430,10 +431,12 @@ public class BeanDefinitionParserDelegate {
 			}
 		}
 
+		// 检查beanName是否重复（不重要）
 		if (containingBean == null) {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		// 此方法解析并组装BeanDefinition对象，重要程度【5】
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -465,6 +468,8 @@ public class BeanDefinitionParserDelegate {
 				}
 			}
 			String[] aliasesArray = StringUtils.toStringArray(aliases);
+			// 这里将BeanDefinition对象再封装成BeanDefinitionHolder
+			// BeanDefinitionHolder类中包含了BeanDefinition(标签封装对象)，beanName(bean的名称), aliases(别名)等3个属性
 			return new BeanDefinitionHolder(beanDefinition, beanName, aliasesArray);
 		}
 
@@ -512,17 +517,29 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		try {
+			// 创建GenericBeanDefinition对象
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
 
+			// 解析bean标签的属性，并把解析出来的属性设置到BeanDefinition对象中
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
+			// 解析bean中的meta标签  重要程度【1】
 			parseMetaElements(ele, bd);
+
+			// 解析bean中的lookup-method标签  重要程度【2】，可看可不看
 			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
+
+			// 解析bean中的replaced-method标签  重要程度【2】，可看可不看
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
+			// 解析bean中的constructor-arg标签  重要程度【2】，可看可不看
 			parseConstructorArgElements(ele, bd);
+
+			// 解析bean中的property标签  重要程度【2】，可看可不看
 			parsePropertyElements(ele, bd);
+
+			// 此方法，基本用不到
 			parseQualifierElements(ele, bd);
 
 			bd.setResource(this.readerContext.getResource());
@@ -555,7 +572,9 @@ public class BeanDefinitionParserDelegate {
 	 */
 	public AbstractBeanDefinition parseBeanDefinitionAttributes(Element ele, String beanName,
 			@Nullable BeanDefinition containingBean, AbstractBeanDefinition bd) {
+		/* 此方法都是涉及解析标签，将相应的属性封装到BeanDefinition对象的过程。此bean标签的相应属性使用案例详情mz-learning-springsource工程 */
 
+		// 设置bean标签中的scope属性
 		if (ele.hasAttribute(SINGLETON_ATTRIBUTE)) {
 			error("Old 1.x 'singleton' attribute in use - upgrade to 'scope' declaration", ele);
 		}
@@ -639,6 +658,7 @@ public class BeanDefinitionParserDelegate {
 	protected AbstractBeanDefinition createBeanDefinition(@Nullable String className, @Nullable String parentName)
 			throws ClassNotFoundException {
 
+		// 调用BeanDefinitionReaderUtils工具类静态方法，创建BeanDefinition对象（子类GenericBeanDefinition）
 		return BeanDefinitionReaderUtils.createBeanDefinition(
 				parentName, className, this.readerContext.getBeanClassLoader());
 	}
@@ -728,11 +748,14 @@ public class BeanDefinitionParserDelegate {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node node = nl.item(i);
 			if (isCandidateElement(node) && nodeNameEquals(node, LOOKUP_METHOD_ELEMENT)) {
+				// 强行lookup-method标签
 				Element ele = (Element) node;
 				String methodName = ele.getAttribute(NAME_ATTRIBUTE);
 				String beanRef = ele.getAttribute(BEAN_ELEMENT);
+				// LookupOverride继承了抽象类MethodOverride
 				LookupOverride override = new LookupOverride(methodName, beanRef);
 				override.setSource(extractSource(ele));
+				// 将封装好的MethodOverride(即LookupOverride)对象放到MethodOverrides的set集合中
 				overrides.addOverride(override);
 			}
 		}
@@ -749,10 +772,13 @@ public class BeanDefinitionParserDelegate {
 				Element replacedMethodEle = (Element) node;
 				String name = replacedMethodEle.getAttribute(NAME_ATTRIBUTE);
 				String callback = replacedMethodEle.getAttribute(REPLACER_ATTRIBUTE);
+
+				// 一个replaced-method标签封装成一个ReplaceOverride对象，最后加入到BeanDefinition对象中
 				ReplaceOverride replaceOverride = new ReplaceOverride(name, callback);
 				// Look for arg-type match elements.
 				List<Element> argTypeEles = DomUtils.getChildElementsByTagName(replacedMethodEle, ARG_TYPE_ELEMENT);
 				for (Element argTypeEle : argTypeEles) {
+					// 根据方法参数类型来区分同名的不同的方法
 					String match = argTypeEle.getAttribute(ARG_TYPE_MATCH_ATTRIBUTE);
 					match = (StringUtils.hasText(match) ? match : DomUtils.getTextValue(argTypeEle));
 					if (StringUtils.hasText(match)) {
@@ -794,6 +820,7 @@ public class BeanDefinitionParserDelegate {
 							error("Ambiguous constructor-arg entries for index " + index, ele);
 						}
 						else {
+							// 获取BeanDefinition对象中的ConstructorArgumentValues属性，封装<constructor-arg>标签数据
 							bd.getConstructorArgumentValues().addIndexedArgumentValue(index, valueHolder);
 						}
 					}
@@ -842,9 +869,11 @@ public class BeanDefinitionParserDelegate {
 				return;
 			}
 			Object val = parsePropertyValue(ele, bd, propertyName);
+			// 将<property>标签的name与value属性封装到PropertyValue对象中
 			PropertyValue pv = new PropertyValue(propertyName, val);
 			parseMetaElements(ele, pv);
 			pv.setSource(extractSource(ele));
+			// 获取BeanDefinition对象的MutablePropertyValues属性，用于封装<property>标签的数据，将PropertyValue对象设置到集合中
 			bd.getPropertyValues().addPropertyValue(pv);
 		}
 		finally {
@@ -1375,13 +1404,16 @@ public class BeanDefinitionParserDelegate {
 
 		BeanDefinitionHolder finalDefinition = definitionHolder;
 
+		// 根据bean标签属性装饰BeanDefinitionHolder，比如<bean class="xx" p:username="moon"/>
 		// Decorate based on custom attributes first.
 		NamedNodeMap attributes = ele.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node node = attributes.item(i);
+			// 循环标签中p/c前缀的属性，使用装饰者设计模式进去包装
 			finalDefinition = decorateIfRequired(node, finalDefinition, containingBd);
 		}
 
+		// 根据bean标签子元素装饰BeanDefinitionHolder
 		// Decorate based on custom nested elements.
 		NodeList children = ele.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
@@ -1396,10 +1428,14 @@ public class BeanDefinitionParserDelegate {
 	public BeanDefinitionHolder decorateIfRequired(
 			Node node, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
 
+		// 根据node获取到node的命名空间，形如：http://www.springframework.org/schema/p
 		String namespaceUri = getNamespaceURI(node);
 		if (namespaceUri != null && !isDefaultNamespace(namespaceUri)) {
+			// 这里有SPI服务发现的思想，根据配置文件获取namespaceUri对应的处理类
 			NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
 			if (handler != null) {
+				// 调用NamespaceHandler处理类的decorate方法，开始具体装饰过程，并返回装饰后的对象
+				// 对应的处理类是：org.springframework.beans.factory.xml.SimplePropertyNamespaceHandler
 				BeanDefinitionHolder decorated =
 						handler.decorate(node, originalDef, new ParserContext(this.readerContext, this, containingBd));
 				if (decorated != null) {

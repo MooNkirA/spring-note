@@ -53,6 +53,7 @@ public interface NamespaceHandler {
 	 * construction but before any custom elements are parsed.
 	 * @see NamespaceHandlerSupport#registerBeanDefinitionParser(String, BeanDefinitionParser)
 	 */
+	/* 这个接口方法重要程度【5】，关注相关实现类的实现 */
 	void init();
 
 	/**
@@ -69,6 +70,7 @@ public interface NamespaceHandler {
 	 * @param parserContext the object encapsulating the current state of the parsing process
 	 * @return the primary {@code BeanDefinition} (can be {@code null} as explained above)
 	 */
+	/* 这个接口方法重要程度【5】，关注相关实现类的实现 */
 	@Nullable
 	BeanDefinition parse(Element element, ParserContext parserContext);
 
@@ -91,6 +93,7 @@ public interface NamespaceHandler {
 	 * A {@code null} value is strictly speaking invalid, but will be leniently
 	 * treated like the case where the original bean definition gets returned.
 	 */
+	/* 这个接口方法重要程度【2】，了解相关实现类的实现 */
 	@Nullable
 	BeanDefinitionHolder decorate(Node source, BeanDefinitionHolder definition, ParserContext parserContext);
 

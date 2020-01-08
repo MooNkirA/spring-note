@@ -170,6 +170,7 @@ public abstract class PropertiesLoaderUtils {
 	 * @throws IOException if loading failed
 	 */
 	public static Properties loadAllProperties(String resourceName, @Nullable ClassLoader classLoader) throws IOException {
+		// resourceName是写死的"META-INF/spring.handlers"
 		Assert.notNull(resourceName, "Resource name must not be null");
 		ClassLoader classLoaderToUse = classLoader;
 		if (classLoaderToUse == null) {
@@ -178,10 +179,12 @@ public abstract class PropertiesLoaderUtils {
 		Enumeration<URL> urls = (classLoaderToUse != null ? classLoaderToUse.getResources(resourceName) :
 				ClassLoader.getSystemResources(resourceName));
 		Properties props = new Properties();
+		// 循环文件中的key-value元素
 		while (urls.hasMoreElements()) {
 			URL url = urls.nextElement();
 			URLConnection con = url.openConnection();
 			ResourceUtils.useCachesIfNecessary(con);
+			// 通过文件流读取文件的数据
 			InputStream is = con.getInputStream();
 			try {
 				if (resourceName.endsWith(XML_FILE_EXTENSION)) {

@@ -861,6 +861,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	public MethodOverrides getMethodOverrides() {
 		if (this.methodOverrides == null) {
+			// 如果此封装子标签的set集合为空，则创建
 			this.methodOverrides = new MethodOverrides();
 		}
 		return this.methodOverrides;

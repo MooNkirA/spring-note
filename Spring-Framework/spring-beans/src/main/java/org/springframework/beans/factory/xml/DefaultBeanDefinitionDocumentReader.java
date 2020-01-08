@@ -127,6 +127,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
 		BeanDefinitionParserDelegate parent = this.delegate;
+		// 这里创建标签解析的委托对象（解析子标签的？）
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
 		if (this.delegate.isDefaultNamespace(root)) {
@@ -168,18 +169,20 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * @param root the DOM root element of the document
 	 */
 	protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) {
+		// 循环整个xml配置文件的根节点，即<beans>标签，解析根节点下的每一个标签
 		if (delegate.isDefaultNamespace(root)) {
 			NodeList nl = root.getChildNodes();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
 				if (node instanceof Element) {
 					Element ele = (Element) node;
+					// 通过判断是否有namespace的uri，如果没有即是默认标签，有的话则是自定义标签
 					if (delegate.isDefaultNamespace(ele)) {
-						// 默认标签解析
+						// 默认标签解析，如："import", "alias", "bean"等标签
 						parseDefaultElement(ele, delegate);
 					}
 					else {
-						// 自定义标签解析
+						// 自定义标签解析，有前缀的标签，如：context:component-scan等
 						delegate.parseCustomElement(ele);
 					}
 				}
@@ -310,10 +313,11 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		// 重点看这个方法，重要程度【5】，解析document，封装成BeanDefinition
+		// 重点看这个方法，重要程度【5】，解析document，封装成BeanDefinition对象(会将BeanDefinition对象再封装成BeanDefinitionHolder对象)
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
-			// 该方法功能不重要，重点理解一下此方法使用的装饰者设计模式，加上SPI设计思想
+			// 该方法功能不重要，是用于解析p与c空间名称前缀标签，重点理解一下此方法使用的装饰者设计模式，加上SPI设计思想
+			// 这方法的作用是对BeanDefinitionHolder对象进行装饰增强，将自定义标签解析后封装成PropertyValue对象，添加到MutablePropertyValues集合中
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
 				// 完成document到BeanDefinition对象转换后，对BeanDefinition对象进行缓存注册
