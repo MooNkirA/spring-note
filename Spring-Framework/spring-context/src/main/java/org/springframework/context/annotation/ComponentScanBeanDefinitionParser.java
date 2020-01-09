@@ -77,16 +77,31 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String FILTER_EXPRESSION_ATTRIBUTE = "expression";
 
 
+	/*
+	 * 此解析类的parse方法主要需要处理的逻辑如下：
+	 * 	1. 扫描标签设置的“base-package”属性的包路径，所有.class后缀的文件
+	 * 	2. 要判断类上是否有注解
+	 * 	3. 将有注解的类包装成BeanDefinition对象
+	 * 		GenericBeanDefinition genericBeanDefinition = new GenericBeanDefinition();
+	 * 		genericBeanDefinition.setBeanClass(Xxxx.class);
+	 * 	4. 完成beanDefinition对象注册到spring容器中
+	 */
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 获取标签设置的“base-package”属性的值
 		String basePackage = element.getAttribute(BASE_PACKAGE_ATTRIBUTE);
 		basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
+
+		// “base-package”可以使用逗号分隔，配置多个扫描的包路径
 		String[] basePackages = StringUtils.tokenizeToStringArray(basePackage,
 				ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 
 		// Actually scan for bean definitions and register them.
+		// 创建注解扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
+
+		// 扫描并将扫描的类封装成BeanDefinition对象。核心方法，重要程度【5】
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
@@ -94,12 +109,16 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	protected ClassPathBeanDefinitionScanner configureScanner(ParserContext parserContext, Element element) {
+		// 使用默认的过滤器，默认就是扫描spring框架的@Service @Component等注解
 		boolean useDefaultFilters = true;
+		// 判断是否有配置“use-default-filters”属性
 		if (element.hasAttribute(USE_DEFAULT_FILTERS_ATTRIBUTE)) {
+			// 使用xml文件中配置“use-default-filters”的值
 			useDefaultFilters = Boolean.valueOf(element.getAttribute(USE_DEFAULT_FILTERS_ATTRIBUTE));
 		}
 
 		// Delegate bean definition registration to scanner class.
+		// 创建注解的扫描器
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
 		scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
 		scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
@@ -128,6 +147,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) {
+		// 创建ClassPathBeanDefinitionScanner扫描器
 		return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters,
 				readerContext.getEnvironment(), readerContext.getResourceLoader());
 	}

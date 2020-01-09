@@ -70,7 +70,9 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 根据标签元素去查找相应的解析类
 		BeanDefinitionParser parser = findParserForElement(element, parserContext);
+		// 获取解析类后，调用parse方法，将标签解析到BeanDefinition对象
 		return (parser != null ? parser.parse(element, parserContext) : null);
 	}
 
@@ -80,7 +82,9 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	 */
 	@Nullable
 	private BeanDefinitionParser findParserForElement(Element element, ParserContext parserContext) {
+		// 获取当前元素的标签名称
 		String localName = parserContext.getDelegate().getLocalName(element);
+		// 根据标签名称从类属性parsers的map集合中获取相应的解析类。（注：在spring.handlers配置中，相应处理类的init方法中进行解析类的注册，放到parsers属性中）
 		BeanDefinitionParser parser = this.parsers.get(localName);
 		if (parser == null) {
 			parserContext.getReaderContext().fatal(

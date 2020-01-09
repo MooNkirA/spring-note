@@ -1381,17 +1381,25 @@ public class BeanDefinitionParserDelegate {
 		return parseCustomElement(ele, null);
 	}
 
+	/* 自定义标签与默认标签的解析逻辑流程是一样的 */
 	@Nullable
 	public BeanDefinition parseCustomElement(Element ele, @Nullable BeanDefinition containingBd) {
+		// 获取自定义标签的namespaceUri
 		String namespaceUri = getNamespaceURI(ele);
 		if (namespaceUri == null) {
 			return null;
 		}
+		// 通过uri获取相应的处理类进行标签的解析
 		NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
 		if (handler == null) {
 			error("Unable to locate Spring NamespaceHandler for XML schema namespace [" + namespaceUri + "]", ele);
 			return null;
 		}
+		/*
+		 * 调用相关处理类的parse方法。这里与默认标签解析的区别是：
+		 *   默认标签解析在返回处理类后，会调用 handler.decorate(node, originalDef, new ParserContext(this.readerContext, this, containingBd)); 装饰方法，
+		 *   而自定义标签解析返回处理类后，直接调用 handler.parse(ele, new ParserContext(this.readerContext, this, containingBd)); 标签解析方法
+		 */
 		return handler.parse(ele, new ParserContext(this.readerContext, this, containingBd));
 	}
 
@@ -1435,7 +1443,7 @@ public class BeanDefinitionParserDelegate {
 			NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
 			if (handler != null) {
 				// 调用NamespaceHandler处理类的decorate方法，开始具体装饰过程，并返回装饰后的对象
-				// 对应的处理类是：org.springframework.beans.factory.xml.SimplePropertyNamespaceHandler
+				// 例如：http\://www.springframework.org/schema/p，对应的处理类是：org.springframework.beans.factory.xml.SimplePropertyNamespaceHandler
 				BeanDefinitionHolder decorated =
 						handler.decorate(node, originalDef, new ParserContext(this.readerContext, this, containingBd));
 				if (decorated != null) {
