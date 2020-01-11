@@ -80,7 +80,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	/*
 	 * 此解析类的parse方法主要需要处理的逻辑如下：
 	 * 	1. 扫描标签设置的“base-package”属性的包路径，所有.class后缀的文件
-	 * 	2. 要判断类上是否有注解
+	 * 	2. 将第1步扫描出来的文件所有相关信息都封装到一个Metadata对象中，再去判断扫描到的类上是否有注解
 	 * 	3. 将有注解的类包装成BeanDefinition对象
 	 * 		GenericBeanDefinition genericBeanDefinition = new GenericBeanDefinition();
 	 * 		genericBeanDefinition.setBeanClass(Xxxx.class);
@@ -101,8 +101,13 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		// 创建注解扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
 
-		// 扫描并将扫描的类封装成BeanDefinition对象。核心方法，重要程度【5】
+		// 进行扫描，并将扫描到的类封装成BeanDefinition对象。核心方法，重要程度【5】
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
+
+		/*
+		 * 注册一些XxxBeanPostProcessor类，是用于使用注解DI依赖注入（如@Autowired、@Value等） 重要程度【5】
+		 *   如：ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等
+		 */
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
 		return null;
@@ -120,6 +125,8 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		// Delegate bean definition registration to scanner class.
 		// 创建注解的扫描器
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
+		// ========以下代码不是很重要 start =============
+		// 以下都是去解析封装<context:component-scan>标签中的其他属性，但这些属性几乎用不上
 		scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
 		scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
 
@@ -140,14 +147,17 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		catch (Exception ex) {
 			parserContext.getReaderContext().error(ex.getMessage(), parserContext.extractSource(element), ex.getCause());
 		}
+		// ========以上代码不是很重要 end =============
 
+		// 解析<context:exclude-filter>与<context:include-filter>两个子标签，将配置包含与不包含的过滤器分别加入
+		// ClassPathScanningCandidateComponentProvider类的 List<TypeFilter> excludeFilters 与 List<TypeFilter> includeFilters 属性中
 		parseTypeFilters(element, scanner, parserContext);
 
 		return scanner;
 	}
 
 	protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) {
-		// 创建ClassPathBeanDefinitionScanner扫描器
+		// 创建ClassPathBeanDefinitionScanner扫描器（扩展：mybatis框架也使用此类，继承并扩展，使用它去扫描@Mapper注解）
 		return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters,
 				readerContext.getEnvironment(), readerContext.getResourceLoader());
 	}
@@ -168,6 +178,8 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 			annotationConfig = Boolean.valueOf(element.getAttribute(ANNOTATION_CONFIG_ATTRIBUTE));
 		}
 		if (annotationConfig) {
+			// 此方法注册了几个比较重要的BeanPostProcessor类
+			// 如：AutowiredAnnotationBeanPostProcessor, ConfigurationClassPostProcessor, CommonAnnotationBeanPostProcessor
 			Set<BeanDefinitionHolder> processorDefinitions =
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {
