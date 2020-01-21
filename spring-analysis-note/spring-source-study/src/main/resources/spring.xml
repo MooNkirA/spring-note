@@ -1,0 +1,113 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:moon="http://www.moon.com/schema/mytags"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.moon.com/schema/mytags
+       http://www.moon.com/schema/mytags.xsd">
+
+    <!-- 带前缀的标签为自定义标签
+            配置此标签，spinrg才能扫描到相关的如@Controller, @Service, @Component等注解
+     -->
+    <context:component-scan base-package="com.moon.spring"/>
+
+    <!-- 传统标签 -->
+    <bean class="com.moon.spring.bean.Student" id="student"/>
+
+    <!--
+        抽象属性abstract使用示例，比较少用
+        此案例中，实际上Parent类与Son类是没有继承关系的，但通过配置此标签，使用Son类与Parent类有继承关系
+        如果将Son类中的username属性注释，也会继承父类中的username属性
+        注：以下在解析过程中是这两个不同的BeanDefinition对象，但会在实例化过程中合并成一个
+     -->
+    <bean id="parent" class="com.moon.spring.bean.Parent" abstract="true">
+        <property name="username" value="parent name"/>
+    </bean>
+    <bean id="son" class="com.moon.spring.bean.Son">
+        <!--<property name="username" value="son name"/>-->
+        <property name="age" value="18"/>
+    </bean>
+
+    <!--
+         autowire-candidate属性测试：在UserServiceImpl类中注入测试
+         primary属性测试：配置@Primary注解，优先选择指定某个实现类进去注入
+     -->
+    <bean class="com.moon.spring.service.AccountServiceImpl" id="accountService"
+          autowire-candidate="false" scope="singleton" primary="true"/>
+
+
+    <bean class="com.moon.spring.bean.FactoryBean" id="factoryBean">
+        <!--<description>com.moon.springctoryBean</description>-->
+        <meta key="key1" value="value1"/>
+    </bean>
+
+    <!--
+        init-method 属性与 destroy-method 属性测试
+            就是定义bean创建与销毁时需要执行的方法
+    -->
+    <!--<bean class="com.moon.springopertyClass" id="propertyClass"
+       init-method="initMehtod" destroy-method="destroyMethod" />-->
+
+    <!--
+       factory-bean 属性与 factory-method 属性测试
+        即是将PropertyClass实例化的操作不交给spring去管理，而通过FactoryBean这个类去进行PropertyClass的实例化，此时class属性失效
+        注：spring框架有这种功能，但没有什么应用场景
+    -->
+    <bean class="com.moon.spring.bean.PropertyClass" id="propertyClass"
+          factory-bean="factoryBean" factory-method="factoryMethod"/>
+
+
+    <!--
+        lookup-method子标签测试
+            相当于调用某个方法返回一个接口（如：getPeople()方法返回People对象）
+            通过lookup-method属性可以指定bean的值，返回的接口所对应的实现类对象（即此处返回了Woman这个实现类）
+     -->
+    <bean id="woman" class="com.moon.spring.bean.Woman" lazy-init="false"/>
+    <bean id="people" class="com.moon.spring.bean.ShowSixClass">
+        <lookup-method name="getPeople" bean="woman"/>
+    </bean>
+
+    <!--
+        replaced-method子标签测试
+           指定一个类实现MethodReplacer接口，设置需要替换的方法名name属性，与方法的参数arg-type子标签，替换原来的方法
+     -->
+    <bean id="replaceClass" class="com.moon.spring.bean.ReplaceClass" lazy-init="false"/>
+    <bean id="originClass" class="com.moon.spring.bean.OriginClass">
+        <replaced-method name="replaceMethod" replacer="replaceClass">
+            <!-- 方法可能出现重载的情况，所以需要根据类型和方法名去准确定位到方法 -->
+            <arg-type match="java.lang.String"/>
+        </replaced-method>
+    </bean>
+
+    <!-- constructor-arg子标签测试（现在几乎不使用） -->
+    <bean class="com.moon.spring.bean.ConstructorArgBean" id="constructorArgBean">
+        <constructor-arg name="username" value="moon" index="0" type="java.lang.String"/>
+        <constructor-arg name="password" value="123" index="1" type="java.lang.String"/>
+    </bean>
+    <!-- property子标签测试（此方式几乎不使用，直接使用@Value实现） -->
+    <bean class="com.moon.spring.bean.PropertyBean" id="propertyBean">
+        <property name="username" value="Jack"/>
+        <property name="password" value="123"/>
+    </bean>
+
+    <!--
+        使用p/c空间名称去封装装饰bean，
+            p空间名称前缀标签是用于替换<property>标签方式
+            c空间名称前缀标签是用于替换<constructor-arg>标签方式
+     -->
+    <bean class="com.moon.spring.bean.DecoratorBean" id="decoratorBean"
+          p:username="Jack" p:password="123" c:age="12" c:sex="1"/>
+
+    <!-- 自定义标签 -->
+    <moon:redis id="redis" ip="127.0.0.1" port="6379"/>
+
+
+</beans>
