@@ -94,7 +94,7 @@
     </bean>
     <!-- property子标签测试（此方式几乎不使用，直接使用@Value实现） -->
     <bean class="com.moon.spring.bean.PropertyBean" id="propertyBean">
-        <property name="username" value="Jack"/>
+        <property name="username" value="MoonZero"/>
         <property name="password" value="123"/>
     </bean>
 
@@ -104,7 +104,7 @@
             c空间名称前缀标签是用于替换<constructor-arg>标签方式
      -->
     <bean class="com.moon.spring.bean.DecoratorBean" id="decoratorBean"
-          p:username="Jack" p:password="123" c:age="12" c:sex="1"/>
+          p:username="Moon" p:password="123" c:age="12" c:sex="1"/>
 
     <!-- 自定义标签 -->
     <moon:redis id="redis" ip="127.0.0.1" port="6379"/>

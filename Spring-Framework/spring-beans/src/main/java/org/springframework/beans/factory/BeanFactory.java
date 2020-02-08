@@ -113,6 +113,7 @@ import org.springframework.lang.Nullable;
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
+/* Spring框架中，所有对Bean相关操作，都可以在BeanFactory里实现 */
 public interface BeanFactory {
 
 	/**

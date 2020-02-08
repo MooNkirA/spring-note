@@ -6,6 +6,7 @@ import com.moon.spring.bean.OriginClass;
 import com.moon.spring.bean.PropertyClass;
 import com.moon.spring.bean.ShowSixClass;
 import com.moon.spring.bean.Student;
+import com.moon.spring.beanDefinition.BeanClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

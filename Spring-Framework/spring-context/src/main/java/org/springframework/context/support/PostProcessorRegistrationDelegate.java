@@ -100,26 +100,29 @@ final class PostProcessorRegistrationDelegate {
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
 
-			// 调用过程
+			// 调用过程（调用postProcessBeanDefinitionRegistry方法）
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
-			currentRegistryProcessors.clear();
+			currentRegistryProcessors.clear(); // 将存放BeanDefinitionRegistryPostProcessor接口实现类的容器清空
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
+			// 对实现Ordered排序接口的类调用（与上面逻辑一样）
 			postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
-				// 判断是否是实现的Ordered接口
+				// 判断是否是实现的Ordered接口，该接口也是用于排序。PriorityOrdered接口继承于Ordered接口
 				if (!processedBeans.contains(ppName) && beanFactory.isTypeMatch(ppName, Ordered.class)) {
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
 					processedBeans.add(ppName);
 				}
 			}
+			// 对BeanDefinitionRegistryPostProcessor接口的实现类进行排序
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
+			// 调用过程（调用postProcessBeanDefinitionRegistry方法）
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();
 
 			// Finally, invoke all other BeanDefinitionRegistryPostProcessors until no further ones appear.
-			// 对没实现排序接口的类调用
+			// 对没实现任何排序接口的类调用（与上面逻辑一样）
 			boolean reiterate = true;
 			while (reiterate) {
 				reiterate = false;
@@ -292,6 +295,7 @@ final class PostProcessorRegistrationDelegate {
 	private static void invokeBeanDefinitionRegistryPostProcessors(
 			Collection<? extends BeanDefinitionRegistryPostProcessor> postProcessors, BeanDefinitionRegistry registry) {
 
+		// 循环实现了BeanDefinitionRegistryPostProcessor接口的类，调用postProcessBeanDefinitionRegistry方法
 		for (BeanDefinitionRegistryPostProcessor postProcessor : postProcessors) {
 			postProcessor.postProcessBeanDefinitionRegistry(registry);
 		}
