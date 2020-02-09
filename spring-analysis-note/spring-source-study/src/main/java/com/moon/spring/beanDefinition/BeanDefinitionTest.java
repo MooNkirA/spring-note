@@ -52,8 +52,15 @@ public class BeanDefinitionTest implements BeanDefinitionRegistryPostProcessor, 
         scanner.scan("com.moon.spring");
     }
 
+    /**
+     * 此方法是父接口BeanFactoryPostProcessor的方法
+     *
+     * @param beanFactory
+     * @throws BeansException
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        /* BeanFactory 对象一样可以拿到所有的BeanDefinition对象 */
     }
 
     @Override
