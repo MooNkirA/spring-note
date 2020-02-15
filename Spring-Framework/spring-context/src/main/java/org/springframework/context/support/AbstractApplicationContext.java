@@ -578,12 +578,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Initialize other special beans in specific context subclasses.
 				onRefresh();
 
-				// 往事件管理类中注册事件类
+				// 往事件管理类中注册事件类，与initApplicationEventMulticaster()是成对出现的
 				// Check for listener beans and register them.
 				registerListeners();
 
 				/*
-				 * 此氷地是spring中最重要的方法（没有之一），重要程度【5】。
+				 * 此方法是spring中最重要的方法（没有之一），重要程度【5】。
 				 * 所以一定要理解要具体看，具体作用如下：
 				 * 		1. bean实例化过程
 				 * 		2. ioc
@@ -883,6 +883,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * initializing all remaining singleton beans.
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+		// 设置类型转换器（暂时未研究）
 		// Initialize conversion service for this context.
 		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
 				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
@@ -890,6 +891,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
 		}
 
+		// 暂时未研究
 		// Register a default embedded value resolver if no bean post-processor
 		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
@@ -897,6 +899,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 
+		// 暂时未研究
 		// Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
 		String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
 		for (String weaverAwareName : weaverAwareNames) {
@@ -909,6 +912,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Allow for caching all bean definition metadata, not expecting further changes.
 		beanFactory.freezeConfiguration();
 
+		// 此方法为重点，重要程度【5】
 		// Instantiate all remaining (non-lazy-init) singletons.
 		beanFactory.preInstantiateSingletons();
 	}

@@ -293,7 +293,7 @@ class ConstructorResolver {
 			InstantiationStrategy strategy = this.beanFactory.getInstantiationStrategy();
 			if (System.getSecurityManager() != null) {
 				return AccessController.doPrivileged((PrivilegedAction<Object>) () ->
-						strategy.instantiate(mbd, beanName, this.beanFactory, constructorToUse, argsToUse),
+						strategy.instantiate(mbd, beanName, this.beanFactory, constructorToUse, argsToUse), // 反射调用过程
 						this.beanFactory.getAccessControlContext());
 			}
 			else {
@@ -389,6 +389,7 @@ class ConstructorResolver {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"factory-bean reference points back to the same bean definition");
 			}
+			// 如果配置了factory-bean属性，则先实例此factoryBean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
@@ -403,6 +404,7 @@ class ConstructorResolver {
 						"bean definition declares neither a bean class nor a factory-bean reference");
 			}
 			factoryBean = null;
+			// 如果没有配置factory-bean属性，则factoryBean Class类对象
 			factoryClass = mbd.getBeanClass();
 			isStatic = true;
 		}
@@ -427,6 +429,7 @@ class ConstructorResolver {
 				}
 			}
 			if (argsToResolve != null) {
+				// 对方法参数的解析，获取参数列表，再一个个去判断参数类型，还要判断参数上是否有注解，比较难理解。暂时未研究
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve, true);
 			}
 		}
@@ -604,7 +607,11 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved factory method arguments");
-		bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, factoryMethodToUse, argsToUse));
+		// 将获取的bean实例包装到BeanWrapperImpl对象中
+		bw.setBeanInstance(
+				// 完成反射调用，重要程度【5】
+				instantiate(beanName, mbd, factoryBean, factoryMethodToUse, argsToUse)
+		);
 		return bw;
 	}
 

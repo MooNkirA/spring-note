@@ -243,8 +243,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
+		// 从缓存中拿实例
 		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
+		// 如果缓存里面能拿到实例
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
 				if (isSingletonCurrentlyInCreation(beanName)) {
@@ -255,16 +257,21 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			// 这个方法是FactoryBean接口的调用入口
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
 		else {
+			/* 如果singletonObjects缓存里面没有相应实例，则执行此分支逻辑 */
+
+			// 如果bean的scope属性是Prototype（多例）的，校验是否有出现循环依赖，如果有则直接报错
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
 
+			// 校验是否为父类容器，重要程度【1】。暂不研究
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
@@ -292,9 +299,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
+				// 合并父子对象
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+				// 校验需要实例的bean是否为抽象类
 				checkMergedBeanDefinition(mbd, beanName, args);
 
+				// 获取依赖对象属性，依赖对象要先实例化
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
@@ -305,6 +315,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 						registerDependentBean(dep, beanName);
 						try {
+							// 将配置的“depends-on”属性的bean先实例化，这里是递归调用，保证一层层往上的“depends-on”的bean先实例化
 							getBean(dep);
 						}
 						catch (NoSuchBeanDefinitionException ex) {
@@ -316,8 +327,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					// 此逻辑是重点，因为大部分情况都是单例的
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 创建bean实例核心逻辑
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
@@ -328,10 +341,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							throw ex;
 						}
 					});
+					// 此方法是FactoryBean接口的调用入口
 					bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
 
 				else if (mbd.isPrototype()) {
+					/* 多例的bean实例化 */
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
@@ -341,10 +356,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					finally {
 						afterPrototypeCreation(beanName);
 					}
+					// 此方法是FactoryBean接口的调用入口
 					bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
 				}
 
 				else {
+					/* 其他作用范围的bean */
 					String scopeName = mbd.getScope();
 					final Scope scope = this.scopes.get(scopeName);
 					if (scope == null) {
@@ -360,6 +377,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 								afterPrototypeCreation(beanName);
 							}
 						});
+						// 此方法是FactoryBean接口的调用入口
 						bean = getObjectForBeanInstance(scopedInstance, name, beanName, mbd);
 					}
 					catch (IllegalStateException ex) {
@@ -1259,6 +1277,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			if (mbd == null) {
+				// 获取parentName，如果不为空，则代表有父类标签，需要进行合并
 				if (bd.getParentName() == null) {
 					// Use copy of given root bean definition.
 					if (bd instanceof RootBeanDefinition) {
@@ -1274,6 +1293,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					try {
 						String parentBeanName = transformedBeanName(bd.getParentName());
 						if (!beanName.equals(parentBeanName)) {
+							// 递归查找父类
 							pbd = getMergedBeanDefinition(parentBeanName);
 						}
 						else {

@@ -810,22 +810,33 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return (this.configurationFrozen || super.isBeanEligibleForMetadataCaching(beanName));
 	}
 
+	/**
+	 * 此方法是具体实例化过程
+	 *
+	 * @throws BeansException
+	 */
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
 		if (logger.isTraceEnabled()) {
 			logger.trace("Pre-instantiating singletons in " + this);
 		}
 
+		/* 在分析xml解析时研究过，就是所有beanDefinition对象对应的beanName都缓存到beanDefinitionNames容器中 */
 		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
 		for (String beanName : beanNames) {
+			// 把父BeanDefinition里面的属性拿到子BeanDefinition中，相当于涉及两个BeanDefinition的合并
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+
+			// 如果配置的bean不是抽象的，单例的，非懒加载的就实例化
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
+
+					// 判断bean是否实现了FactoryBean接口，暂时未研究
 					if (bean instanceof FactoryBean) {
 						final FactoryBean<?> factory = (FactoryBean<?>) bean;
 						boolean isEagerInit;
@@ -844,6 +855,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
+					// 实例化过程，重要程度【5】
 					getBean(beanName);
 				}
 			}
