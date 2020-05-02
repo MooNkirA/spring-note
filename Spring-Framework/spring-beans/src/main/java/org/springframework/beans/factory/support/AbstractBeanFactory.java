@@ -239,7 +239,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-
+		// 将方法传入的bean名称转成spring容器的保存beanName
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
@@ -299,7 +299,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
-				// 合并父子对象
+				// 合并父子BeanDefinition
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				// 校验需要实例的bean是否为抽象类
 				checkMergedBeanDefinition(mbd, beanName, args);
@@ -1277,10 +1277,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			if (mbd == null) {
-				// 获取parentName，如果不为空，则代表有父类标签，需要进行合并
+				// 获取parentName并判断
 				if (bd.getParentName() == null) {
 					// Use copy of given root bean definition.
 					if (bd instanceof RootBeanDefinition) {
+						// 复制方法传入的子BeanDefinition
 						mbd = ((RootBeanDefinition) bd).cloneBeanDefinition();
 					}
 					else {
@@ -1288,6 +1289,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					}
 				}
 				else {
+					// 如果parentName不为空，则代表有父类标签，需要进行合并
 					// Child bean definition: needs to be merged with parent.
 					BeanDefinition pbd;
 					try {
@@ -1313,7 +1315,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 								"Could not resolve parent bean definition '" + bd.getParentName() + "'", ex);
 					}
 					// Deep copy with overridden values.
+					// 将递归查找出来的父BeanDefinition创建一个新的RootBeanDefinition对象
 					mbd = new RootBeanDefinition(pbd);
+					// 将子的BeanDefinition设置到新的父RootBeanDefinition对象，完成父与子的合并
 					mbd.overrideFrom(bd);
 				}
 

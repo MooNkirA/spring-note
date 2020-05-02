@@ -176,7 +176,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/* 根据beanName从缓存中获取实例 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		// 1. 先从一级缓存查找获取对象实例（如果实例化完成，都是此容器中获取）
+		// 1. 先从一级缓存查找获取对象实例（如果类的实例化全部完成后，都是此容器中获取）
 		Object singletonObject = this.singletonObjects.get(beanName);
 		// 如果bean还正在创建，还没创建完成，其实就是堆内存有了，属性还没有DI依赖注入
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
@@ -225,7 +225,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
 
-				// 把beanName添加到singletonsCurrentlyInCreation Set容器中，在这个集合里面的bean都是正在实例化的bean
+				// 在初始化化bean实例前，把beanName添加到singletonsCurrentlyInCreation Set容器中，在这个集合里面的bean都是正在实例化的bean
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -355,6 +355,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	protected void beforeSingletonCreation(String beanName) {
 		// 把beanName添加到singletonsCurrentlyInCreation的Set容器中，在这个集合里面的bean都是正在实例化的bean
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
+			// 如果需要创建的beanName不在inCreationCheckExclusions容器（存储排除创建的）中，并且singletonsCurrentlyInCreation容器（存储正在创建的）已经存在，抛出异常
 			throw new BeanCurrentlyInCreationException(beanName);
 		}
 	}

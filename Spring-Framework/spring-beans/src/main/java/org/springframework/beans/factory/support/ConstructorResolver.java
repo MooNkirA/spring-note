@@ -394,6 +394,7 @@ class ConstructorResolver {
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
+			// 获取配置的factory-bean的Class对象
 			factoryClass = factoryBean.getClass();
 			isStatic = false;
 		}
@@ -404,7 +405,7 @@ class ConstructorResolver {
 						"bean definition declares neither a bean class nor a factory-bean reference");
 			}
 			factoryBean = null;
-			// 如果没有配置factory-bean属性，则factoryBean Class类对象
+			// 如果没有配置factory-bean属性，则获取当前类的Class类对象
 			factoryClass = mbd.getBeanClass();
 			isStatic = true;
 		}
@@ -626,6 +627,7 @@ class ConstructorResolver {
 						this.beanFactory.getAccessControlContext());
 			}
 			else {
+				// 进行反射调用
 				return this.beanFactory.getInstantiationStrategy().instantiate(
 						mbd, beanName, this.beanFactory, factoryBean, factoryMethod, args);
 			}

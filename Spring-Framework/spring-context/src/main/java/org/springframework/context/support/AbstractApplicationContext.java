@@ -574,17 +574,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Initialize event multicaster for this context.
 				initApplicationEventMulticaster();
 
-				// 此方法着重理解模板设计模式，因为在springboot中，此方法是用来完成内嵌式tomcat启动
+				// 此方法重点理解模板设计模式，因为在springboot中，此方法是用来完成内嵌式tomcat启动
 				// Initialize other special beans in specific context subclasses.
 				onRefresh();
 
-				// 往事件管理类中注册事件类，与initApplicationEventMulticaster()是成对出现的
+				// 往事件管理类中注册事件类，此方法会与initApplicationEventMulticaster()方法成对出现的
 				// Check for listener beans and register them.
 				registerListeners();
 
 				/*
 				 * 此方法是spring中最重要的方法（没有之一），重要程度【5】。
-				 * 所以一定要理解要具体看，具体作用如下：
+				 * 所以此方法要重点理解分析，此方法具体作用如下：
 				 * 		1. bean实例化过程
 				 * 		2. ioc
 				 * 		3. 注解支持
@@ -891,7 +891,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
 		}
 
-		// 暂时未研究
+		// 此方法没有什么作用，暂时未研究
 		// Register a default embedded value resolver if no bean post-processor
 		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
