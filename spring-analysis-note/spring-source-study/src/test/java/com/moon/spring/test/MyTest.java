@@ -4,12 +4,13 @@ import com.moon.spring.bean.ConstructorArgBean;
 import com.moon.spring.bean.CustomAnnotationClass;
 import com.moon.spring.bean.OriginClass;
 import com.moon.spring.bean.PropertyClass;
-import com.moon.spring.bean.ShowSixClass;
+import com.moon.spring.bean.ShowSexClass;
 import com.moon.spring.bean.Student;
 import com.moon.spring.beanDefinition.BeanClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -37,7 +38,7 @@ public class MyTest {
     private PropertyClass propertyClass;
 
     @Autowired
-    private ShowSixClass showSixClass;
+    private ShowSexClass showSexClass;
 
     @Autowired
     private OriginClass originClass;
@@ -87,10 +88,18 @@ public class MyTest {
         System.out.println(student.getUserName());*/
     }
 
+    @Test
+    public void testBeanClass() {
+        ApplicationContext ac = new AnnotationConfigApplicationContext("com.moon.spring");
+        BeanClass beanClass = (BeanClass) ac.getBean("beanClass");
+        System.out.println("BeanClass -->" + beanClass);
+    }
+
+
     /* 测试lookup-method子标签 */
     @Test
     public void lookUpMethod() {
-        showSixClass.showsix();
+        showSexClass.getPeople().showSex();
     }
 
     /* 测试replaced-method子标签 */

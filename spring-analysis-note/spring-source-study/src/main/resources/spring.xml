@@ -71,8 +71,9 @@
             通过lookup-method属性可以指定bean的值，返回的接口所对应的实现类对象（即此处返回了Woman这个实现类）
      -->
     <bean id="woman" class="com.moon.spring.bean.Woman" lazy-init="false"/>
-    <bean id="people" class="com.moon.spring.bean.ShowSixClass">
-        <lookup-method name="getPeople" bean="woman"/>
+    <bean id="people" class="com.moon.spring.bean.ShowSexClass">
+        <!-- 在ShowSexClass类的相应方法上使用注解@Lookup("woman")，效果一样 -->
+        <!--<lookup-method name="getPeople" bean="woman"/>-->
     </bean>
 
     <!--

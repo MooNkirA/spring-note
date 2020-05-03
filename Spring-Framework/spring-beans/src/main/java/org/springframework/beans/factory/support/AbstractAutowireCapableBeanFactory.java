@@ -1245,11 +1245,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		if (beanClass != null && hasInstantiationAwareBeanPostProcessors()) {
-			// 此处进行循环调用
+			// getBeanPostProcessors()方法获取所有注册到BeanFactory里的BeanPostProcessor，在此处进行循环调用
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
+				// 筛选实现了SmartInstantiationAwareBeanPostProcessor接口的BeanPostProcessor
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
-					// 此处只有AutowiredAnnotationBeanPostProcessor类会启作用，其他的实现类（不关注此功能的）只需要返回null即可
+					/*
+					 * 此处只有AutowiredAnnotationBeanPostProcessor类会启作用，其他的实现类（不关注此功能的）只需要返回null即可
+					 * 	这里是spring进行了功能的埋点，日后如果需要进行功能扩展，
+					 * 	只需要实现SmartInstantiationAwareBeanPostProcessor接口，将业务逻辑写在determineCandidateConstructors方法中
+					 */
 					Constructor<?>[] ctors = ibp.determineCandidateConstructors(beanClass, beanName);
 					if (ctors != null) {
 						return ctors;

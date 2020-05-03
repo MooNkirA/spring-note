@@ -555,7 +555,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				/*
-				 * 此方法完成对以下两个接口的调用
+				 * 此方法完成实例化实现了以下两个接口的类，并且调用postProcessBeanDefinitionRegistry()方法
 				 * 		BeanDefinitionRegistryPostProcessor
 				 *  	BeanFactoryPostProcessor
 				 */

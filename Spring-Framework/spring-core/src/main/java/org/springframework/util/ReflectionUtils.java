@@ -581,11 +581,13 @@ public abstract class ReflectionUtils {
 	public static void doWithMethods(Class<?> clazz, MethodCallback mc, @Nullable MethodFilter mf) {
 		// Keep backing up the inheritance hierarchy.
 		Method[] methods = getDeclaredMethods(clazz);
+		// 循环所有方法
 		for (Method method : methods) {
 			if (mf != null && !mf.matches(method)) {
 				continue;
 			}
 			try {
+				// 调用回调函数（外部程序调用时的lambda表达式）
 				mc.doWith(method);
 			}
 			catch (IllegalAccessException ex) {
@@ -662,7 +664,9 @@ public abstract class ReflectionUtils {
 	 */
 	private static Method[] getDeclaredMethods(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
+		// 在缓存中获取Class对象相应的所有方法
 		Method[] result = declaredMethodsCache.get(clazz);
+		// 如果缓存中没有，则通过反射获取类中所有方法
 		if (result == null) {
 			try {
 				Method[] declaredMethods = clazz.getDeclaredMethods();
@@ -679,6 +683,7 @@ public abstract class ReflectionUtils {
 				else {
 					result = declaredMethods;
 				}
+				// 缓存所有类相应的方法对象
 				declaredMethodsCache.put(clazz, (result.length == 0 ? NO_METHODS : result));
 			}
 			catch (Throwable ex) {

@@ -47,6 +47,7 @@ import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.UnsatisfiedDependencyException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.ConstructorArgumentValues.ValueHolder;
@@ -161,6 +162,7 @@ class ConstructorResolver {
 				}
 			}
 
+			// mbd.hasConstructorArgumentValues()方法返回的是false，因为是@Autowired的构造函数，不是<constructor-arg>标签
 			if (candidates.length == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Constructor<?> uniqueCandidate = candidates[0];
 				// 如果是无参构造函数
@@ -219,7 +221,7 @@ class ConstructorResolver {
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
-						// 获取到参数的值，建议不要看，比较深，主流程弄懂后再去细细打磨
+						// 获取到参数的值，逻辑比较深，暂时不研究，等主流程弄懂后再去细细打磨
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
