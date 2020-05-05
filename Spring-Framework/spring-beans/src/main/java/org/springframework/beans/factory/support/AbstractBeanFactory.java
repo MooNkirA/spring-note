@@ -327,7 +327,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
-					// 此逻辑是重点，因为大部分情况都是单例的
+					/* 此逻辑是重点，因为大部分情况都是单例的 */
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							// 创建bean实例核心逻辑
@@ -361,7 +361,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 
 				else {
-					/* 其他作用范围的bean */
+					/* 其他作用范围的bean的实例化 */
 					String scopeName = mbd.getScope();
 					final Scope scope = this.scopes.get(scopeName);
 					if (scope == null) {
