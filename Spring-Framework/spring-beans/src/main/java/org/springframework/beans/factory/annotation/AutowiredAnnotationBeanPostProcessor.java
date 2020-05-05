@@ -228,7 +228,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 扫描目标类的属性和方法上面是否有@Autowired注解，如果有则收集起来封装成InjectionMetadata对象
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
+		// 设置InjectionMetadata对象的checkedElements属性
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -423,6 +425,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
+		// 与查找@Resource注解的逻辑一样，先从缓存中查找
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
@@ -431,7 +434,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
+					// 查找当前类上是否有@Autowired注解，主要逻辑在此方法
 					metadata = buildAutowiringMetadata(clazz);
+					// 收集后设置到缓存中
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}
@@ -439,6 +444,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return metadata;
 	}
 
+	/* 查找的逻辑与收集@Resource的逻辑一样，注释详见@Resource注解收集里 */
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
