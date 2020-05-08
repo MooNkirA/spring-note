@@ -545,7 +545,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 创建实例，重要程度【5】，但没有涉及DI（依赖注入）
+			// 创建实例，重要程度【5】，但还没有涉及DI（依赖注入）
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		final Object bean = instanceWrapper.getWrappedInstance();
@@ -591,7 +591,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
-			// 此方法进行IOC/DI，依赖注入的核心方法，重要程序【5】
+			// 此方法进行IOC/DI，依赖注入的核心方法，重要程度【5】
 			populateBean(beanName, mbd, instanceWrapper);
 
 			// bean实例化+ioc依赖注入完以后的调用，非常重要，重要程度【5】
