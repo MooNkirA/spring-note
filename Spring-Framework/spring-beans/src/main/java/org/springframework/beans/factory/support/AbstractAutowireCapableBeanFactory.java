@@ -1372,11 +1372,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// to support styles of field injection.
 		boolean continueWithPropertyPopulation = true;
 
+		/* 此方法实现接口可以让所有类都不能依赖注入，但没有什么用处 */
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof InstantiationAwareBeanPostProcessor) {
 					InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
 					if (!ibp.postProcessAfterInstantiation(bw.getWrappedInstance(), beanName)) {
+						// 此属性代表是否需要DI（依赖注入）
 						continueWithPropertyPopulation = false;
 						break;
 					}
@@ -1384,6 +1386,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		// 如果上面的循环判断后为continueWithPropertyPopulation = false，则下面的逻辑都不会执行
 		if (!continueWithPropertyPopulation) {
 			return;
 		}
@@ -1407,18 +1410,23 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		boolean needsDepCheck = (mbd.getDependencyCheck() != AbstractBeanDefinition.DEPENDENCY_CHECK_NONE);
 
 		PropertyDescriptor[] filteredPds = null;
+
+		/* 重点关注此部分代码，重要程度【5】 */
 		if (hasInstAwareBpps) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
 			}
+			// 循环从BeanFactory中获取所有的BeanPostProcessor
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof InstantiationAwareBeanPostProcessor) {
 					InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
+					// postProcessProperties()方法是依赖注入过程，对@Autowired注解的支持
 					PropertyValues pvsToUse = ibp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 					if (pvsToUse == null) {
 						if (filteredPds == null) {
 							filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 						}
+						// 低版本(4.x以下)的spring框架是用这个方法完成依赖注入过程，@Autowired注解的支持
 						pvsToUse = ibp.postProcessPropertyValues(pvs, filteredPds, bw.getWrappedInstance(), beanName);
 						if (pvsToUse == null) {
 							return;
@@ -1435,6 +1443,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
 
+		// 此方法很鸡肋，可以不研究，是老版本用<property name="username" value="moon"/>标签做依赖注入的代码实现，复杂且无用
 		if (pvs != null) {
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}

@@ -83,10 +83,12 @@ public class InjectionMetadata {
 		Collection<InjectedElement> elementsToIterate =
 				(checkedElements != null ? checkedElements : this.injectedElements);
 		if (!elementsToIterate.isEmpty()) {
+			// 循环所有需要注入的元素
 			for (InjectedElement element : elementsToIterate) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Processing injected element of bean '" + beanName + "': " + element);
 				}
+				// 对元素/方法进行注入
 				element.inject(target, beanName, pvs);
 			}
 		}
@@ -115,6 +117,7 @@ public class InjectionMetadata {
 
 	/**
 	 * A single injected element.
+	 * 单个注入元素
 	 */
 	public abstract static class InjectedElement {
 
