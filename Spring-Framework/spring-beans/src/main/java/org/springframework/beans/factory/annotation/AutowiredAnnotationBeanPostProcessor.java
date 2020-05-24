@@ -381,6 +381,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		// 获取之前进行的@Autowired注解收集的元数据（此方法在之前的注解收集过程里研究过）
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
+			// 进行反射完成依赖注入
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (BeanCreationException ex) {

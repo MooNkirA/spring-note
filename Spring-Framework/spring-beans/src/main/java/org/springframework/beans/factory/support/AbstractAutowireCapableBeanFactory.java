@@ -415,6 +415,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		/*
+		 * 循环容器中所有BeanPostProcessor，着重理解以下几个实现类
+		 *  1、ApplicationContextAwareProcessor  对某个Aware接口方法的调用
+		 *  2、InitDestroyAnnotationBeanPostProcessor  @PostConstruct注解方法的调用
+		 *  3、ImportAwareBeanPostProcessor  对ImportAware类型实例setImportMetadata调用
+		 *    这个对理解springboot有很大帮助。 这里暂时不深入了解
+		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
 			if (current == null) {
@@ -1777,15 +1784,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
+			// 调用实现了Aware接口的方法
 			invokeAwareMethods(beanName, bean);
 		}
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
+			// 对类中某些特殊方法的调用，比如@PostConstruct，Aware接口。重要程度【5】
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
+			/*
+			 * 此方法重要程度【5】
+			 *  是实现InitializingBean接口afterPropertiesSet()方法的调用
+			 * 	或者在xml配置文件，<bean>标签的init-method属性相应的方法的调用
+			 */
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
@@ -1802,6 +1816,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	private void invokeAwareMethods(final String beanName, final Object bean) {
 		if (bean instanceof Aware) {
+			// 调用实现BeanNameAware接口的setBeanName()方法，可以获取当前实例化的beanName
 			if (bean instanceof BeanNameAware) {
 				((BeanNameAware) bean).setBeanName(beanName);
 			}
@@ -1811,6 +1826,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					((BeanClassLoaderAware) bean).setBeanClassLoader(bcl);
 				}
 			}
+			// 调用实现BeanFactoryAware接口的setBeanFactory()方法，可以获取当前BeanFactory对象
 			if (bean instanceof BeanFactoryAware) {
 				((BeanFactoryAware) bean).setBeanFactory(AbstractAutowireCapableBeanFactory.this);
 			}
@@ -1832,7 +1848,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected void invokeInitMethods(String beanName, final Object bean, @Nullable RootBeanDefinition mbd)
 			throws Throwable {
 
+		// 判断是否为InitializingBean接口实现
 		boolean isInitializingBean = (bean instanceof InitializingBean);
+		// 首先调用实现InitializingBean接口的afterPropertiesSet()方法
 		if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Invoking afterPropertiesSet() on bean with name '" + beanName + "'");
@@ -1849,15 +1867,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 			else {
+				// 直接调用afterPropertiesSet()方法
 				((InitializingBean) bean).afterPropertiesSet();
 			}
 		}
 
+		// 然后调用xml配置文件中的init-method属性相应的方法
 		if (mbd != null && bean.getClass() != NullBean.class) {
+			// 获取调用的方法名称
 			String initMethodName = mbd.getInitMethodName();
 			if (StringUtils.hasLength(initMethodName) &&
 					!(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
 					!mbd.isExternallyManagedInitMethod(initMethodName)) {
+				// 此方法为调用xml配置文件中的init-method属性相应的方法
 				invokeCustomInitMethod(beanName, bean, mbd);
 			}
 		}
@@ -1879,6 +1901,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				BeanUtils.findMethod(bean.getClass(), initMethodName) :
 				ClassUtils.getMethodIfAvailable(bean.getClass(), initMethodName));
 
+		// 没有配置init-method属性
 		if (initMethod == null) {
 			if (mbd.isEnforceInitMethod()) {
 				throw new BeanDefinitionValidationException("Could not find an init method named '" +
@@ -1914,6 +1937,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		else {
 			try {
+				// 反射调用
 				ReflectionUtils.makeAccessible(initMethod);
 				initMethod.invoke(bean);
 			}
