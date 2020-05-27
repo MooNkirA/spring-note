@@ -419,8 +419,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		 * 循环容器中所有BeanPostProcessor，着重理解以下几个实现类
 		 *  1、ApplicationContextAwareProcessor  对某个Aware接口方法的调用
 		 *  2、InitDestroyAnnotationBeanPostProcessor  @PostConstruct注解方法的调用
-		 *  3、ImportAwareBeanPostProcessor  对ImportAware类型实例setImportMetadata调用
-		 *    这个对理解springboot有很大帮助。 这里暂时不深入了解
+		 *  3、ImportAwareBeanPostProcessor  对ImportAware类型实例setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
@@ -583,8 +582,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
-		/* 判断单例的bean是否需要提前暴露（这里涉及循环依赖的内容，暂时未研究） */
+		/* 判断单例的bean是否需要提前暴露 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
+				// 判断当前bean是否在创建中
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
@@ -1807,6 +1807,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null),
 					beanName, "Invocation of init method failed", ex);
 		}
+		// 此部分也是一个 BeanPostProcessor 接口的运用，在这里会返回 bean 的代理实例，这个就是 AOP 的入口【暂未研究】
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
