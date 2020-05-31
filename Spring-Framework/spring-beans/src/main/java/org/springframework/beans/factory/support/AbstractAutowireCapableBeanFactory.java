@@ -584,15 +584,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
 		/* 判断单例的bean是否需要提前暴露 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
-				// 判断当前bean是否在创建中
+				// 判断singletonsCurrentlyInCreation容器中，是否存在当前bean的名称，从而判断当前bean是否正在创建中
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			// 这里后面需要着重理解，对理解循环依赖帮助非常大，重要程度【5】。添加三级缓存，目前暂未研究
-			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
+			// 添加当前创建好的bean实例（但还没有DI依赖注入）加入到三级缓存，对理解循环依赖帮助非常大，重要程度【5】。
+			addSingletonFactory(beanName,
+					// 此匿名内部类要完成的逻辑是，直接将已经创建好的bean实例返回（在堆内存中存在，但还没有DI依赖注入，引用类型的属性为null）
+					() -> getEarlyBeanReference(beanName, mbd, bean)
+			);
 		}
 
 		// Initialize the bean instance.
@@ -951,6 +954,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @param bean the raw bean instance
 	 * @return the object to expose as bean reference
 	 */
+	// 三级缓存对象工厂 ObjectFactory.getObject()调用到这个方法
 	protected Object getEarlyBeanReference(String beanName, RootBeanDefinition mbd, Object bean) {
 		Object exposedObject = bean;
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {

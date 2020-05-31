@@ -7,6 +7,8 @@ import com.moon.spring.bean.PropertyClass;
 import com.moon.spring.bean.ShowSexClass;
 import com.moon.spring.bean.Student;
 import com.moon.spring.beanDefinition.BeanClass;
+import com.moon.spring.factorybean.FactoryBeanDemo;
+import com.moon.spring.factorybean.FactoryBeanOther;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ import java.util.ArrayList;
 public class MyTest {
 
     private static final String BASE_PACKAGE = "com.moon.spring";
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     private PropertyClass propertyClass;
@@ -134,4 +139,17 @@ public class MyTest {
         jedis.set("moon", "this is a custom tag");
         System.out.println(jedis.get("moon"));
     }
+
+    /* FactoryBean接口实现测试 */
+    @Test
+    public void factoryBeanTest() {
+        // 实现了FactoryBean接口的类，通过bean的id只能获取该类实现了getObject()方法返回的对象实例
+        FactoryBeanOther other = (FactoryBeanOther) applicationContext.getBean("factoryBeanDemo");
+        System.out.println(other); // com.moon.spring.factorybean.FactoryBeanOther@4cc8eb05
+
+        // 如果要获取实现了FactoryBean接口的类的实例，只能通过【“&” + bean的id】来获取实例
+        FactoryBeanDemo factoryBeanDemo = (FactoryBeanDemo) applicationContext.getBean("&factoryBeanDemo");
+        System.out.println(factoryBeanDemo); // com.moon.spring.factorybean.FactoryBeanDemo@51f116b8
+    }
+
 }

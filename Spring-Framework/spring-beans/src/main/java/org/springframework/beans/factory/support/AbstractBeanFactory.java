@@ -1680,12 +1680,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
+		// 判断如果传入的实例不是FactoryBean接口类型的，或者beanName是以&号开头的，则直接返回传入的实例（相当于此方法没有任何作用）
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
 
+		// 以下逻辑说明了实例beanInstance是FactoryBean接口类型的，并且beanName不是以&开头
 		Object object = null;
 		if (mbd == null) {
+			// 从缓存（factoryBeanObjectCache容器）里面获取FactoryBean类型的实例
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {

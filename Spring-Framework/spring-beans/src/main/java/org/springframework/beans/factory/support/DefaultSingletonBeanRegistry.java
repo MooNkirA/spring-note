@@ -133,8 +133,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
 		synchronized (this.singletonObjects) {
+			// 设置实例到一级缓存
 			this.singletonObjects.put(beanName, singletonObject);
+			// 将创建好的bean的名称从三级缓存中移除
 			this.singletonFactories.remove(beanName);
+			// 将创建好的bean的名称从二级缓存中移除
 			this.earlySingletonObjects.remove(beanName);
 			this.registeredSingletons.add(beanName);
 		}
@@ -152,6 +155,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Assert.notNull(singletonFactory, "Singleton factory must not be null");
 		synchronized (this.singletonObjects) {
 			if (!this.singletonObjects.containsKey(beanName)) {
+
+				/* 此部分是自己新增的代码start */
+				System.out.println("========set value to 3 level cache[singletonFactories] -> beanName :: " + beanName + " ; value :: " + singletonFactory);
+				/* 此部分是自己新增的代码end */
+
 				this.singletonFactories.put(beanName, singletonFactory);
 				this.earlySingletonObjects.remove(beanName);
 				this.registeredSingletons.add(beanName);
@@ -233,8 +241,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
-					// AbstractBeanFactory类中调用的lambda表达式的逻辑
+					// 获取创建好的bean实例（AbstractBeanFactory类中调用的lambda表达式的逻辑）
 					singletonObject = singletonFactory.getObject();
+					// 如果singletonObject不为空，即代表此bean已经完全创建成功，并结束创建。此时这里设置创建成功标识newSingleton为true
 					newSingleton = true;
 				}
 				catch (IllegalStateException ex) {
@@ -258,7 +267,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 						this.suppressedExceptions = null;
 					}
 
-					// bean创建完成后，删除singletonsCurrentlyInCreation Set容器中该bean
+					// bean创建完成后，删除singletonsCurrentlyInCreation Set容器中该bean名称
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {

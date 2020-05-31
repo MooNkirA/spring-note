@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-public class CircularRefB {
+public class CircularRefC {
 
     @Autowired
     private CircularRefA circularRefA;
 
-    public CircularRefB() {
-        System.out.println("============CircularRefB()无参构造函数触发=========== 自动注入属性circularRefA:" + circularRefA);
+    public CircularRefC() {
+        System.out.println("============CircularRefC()无参构造函数触发=========== 自动注入属性circularRefA:" + circularRefA);
     }
 
 }
