@@ -176,7 +176,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/* 根据beanName从缓存中获取实例 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		// 1. 先从一级缓存查找获取对象实例（如果类的实例化全部完成后，都是此容器中获取）
+		// 1. 先从一级缓存查找获取对象实例（如果类的实例化全部完成后，都是从此容器中获取；如第一次进入此方法时，里面是没有相应的实例）
 		Object singletonObject = this.singletonObjects.get(beanName);
 		// 如果bean还正在创建，还没创建完成，其实就是堆内存有了，属性还没有DI依赖注入
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
