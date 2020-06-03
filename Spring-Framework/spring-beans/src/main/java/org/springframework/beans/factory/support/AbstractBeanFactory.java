@@ -350,13 +350,22 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
+
+						// 此方法是将当前实例化的beanName放到容器中，用于在上面的isPrototypeCurrentlyInCreation(beanName)方法中进行循环依赖的判断，阻断循环依赖
 						beforePrototypeCreation(beanName);
+						/*
+						 * 从这里可以看出与单例bean的区别
+						 * 		如果bean是单例：会调用getSingleton(String beanName, ObjectFactory<?> singletonFactory) 方法中，会在创始实例后，将实例保存缓存集合中
+						 * 		如果bean是多例：此时会直接调用createBean()方法，每次都会创建实例。
+						 * 	所以多例情况下，无论是否同一个线程，每次获取的实例都是不是同一个实例
+						 */
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {
+						// 创建完成后，移除prototypesCurrentlyInCreation容器中的beanName
 						afterPrototypeCreation(beanName);
 					}
-					// 此方法是FactoryBean接口的调用入口
+					// 此方法是FactoryBean接口的调用入口，也是在多例实例创建后执行
 					bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
 				}
 
@@ -1066,6 +1075,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	@SuppressWarnings("unchecked")
 	protected void beforePrototypeCreation(String beanName) {
+		// 往prototypesCurrentlyInCreation容器添加正在创建的beanName
+		// 与单例时的singletonsCurrentlyInCreation容器作用是一样的。都是用于判断是否需要阻断循环依赖
 		Object curVal = this.prototypesCurrentlyInCreation.get();
 		if (curVal == null) {
 			this.prototypesCurrentlyInCreation.set(beanName);
@@ -1089,6 +1100,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @see #isPrototypeCurrentlyInCreation
 	 */
 	@SuppressWarnings("unchecked")
+	// 移除prototypesCurrentlyInCreation容器中的beanName
 	protected void afterPrototypeCreation(String beanName) {
 		Object curVal = this.prototypesCurrentlyInCreation.get();
 		if (curVal instanceof String) {
