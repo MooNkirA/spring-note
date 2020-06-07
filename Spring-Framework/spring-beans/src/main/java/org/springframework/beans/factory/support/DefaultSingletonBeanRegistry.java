@@ -528,6 +528,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 		String[] disposableBeanNames;
 		synchronized (this.disposableBeans) {
+			// 获取所有创建bean实例后，注册beanName与DisposableBeanAdapter的映射中的Bean名称
 			disposableBeanNames = StringUtils.toStringArray(this.disposableBeans.keySet());
 		}
 		for (int i = disposableBeanNames.length - 1; i >= 0; i--) {
@@ -568,8 +569,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// Destroy the corresponding DisposableBean instance.
 		DisposableBean disposableBean;
 		synchronized (this.disposableBeans) {
+			// 根据beanNme从disposableBeans容器中获取相应的DisposableBeanAdapter
 			disposableBean = (DisposableBean) this.disposableBeans.remove(beanName);
 		}
+		// 调用DisposableBeanAdapter的destory()方法
 		destroyBean(beanName, disposableBean);
 	}
 
@@ -598,6 +601,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// Actually destroy the bean now...
 		if (bean != null) {
 			try {
+				// 调用destroy方法
 				bean.destroy();
 			}
 			catch (Throwable ex) {

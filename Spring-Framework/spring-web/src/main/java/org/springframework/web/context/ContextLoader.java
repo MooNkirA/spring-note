@@ -513,6 +513,7 @@ public class ContextLoader {
 		servletContext.log("Closing Spring root WebApplicationContext");
 		try {
 			if (this.context instanceof ConfigurableWebApplicationContext) {
+				// 此处进行关闭web容器的操作
 				((ConfigurableWebApplicationContext) this.context).close();
 			}
 		}

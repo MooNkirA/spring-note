@@ -108,10 +108,12 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 				(this.bean instanceof DisposableBean && !beanDefinition.isExternallyManagedDestroyMethod("destroy"));
 		this.nonPublicAccessAllowed = beanDefinition.isNonPublicAccessAllowed();
 		this.acc = acc;
+		// 从BeanDefinition对象中获取相应bean的destroyMethod的名称
 		String destroyMethodName = inferDestroyMethodIfNecessary(bean, beanDefinition);
 		if (destroyMethodName != null && !(this.invokeDisposableBean && "destroy".equals(destroyMethodName)) &&
 				!beanDefinition.isExternallyManagedDestroyMethod(destroyMethodName)) {
 			this.destroyMethodName = destroyMethodName;
+			// 反射获取销毁方法的Method对象
 			this.destroyMethod = determineDestroyMethod(destroyMethodName);
 			if (this.destroyMethod == null) {
 				if (beanDefinition.isEnforceDestroyMethod()) {
@@ -131,6 +133,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 				}
 			}
 		}
+		// 过滤Spring容器中所有的BeanPostProcessor，获取所有DestructionAwareBeanPostProcessor类型的List集合
 		this.beanPostProcessors = filterPostProcessors(postProcessors, bean);
 	}
 
@@ -216,6 +219,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 		if (!CollectionUtils.isEmpty(processors)) {
 			filteredPostProcessors = new ArrayList<>(processors.size());
 			for (BeanPostProcessor processor : processors) {
+				// 只过滤DestructionAwareBeanPostProcessor类型
 				if (processor instanceof DestructionAwareBeanPostProcessor) {
 					DestructionAwareBeanPostProcessor dabpp = (DestructionAwareBeanPostProcessor) processor;
 					if (dabpp.requiresDestruction(bean)) {
@@ -237,6 +241,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 	public void destroy() {
 		if (!CollectionUtils.isEmpty(this.beanPostProcessors)) {
 			for (DestructionAwareBeanPostProcessor processor : this.beanPostProcessors) {
+				// 调用接口实现InitDestroyAnnotationBeanPostProcessor
 				processor.postProcessBeforeDestruction(this.bean, this.beanName);
 			}
 		}

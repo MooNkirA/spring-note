@@ -7,6 +7,7 @@ import com.moon.spring.bean.PropertyClass;
 import com.moon.spring.bean.ShowSexClass;
 import com.moon.spring.bean.Student;
 import com.moon.spring.beanDefinition.BeanClass;
+import com.moon.spring.config.ComponentScanConfig;
 import com.moon.spring.factorybean.FactoryBeanDemo;
 import com.moon.spring.factorybean.FactoryBeanOther;
 import org.junit.Test;
@@ -30,17 +31,14 @@ import java.util.ArrayList;
  * @date 2019-12-15 12:25
  * @description
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring.xml"})
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @ContextConfiguration(locations = {"classpath:spring.xml"})
 public class MyTest {
 
     private static final String BASE_PACKAGE = "com.moon.spring";
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    private PropertyClass propertyClass;
 
     @Autowired
     private ShowSexClass showSexClass;
@@ -82,6 +80,12 @@ public class MyTest {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BASE_PACKAGE);
         Student student = (Student) applicationContext.getBean("student");
         System.out.println(student.getUserName());
+    }
+
+    @Test
+    public void componentScanTest() {
+        applicationContext = new AnnotationConfigApplicationContext(ComponentScanConfig.class);
+        System.out.println("@ComponentScan Test --> " + applicationContext.getBean("userServiceImpl"));
     }
 
     /* springboot 加载容器的上下文对象（EmbeddedWebApplicationContext） */
@@ -185,6 +189,23 @@ public class MyTest {
     @Test
     public void requestSessoinScopeTest() {
         applicationContext.getBean("requestScopeBean");
+    }
+
+    /* 测试自定义作用域 */
+    @Test
+    public void customScopeTest() {
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                if (finalI % 2 == 0) {
+                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
+                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
+                } else {
+                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
+                }
+
+            }).start();
+        }
     }
 
 }
