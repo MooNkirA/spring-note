@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * @description
  */
 // @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration(locations = {"classpath:spring.xml"})
+// @ContextConfiguration(locations = {"classpath:spring.xml"}) // 测试注解方式配置spring时注释掉
 public class MyTest {
 
     private static final String BASE_PACKAGE = "com.moon.spring";
@@ -99,7 +99,7 @@ public class MyTest {
 
     @Test
     public void testBeanClass() {
-        ApplicationContext ac = new AnnotationConfigApplicationContext("com.moon.spring");
+        ApplicationContext ac = new AnnotationConfigApplicationContext(BASE_PACKAGE);
         BeanClass beanClass = (BeanClass) ac.getBean("beanClass");
         System.out.println("BeanClass -->" + beanClass);
     }

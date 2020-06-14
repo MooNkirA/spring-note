@@ -141,6 +141,7 @@ class ConfigurationClassBeanDefinitionReader {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
+		// 执行有@ImportResource注解的逻辑，主要是调用了xml配置文件的解析逻辑
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}

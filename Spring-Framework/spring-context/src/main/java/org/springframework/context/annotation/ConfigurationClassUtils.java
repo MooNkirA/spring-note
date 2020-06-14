@@ -60,6 +60,7 @@ abstract class ConfigurationClassUtils {
 
 	private static final Log logger = LogFactory.getLog(ConfigurationClassUtils.class);
 
+	/** 存放支持的注解类型名称 */
 	private static final Set<String> candidateIndicators = new HashSet<>(8);
 
 	static {
@@ -112,9 +113,11 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
+		// 判断是否有@Configuration注解
 		if (isFullConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		// 判断是否有@Component注解，或者类上面没注解（xml配置实例化）但方法上面有@Bean注解
 		else if (isLiteConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
@@ -168,6 +171,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Any of the typical annotations found?
+		// 判断是否包含candidateIndicators容器中的@Component、@ComponentScan、@Import、@ImportResource
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -176,6 +180,7 @@ abstract class ConfigurationClassUtils {
 
 		// Finally, let's look for @Bean methods...
 		try {
+			// 判断是否有@Bean注解
 			return metadata.hasAnnotatedMethods(Bean.class.getName());
 		}
 		catch (Throwable ex) {

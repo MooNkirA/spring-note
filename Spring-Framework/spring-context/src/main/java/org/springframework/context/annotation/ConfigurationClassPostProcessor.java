@@ -270,6 +270,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+			// 判断类上是否有@Configuration、@Component，或者类中的方法有@Bean注解
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -277,9 +278,11 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 		// Return immediately if no @Configuration classes were found
 		if (configCandidates.isEmpty()) {
+			// 如果没有找到以上的注解，直接结束
 			return;
 		}
 
+		// 排序
 		// Sort by previously determined @Order value, if applicable
 		configCandidates.sort((bd1, bd2) -> {
 			int i1 = ConfigurationClassUtils.getOrder(bd1.getBeanDefinition());
@@ -305,6 +308,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
+		// 此处有一个重要的类ConfigurationClassParser，是对@ComponentScan @Configuration支持
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
@@ -312,6 +316,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
+			// ConfigurationClassParser类的重点方法，将相关的支持的注意进行封装
 			parser.parse(candidates);
 			parser.validate();
 
@@ -324,6 +329,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
+			// 设置beanDefinition的属性值，具体执行 @import/@importSource/@Bean 的逻辑。重要程度【5】
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 

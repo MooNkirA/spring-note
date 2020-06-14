@@ -196,6 +196,7 @@ class ConfigurationClassParser {
 	}
 
 	protected final void parse(AnnotationMetadata metadata, String beanName) throws IOException {
+		// 将metadata与beanName再封装成ConfigurationClass对象
 		processConfigurationClass(new ConfigurationClass(metadata, beanName));
 	}
 
@@ -236,9 +237,11 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Recursively process the configuration class and its superclass hierarchy.
+		// Recursively process the configuration class and its superclass hierarchy. --> 翻译：递归处理配置类及其超类层次结构
+		// 封装成SourceClass对象，此对象主要封装了处理类的Class对象与类相关信息的metadata对象
 		SourceClass sourceClass = asSourceClass(configClass);
 		do {
+			// 处理相关注解
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass);
 		}
 		while (sourceClass != null);
@@ -276,13 +279,15 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Process any @ComponentScan annotations
+		// Process any @ComponentScan annotations --> 翻译：处理任何@ComponentScan注解
+		// 从metaData对象中获取是否有@ComponentScans或@ComponentScan注解
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		if (!componentScans.isEmpty() &&
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
+				// 处理@ComponentScan注解
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
@@ -299,9 +304,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		// 解析@Import注解，其注解的作用是引入一个类
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
+		// 解析@ImportResource注解，其注解的作用是引入一个xml配置文件
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
