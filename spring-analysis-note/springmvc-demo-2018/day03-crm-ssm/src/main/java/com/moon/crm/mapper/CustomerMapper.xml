@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace命名空间，作用就是对sql进行分类化管理，理解为sql隔离
+	注意：！！使用mapper代理方法开发，namespace必须和Mapper代理接口的全限定名称一致
+ -->
+<mapper namespace="com.moon.crm.mapper.CustomerMapper">
+
+	<!-- 00.抽取公共的sql语句（where查询条件） -->
+	<sql id="select_customer_where">
+		<!-- 字符串拼接符${}：当前传递的pojo类是QueryVo,下面是QueryVo的属性名称
+				1.当参数传递的是简单类型的时候，花括号中的内容只能是Value
+				2.当参数传递的pojo的时候，花括号中的内容是pojo的属性
+		 -->
+		<where>
+			<if test="custName != null and custName != ''">
+				c.`cust_name` like '%${custName}%'
+			</if>
+			<if test="custSource != null and custSource != ''">
+				and c.`cust_source` = #{custSource}
+			</if>
+			<if test="custIndustry != null and custIndustry != ''">
+				 and c.`cust_industry` = #{custIndustry}
+			</if>
+			<if test="custLevel != null and custLevel != ''">
+				and c.`cust_level` = #{custLevel}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 1.根据多条件查询的用户数据集合 -->
+	<select id="queryCustomerList" parameterType="queryVo" resultType="customer">
+		<!-- 传入包装类参数，返回客户对象 -->
+		select
+		  c.`cust_id`,
+		  c.`cust_name`,
+		  b1.`dict_item_name` cust_source,
+		  b2.`dict_item_name` cust_industry,
+		  b3.`dict_item_name` cust_level,
+		  c.`cust_phone`,
+		  c.`cust_mobile`
+		from
+		  customer c
+		  left join base_dict b1
+		    on c.`cust_source` = b1.`dict_id`
+		  left join base_dict b2
+		    on c.`cust_industry` = b2.`dict_id`
+		  left join base_dict b3
+		    on c.`cust_level` = b3.`dict_id`
+		<include refid="select_customer_where" />
+		<!-- 分页查询的参数封装在QueryVo类中 -->
+		limit #{start}, #{rows}
+	</select>
+	
+	<!-- 2.根据多条件查询数据的总记录数 -->
+	<select id="countCustomers" parameterType="queryVo" resultType="int">
+		<!-- 传入包装类参数，返回int类型总记录数 -->
+		select
+		  COUNT(*)
+		from
+		  customer c
+		<include refid="select_customer_where" />
+	</select>
+	
+	<!-- 3.根据id查询用户 -->
+	<select id="queryCustomerById" parameterType="long" resultType="customer">
+		select * from customer where cust_id=#{cust_id}
+	</select>
+	
+	<!-- 4.根据id修改用户数据 -->
+	<update id="updateCustomerById" parameterType="customer">
+		update customer c
+		<set>
+			<if test="cust_name != null and cust_name != ''">
+				c.cust_name = #{cust_name},
+			</if>
+			<if test="cust_source != null and cust_source != ''">
+				c.cust_source = #{cust_source},
+			</if>
+			<if test="cust_industry != null and cust_industry != ''">
+				c.cust_industry = #{cust_industry},
+			</if>
+			<if test="cust_level != null and cust_level != ''">
+				c.cust_level = #{cust_level},
+			</if>
+			<if test="cust_linkman != null and cust_linkman != ''">
+				c.cust_linkman = #{cust_linkman},
+			</if>
+			<if test="cust_phone != null and cust_phone != ''">
+				c.cust_phone = #{cust_phone},
+			</if>
+			<if test="cust_mobile != null and cust_mobile != ''">
+				c.cust_mobile = #{cust_mobile},
+			</if>
+			<if test="cust_zipcode != null and cust_zipcode != ''">
+				c.cust_zipcode = #{cust_zipcode},
+			</if>
+			<if test="cust_address != null and cust_address != ''">
+				c.cust_address = #{cust_address},
+			</if>
+		</set>
+		<where>
+			c.cust_id = #{cust_id}
+		</where>
+	</update>
+	
+	<!-- 5.根据id删除客户 -->
+	<delete id="deleteCustomerById" parameterType="long">
+		delete from customer where cust_id=#{custId}
+	</delete>
+	
+</mapper>
