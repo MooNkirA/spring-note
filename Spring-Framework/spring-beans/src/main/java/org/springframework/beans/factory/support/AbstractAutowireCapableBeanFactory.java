@@ -436,6 +436,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		/*
+		 * 这里又是BeanPostProcessor接口的运用，这里主要理解以下实现类
+		 * 	1、AbstractAutoProxyCreator 主要处理AOP代理生成的逻辑
+		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
