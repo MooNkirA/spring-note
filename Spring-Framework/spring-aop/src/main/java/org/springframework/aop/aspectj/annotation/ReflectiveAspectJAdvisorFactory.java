@@ -127,6 +127,9 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		List<Advisor> advisors = new ArrayList<>();
 		// 这里的getAdvisorMethods(aspectClass)方法是获取没有@Pointcut注解的方法，循环每个Method对象
 		for (Method method : getAdvisorMethods(aspectClass)) {
+
+			/* TODO: 目前分析的位置。 */
+			// 重要程度【5】
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, advisors.size(), aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
