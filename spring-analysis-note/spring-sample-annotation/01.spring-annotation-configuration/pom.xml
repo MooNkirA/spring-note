@@ -9,26 +9,17 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spring-annotation-quickstart</artifactId>
-    <name>${project.artifactId}</name>
+    <artifactId>spring-annotation-configuration</artifactId>
+    <name>spring-annotation-configuration</name>
     <packaging>jar</packaging>
-    <description>Spring全注解开发示例</description>
+    <description>@Configuration注解的使用示例</description>
 
     <dependencies>
-        <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-        <!-- mysql驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
     </dependencies>
+
 
 </project>

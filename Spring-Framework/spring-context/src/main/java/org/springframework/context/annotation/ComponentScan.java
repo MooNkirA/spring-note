@@ -63,6 +63,10 @@ public @interface ComponentScan {
 	 * <p>Allows for more concise annotation declarations if no other attributes
 	 * are needed &mdash; for example, {@code @ComponentScan("org.my.pkg")}
 	 * instead of {@code @ComponentScan(basePackages = "org.my.pkg")}.
+	 *
+	 * basePackages的别名
+	 * 允许在不需要其他属性的情况下进行更简洁的注释声明，例如:
+	 * {@code @ComponentScan("org.my.pkg") 相当于 @ComponentScan(basePackages = "org.my.pkg")`}
 	 */
 	@AliasFor("basePackages")
 	String[] value() default {};
@@ -73,6 +77,9 @@ public @interface ComponentScan {
 	 * attribute.
 	 * <p>Use {@link #basePackageClasses} for a type-safe alternative to
 	 * String-based package names.
+	 *
+	 * 扫描带注解的基础包，是value的别名，不能同时配置
+	 * 使用basePackageClasses属性替代这种以字符串
 	 */
 	@AliasFor("value")
 	String[] basePackages() default {};
@@ -82,6 +89,8 @@ public @interface ComponentScan {
 	 * to scan for annotated components. The package of each class specified will be scanned.
 	 * <p>Consider creating a special no-op marker class or interface in each package
 	 * that serves no purpose other than being referenced by this attribute.
+	 *
+	 * 扫描具体的类。basePackagesClasses属性的类型是Class数组，也就是说支持同时指定多个扫描类。
 	 */
 	Class<?>[] basePackageClasses() default {};
 
@@ -94,11 +103,16 @@ public @interface ComponentScan {
 	 * {@link AnnotationBeanNameGenerator} or any custom instance supplied to the
 	 * application context at bootstrap time.
 	 * @see AnnotationConfigApplicationContext#setBeanNameGenerator(BeanNameGenerator)
+	 *
+	 * 配置beanName生成器，默认是BeanNameGenerator类。一般情况下，都是使用默认的beanName生成器，但是Spring实现了可配置beanName生成器。
 	 */
 	Class<? extends BeanNameGenerator> nameGenerator() default BeanNameGenerator.class;
 
 	/**
 	 * The {@link ScopeMetadataResolver} to be used for resolving the scope of detected components.
+	 *
+	 * 处理检测到的bean的scope范围。spring的bean是有作用域的，默认是singleton，这个默认值就是在ScopeMetaData类中指定的：{@code private String scopeName = "singleton";}
+	 * 这个属性也是可选配置，默认的处理bean作用域的实现类是AnnotationScopeMetaDataResolver.class。如果设置就是取注解上获取指定的scope的value值，如果没有配置，就是用默认值singleton。
 	 */
 	Class<? extends ScopeMetadataResolver> scopeResolver() default AnnotationScopeMetadataResolver.class;
 
@@ -109,6 +123,8 @@ public @interface ComponentScan {
 	 * execute the actual scan.
 	 * <p>Note that setting this attribute overrides any value set for {@link #scopeResolver}.
 	 * @see ClassPathBeanDefinitionScanner#setScopedProxyMode(ScopedProxyMode)
+	 *
+	 * 用于指定bean生成时的代理方式。默认是Default，则不使用代理。可选值有四个：DEFAULT，NO，INTERFACES，TARGET_CLASS。
 	 */
 	ScopedProxyMode scopedProxy() default ScopedProxyMode.DEFAULT;
 
@@ -116,12 +132,16 @@ public @interface ComponentScan {
 	 * Controls the class files eligible for component detection.
 	 * <p>Consider use of {@link #includeFilters} and {@link #excludeFilters}
 	 * for a more flexible approach.
+	 *
+	 * 用于指定符合组件检测条件的类文件，默认值ClassPathScanningCandidateComponentProvider.DEFAULT_RESOURCE_PATTERN
 	 */
 	String resourcePattern() default ClassPathScanningCandidateComponentProvider.DEFAULT_RESOURCE_PATTERN;
 
-	/**
+	/**6
 	 * Indicates whether automatic detection of classes annotated with {@code @Component}
 	 * {@code @Repository}, {@code @Service}, or {@code @Controller} should be enabled.
+	 *
+	 * 是否对带有@Component @Repository @Service @Controller注解的类开启检测，默认是开启的。
 	 */
 	boolean useDefaultFilters() default true;
 
@@ -134,12 +154,16 @@ public @interface ComponentScan {
 	 * even if it does not match the default filters (i.e. is not annotated with {@code @Component}).
 	 * @see #resourcePattern()
 	 * @see #useDefaultFilters()
+	 *
+	 * 自定义组件扫描的过滤规则，用于扫描组件。
 	 */
 	Filter[] includeFilters() default {};
 
 	/**
 	 * Specifies which types are not eligible for component scanning.
 	 * @see #resourcePattern
+	 *
+	 * 自定义组件扫描的排除规则
 	 */
 	Filter[] excludeFilters() default {};
 
@@ -147,6 +171,8 @@ public @interface ComponentScan {
 	 * Specify whether scanned beans should be registered for lazy initialization.
 	 * <p>Default is {@code false}; switch this to {@code true} when desired.
 	 * @since 4.1
+	 *
+	 * 组件扫描时是否采用懒加载，默认值为false（不开启）
 	 */
 	boolean lazyInit() default false;
 
