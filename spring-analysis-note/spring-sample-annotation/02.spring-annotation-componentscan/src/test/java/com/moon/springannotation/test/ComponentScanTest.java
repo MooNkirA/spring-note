@@ -37,6 +37,7 @@ public class ComponentScanTest {
         userService.saveUser();
     }
 
+    /* 测试basePackageClasses属性 */
     @Test
     public void componentScanBasePackageClassesTest() {
         // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
@@ -47,6 +48,21 @@ public class ComponentScanTest {
         userService.saveUser();
 
         // 使用basePackageClasses方法扫描，测试指定字节码类所在的包及其子包所有的类是否被扫描到
+        AccountService accoutService = context.getBean("accountService", AccountService.class);
+        accoutService.deleteAccount();
+    }
+
+    /* 测试nameGenerator属性 */
+    @Test
+    public void componentScanNameGeneratorTest() {
+        // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
+        ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
+        // 2. 根据id去获取对应的bean实例，因为是自定义baeanName命名规则，所以需要使用自定义的beanName才能获取到相应的spring容器的对象
+        UserService userService = context.getBean("MooN_userService", UserService.class);
+        // 3. 调用对象方法
+        userService.saveUser();
+
+        // 使用spring架构默认的命名规则的名称去获取容器中的实例，报错！
         AccountService accoutService = context.getBean("accountService", AccountService.class);
         accoutService.deleteAccount();
     }
