@@ -30,6 +30,7 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
  * @author Mark Fisher
  * @since 2.5
  */
+/* Spring 过滤器必须实现的基础接口 */
 @FunctionalInterface
 public interface TypeFilter {
 
@@ -41,6 +42,12 @@ public interface TypeFilter {
 	 * for other classes (such as superclasses and interfaces)
 	 * @return whether this filter matches
 	 * @throws IOException in case of I/O failure when reading metadata
+	 *
+	 * 此方法是用于判断过滤器是否与目标类匹配，返回值是boolean类型。
+	 * 		true: 表示该类加入到spring的容器中
+	 * 		false: 表示该类不加入容器
+	 * 	@param metadataReader 元数据读取器，读取到的当前正在扫描的类的信息
+	 * 	@param metadataReaderFactory 元数据读取器的工厂，可以获得到其他任何类的信息
 	 */
 	boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory)
 			throws IOException;

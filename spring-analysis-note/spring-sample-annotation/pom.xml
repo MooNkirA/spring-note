@@ -15,8 +15,9 @@
 
     <modules>
         <module>00.spring-annotation-quickstart</module>
-        <module>01.spring-annotation-configuration</module>
-        <module>02.spring-annotation-componentscan</module>
+        <module>01.annotation-configuration</module>
+        <module>02.annotation-componentscan</module>
+        <module>03.annotation-componentscan-filter</module>
     </modules>
 
     <!-- 版本号管理 -->

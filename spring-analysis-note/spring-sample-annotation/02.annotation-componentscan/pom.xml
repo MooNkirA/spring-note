@@ -9,25 +9,20 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>00.spring-annotation-quickstart</artifactId>
+    <artifactId>02.annotation-componentscan</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>Spring全注解开发示例</description>
+    <description>@ComponentScan注解的使用示例</description>
 
     <dependencies>
-        <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-        <!-- mysql驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
