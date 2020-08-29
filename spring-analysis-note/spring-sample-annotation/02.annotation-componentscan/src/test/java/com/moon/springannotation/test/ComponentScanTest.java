@@ -20,7 +20,7 @@ public class ComponentScanTest {
 
     @Test
     public void componentScanBaseTest() {
-        // 1. 获取基于注解的spinrg容器，使用传入字节码的构造函数创建容器。（这里故意不使用传入基础包的构造函数，如果这里配置了扫描包包含了测试层的位置，则看不出效果）
+        // 1. 获取基于注解的spring容器，使用传入字节码的构造函数创建容器。（这里故意不使用传入基础包的构造函数，如果这里配置了扫描包包含了测试层的位置，则看不出效果）
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         // 2. 根据id或者类型去获取对应的bean实例
         UserService userService = context.getBean("userService", UserService.class);
@@ -30,7 +30,7 @@ public class ComponentScanTest {
 
     @Test
     public void componentScanBasePackagesTest() {
-        // 1. 获取基于注解的spinrg容器，使用传入字节码的构造函数创建容器。（这里故意不使用传入基础包的构造函数，如果这里配置了扫描包包含了测试层的位置，则看不出效果）
+        // 1. 获取基于注解的spring容器，使用传入字节码的构造函数创建容器。（这里故意不使用传入基础包的构造函数，如果这里配置了扫描包包含了测试层的位置，则看不出效果）
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         // 2. 根据id或者类型去获取对应的bean实例
         UserService userService = context.getBean("userService", UserService.class);
@@ -41,7 +41,7 @@ public class ComponentScanTest {
     /* 测试basePackageClasses属性 */
     @Test
     public void componentScanBasePackageClassesTest() {
-        // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
+        // 1. 获取基于注解的spring容器，使用基础包的构造函数，只扫描配置类所在的包。
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
         // 2. 根据id或者类型去获取对应的bean实例
         UserService userService = context.getBean("userService", UserService.class);
@@ -56,7 +56,7 @@ public class ComponentScanTest {
     /* 测试nameGenerator属性 */
     @Test
     public void componentScanNameGeneratorTest() {
-        // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
+        // 1. 获取基于注解的spring容器，使用基础包的构造函数，只扫描配置类所在的包。
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
         // 2. 根据id去获取对应的bean实例，因为是自定义baeanName命名规则，所以需要使用自定义的beanName才能获取到相应的spring容器的对象
         UserService userService = context.getBean("MooN_userService", UserService.class);
@@ -71,7 +71,7 @@ public class ComponentScanTest {
     /* 测试resourcePattern属性 */
     @Test
     public void componentScanNameResourcePatternTest() {
-        // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
+        // 1. 获取基于注解的spring容器，使用基础包的构造函数，只扫描配置类所在的包。
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
         // 2. 因为是配置了resourcePattern属性为"*/*.class"，所以扫描"com.moon.springsample"下任意包的任意class文件，所以扫描不到service包下的impl包中的注解
         UserService userService = context.getBean("userService", UserService.class);
@@ -82,7 +82,7 @@ public class ComponentScanTest {
     /* 测试includeFilters、excludeFilters属性 */
     @Test
     public void componentScanFiltersTest() {
-        // 1. 获取基于注解的spinrg容器，使用基础包的构造函数，只扫描配置类所在的包。
+        // 1. 获取基于注解的spring容器，使用基础包的构造函数，只扫描配置类所在的包。
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
         /*
          *  配置includeFilters属性为@ComponentScan.Filter(value = Service.class)，

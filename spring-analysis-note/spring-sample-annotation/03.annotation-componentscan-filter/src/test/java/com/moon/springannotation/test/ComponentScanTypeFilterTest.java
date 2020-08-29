@@ -22,7 +22,7 @@ public class ComponentScanTypeFilterTest {
      */
     @Test
     public void customTypeFiltertest() {
-        // 1. 传入项目配置类字节码方式，创建基于注解的spinrg容器
+        // 1. 传入项目配置类字节码方式，创建基于注解的spring容器
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         // 2. 根据bean名称，从容器中获取订单与平台业务实现类，并调用方法
         OrderService orderService = context.getBean("orderService", OrderService.class);

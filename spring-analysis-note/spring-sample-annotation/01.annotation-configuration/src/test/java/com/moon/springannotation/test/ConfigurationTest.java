@@ -16,10 +16,10 @@ public class ConfigurationTest {
 
     /* Configuratio注解使用测试 */
     public static void main(String[] args) {
-        // 方式一：1. 获取基于注解的spinrg容器，使用基础包basePackages的构造函数创建=容器，此时SpringConfiguration类上必须加上@Configuration注解
+        // 方式一：1. 获取基于注解的spring容器，使用基础包basePackages的构造函数创建容器，此时SpringConfiguration类上必须加上@Configuration注解
         // ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample");
 
-        // 方式二：1. 获取基于注解的spinrg容器，使用传入字节码的构造函数创建容器，此时SpringConfiguration类上可以不加@Configuration注解
+        // 方式二：1. 获取基于注解的spring容器，使用传入字节码的构造函数创建容器，此时SpringConfiguration类上可以不加@Configuration注解
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
         // 2. 根据id或者类型去获取对应的bean实例

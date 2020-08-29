@@ -16,7 +16,7 @@ public class SpringAnnotationDrivenTest {
 
     /* 测试spring全注解开发示例 */
     public static void main(String[] args) {
-        // 1. 获取基于注解的spinrg容器
+        // 1. 获取基于注解的spring容器
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample");
         JdbcTemplate jdbcTemplate = context.getBean("jdbcTemplate", JdbcTemplate.class);
         // 3. 进行数据库操作
