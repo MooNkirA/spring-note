@@ -9,21 +9,25 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>06-annotation-import-importselector</artifactId>
+    <artifactId>08-annotation-propertysource</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@Import注解高级使用 - 自定义ImportSelector示例</description>
+    <description>@PropertySource注解基础使用示例</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
-        <!-- 导入aspectJ的依赖 -->
+        <!-- spring的jdbc -->
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.8.13</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <!-- mysql驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

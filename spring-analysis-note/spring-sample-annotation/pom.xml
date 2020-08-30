@@ -22,6 +22,9 @@
         <module>05-annotation-import</module>
         <module>06-annotation-import-importselector</module>
         <module>07-annotation-import-importbeandefinitionregistrar</module>
+        <module>08-annotation-propertysource</module>
+        <module>09-annotation-propertysource-propertysourcefactory</module>
+        <module>10-annotation-dependson</module>
     </modules>
 
     <!-- 版本号管理 -->

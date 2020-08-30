@@ -174,6 +174,8 @@ public @interface PropertySource {
 	 * be generated based on the description of the underlying resource.
 	 * @see org.springframework.core.env.PropertySource#getName()
 	 * @see org.springframework.core.io.Resource#getDescription()
+	 *
+	 * 指定资源的名称。如果没有指定，将根据基础资源描述生成。
 	 */
 	String name() default "";
 
@@ -189,6 +191,8 @@ public @interface PropertySource {
 	 * for examples.
 	 * <p>Each location will be added to the enclosing {@code Environment} as its own
 	 * property source, and in the order declared.
+	 *
+	 * 指定资源的位置。可以是类路径，也可以是文件路径。
 	 */
 	String[] value();
 
@@ -198,12 +202,16 @@ public @interface PropertySource {
 	 * <p>{@code true} is appropriate if the properties file is completely optional.
 	 * Default is {@code false}.
 	 * @since 4.0
+	 *
+	 * 指定是否忽略资源文件不存在，默认是false,也就是说当资源文件不存在时spring启动将会报错
 	 */
 	boolean ignoreResourceNotFound() default false;
 
 	/**
 	 * A specific character encoding for the given resources, e.g. "UTF-8".
 	 * @since 4.3
+	 *
+	 * 指定解析资源文件使用的字符集。当有中文的时候，需要指定中文的字符集。
 	 */
 	String encoding() default "";
 
