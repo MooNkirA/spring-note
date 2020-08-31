@@ -25,6 +25,7 @@
         <module>08-annotation-propertysource</module>
         <module>09-annotation-propertysource-propertysourcefactory</module>
         <module>10-annotation-dependson</module>
+        <module>11-annotation-lazy</module>
     </modules>
 
     <!-- 版本号管理 -->
