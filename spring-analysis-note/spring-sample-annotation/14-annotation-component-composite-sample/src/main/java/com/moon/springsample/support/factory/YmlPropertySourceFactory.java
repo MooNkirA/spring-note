@@ -1,4 +1,4 @@
-package com.moon.springsample.propertysource.factory;
+package com.moon.springsample.support.factory;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.env.PropertiesPropertySource;
@@ -14,10 +14,10 @@ import java.util.Properties;
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-8-30 10:41
+ * @date 2020-9-1 21:45
  * @description
  */
-public class CustomPropertySourceFactory implements PropertySourceFactory {
+public class YmlPropertySourceFactory implements PropertySourceFactory {
 
     /**
      * 自定义解析规则，该方法主要实现的逻辑是将方法的入参EncodedResource转成PropertySource对象即可
@@ -36,15 +36,8 @@ public class CustomPropertySourceFactory implements PropertySourceFactory {
         yamlFactoryBean.setResources(resource.getResource());
         // 3. 将资源解析成properties文件
         Properties properties = yamlFactoryBean.getObject();
-        /*
-         * 4. 转成PropertySource对象返回
-         *  原DefaultPropertySourceFactory中是通过ResourcePropertySource来创建PropertySource对象，但构造函数的入参不是Properties对象
-         *  按源码往父类构造方法去寻找，此时发现父类PropertiesPropertySource的构造方法入参为Properties对象，
-         *  所以通过PropertiesPropertySource来创建PropertySource对象，但PropertiesPropertySource只有一个两个参数的构造函数
-         *  调用时只能修改逻辑为如果没有，则与资源文件名称做为入参name的值
-         */
+        // 4. 转成PropertySource对象返回
         String propertyName = name != null ? name : resource.getResource().getFilename();
         return new PropertiesPropertySource(propertyName, properties);
     }
-
 }

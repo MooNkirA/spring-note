@@ -28,6 +28,7 @@
         <module>11-annotation-lazy</module>
         <module>12-annotation-conditional</module>
         <module>13-annotation-profile</module>
+        <module>14-annotation-component-composite-sample</module>
     </modules>
 
     <!-- 版本号管理 -->

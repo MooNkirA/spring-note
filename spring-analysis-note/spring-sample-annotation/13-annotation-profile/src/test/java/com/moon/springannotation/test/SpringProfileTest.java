@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @date 2020-9-1 15:15
  * @description
  */
-// 设置使用spring框架的测试容器
+// 设置使用spring框架的测试容器，注解替换原有运行器
 @RunWith(SpringJUnit4ClassRunner.class)
-// 指定配置类
+// 指定 spring 配置文件的位置(配置类),参数值为数组，如果只有一个值{}省略
 @ContextConfiguration(classes = SpringConfiguration.class)
 // 用于指定当前测试示例使用的环境
 @ActiveProfiles("test")
