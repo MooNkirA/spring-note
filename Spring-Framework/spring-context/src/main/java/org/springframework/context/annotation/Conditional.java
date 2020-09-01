@@ -64,6 +64,8 @@ public @interface Conditional {
 	/**
 	 * All {@link Condition Conditions} that must {@linkplain Condition#matches match}
 	 * in order for the component to be registered.
+	 *
+	 * 注解的参数是一个或者多个Condition接口的实现类，实现类中需要编写具体代码实现是否注册到ioc容器的条件。
 	 */
 	Class<? extends Condition>[] value();
 

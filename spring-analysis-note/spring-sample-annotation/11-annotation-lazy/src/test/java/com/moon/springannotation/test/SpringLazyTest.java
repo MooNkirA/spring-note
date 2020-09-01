@@ -16,7 +16,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class SpringLazyTest {
 
     @Test
-    public void dependsOnBasicTest() {
+    public void lazyBasicTest() {
         // 1. 创建注解扫描的容器
         ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.springsample.config");
         // 2. 获取容器中的bean对象
