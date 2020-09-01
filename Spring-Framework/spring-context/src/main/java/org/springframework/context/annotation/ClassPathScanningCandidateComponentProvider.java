@@ -87,6 +87,7 @@ import org.springframework.util.ClassUtils;
  */
 public class ClassPathScanningCandidateComponentProvider implements EnvironmentCapable, ResourceLoaderAware {
 
+	/* 默认扫描是当前包及其子包下的任意类名的.class文件 */
 	static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
 

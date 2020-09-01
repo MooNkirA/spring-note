@@ -34,8 +34,9 @@ import org.springframework.util.Assert;
  */
 public class ScopeMetadata {
 
+	/* bean作用范围单例（字符串）："singleton" */
 	private String scopeName = BeanDefinition.SCOPE_SINGLETON;
-
+	/* 是否需要创建代理对象，默认值为否（不创建代理） */
 	private ScopedProxyMode scopedProxyMode = ScopedProxyMode.NO;
 
 

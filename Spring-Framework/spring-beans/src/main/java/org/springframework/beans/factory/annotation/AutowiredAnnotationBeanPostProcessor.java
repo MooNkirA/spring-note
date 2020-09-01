@@ -120,7 +120,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/* AutowiredAnnotationBeanPostProcessorç±»å¯¹è±¡å¤„ç†çš„æ³¨è§£ç±»å‹seté›†åˆ */
+	/* AutowiredAnnotationBeanPostProcessorÀà¶ÔÏó´¦ÀíµÄ×¢½âÀàĞÍset¼¯ºÏ */
 	private final Set<Class<? extends Annotation>> autowiredAnnotationTypes = new LinkedHashSet<>(4);
 
 	private String requiredParameterName = "required";
@@ -228,9 +228,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		// æ‰«æç›®æ ‡ç±»çš„å±æ€§å’Œæ–¹æ³•ä¸Šé¢æ˜¯å¦æœ‰@Autowiredæ³¨è§£ï¼Œå¦‚æœæœ‰åˆ™æ”¶é›†èµ·æ¥å°è£…æˆInjectionMetadataå¯¹è±¡
+		// É¨ÃèÄ¿±êÀàµÄÊôĞÔºÍ·½·¨ÉÏÃæÊÇ·ñÓĞ@Autowired×¢½â£¬Èç¹ûÓĞÔòÊÕ¼¯ÆğÀ´·â×°³ÉInjectionMetadata¶ÔÏó
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
-		// è®¾ç½®InjectionMetadataå¯¹è±¡çš„checkedElementså±æ€§
+		// ÉèÖÃInjectionMetadata¶ÔÏóµÄcheckedElementsÊôĞÔ
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -248,16 +248,16 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		// Let's check for lookup methods here..
 		if (!this.lookupMethodsChecked.contains(beanName)) {
 			try {
-				// é€šè¿‡beanClasså­—èŠ‚ç å¯¹è±¡ï¼Œå¾ªç¯è°ƒç”¨è¯¥ç±»é‡Œçš„æ‰€æœ‰æ–¹æ³•
+				// Í¨¹ıbeanClass×Ö½ÚÂë¶ÔÏó£¬Ñ­»·µ÷ÓÃ¸ÃÀàÀïµÄËùÓĞ·½·¨
 				ReflectionUtils.doWithMethods(beanClass, method -> {
-					// å¯¹Lookupæ³¨è§£çš„æ”¯æŒï¼Œåˆ¤æ–­æ–¹æ³•ä¸Šæ˜¯å¦æœ‰@LookUpæ³¨è§£
+					// ¶ÔLookup×¢½âµÄÖ§³Ö£¬ÅĞ¶Ï·½·¨ÉÏÊÇ·ñÓĞ@LookUp×¢½â
 					Lookup lookup = method.getAnnotation(Lookup.class);
 					if (lookup != null) {
 						Assert.state(this.beanFactory != null, "No BeanFactory available");
 						LookupOverride override = new LookupOverride(method, lookup.value());
 						try {
 							RootBeanDefinition mbd = (RootBeanDefinition) this.beanFactory.getMergedBeanDefinition(beanName);
-							// ä¸æ ‡ç­¾è§£ææ—¶ä¸€æ ·ï¼Œå°†lookupæ³¨è§£çš„æ–¹æ³•ä½¿ç”¨LookupOverrideå¯¹è±¡åŒ…è£…ï¼Œå†è®¾ç½®åˆ°BeanDefinitionå¯¹è±¡çš„MethodOverrideså±æ€§ä¸­
+							// Óë±êÇ©½âÎöÊ±Ò»Ñù£¬½«lookup×¢½âµÄ·½·¨Ê¹ÓÃLookupOverride¶ÔÏó°ü×°£¬ÔÙÉèÖÃµ½BeanDefinition¶ÔÏóµÄMethodOverridesÊôĞÔÖĞ
 							mbd.getMethodOverrides().addOverride(override);
 						}
 						catch (NoSuchBeanDefinitionException ex) {
@@ -274,7 +274,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
-		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass); // ç¬¬ä¸€æ¬¡æ—¶ç¼“å­˜é‡Œæ²¡æœ‰å½“å‰ç±»çš„æ‰€æœ‰æ„é€ å™¨æ•°æ®
+		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass); // µÚÒ»´ÎÊ±»º´æÀïÃ»ÓĞµ±Ç°ÀàµÄËùÓĞ¹¹ÔìÆ÷Êı¾İ
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
 			synchronized (this.candidateConstructorsCache) {
@@ -282,7 +282,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
-						// è·å–beanå¯¹åº”çš„æ‰€æœ‰æ„é€ å™¨
+						// »ñÈ¡bean¶ÔÓ¦µÄËùÓĞ¹¹ÔìÆ÷
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -295,7 +295,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					Constructor<?> defaultConstructor = null;
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
 					int nonSyntheticConstructors = 0;
-					// å¾ªç¯æ‰€æœ‰æ„é€ å™¨
+					// Ñ­»·ËùÓĞ¹¹ÔìÆ÷
 					for (Constructor<?> candidate : rawCandidates) {
 						if (!candidate.isSynthetic()) {
 							nonSyntheticConstructors++;
@@ -303,7 +303,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 						else if (primaryConstructor != null) {
 							continue;
 						}
-						// è·å–åˆ°æ„é€ å‡½æ•°ä¸Šçš„@Autowiredæ³¨è§£ä¿¡æ¯,è¿™ä¸ªæ–¹æ³•æš‚æ—¶æœªç ”ç©¶
+						// »ñÈ¡µ½¹¹Ôìº¯ÊıÉÏµÄ@Autowired×¢½âĞÅÏ¢,Õâ¸ö·½·¨ÔİÊ±Î´ÑĞ¾¿
 						AnnotationAttributes ann = findAutowiredAnnotation(candidate);
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
@@ -378,10 +378,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		// è·å–ä¹‹å‰è¿›è¡Œçš„@Autowiredæ³¨è§£æ”¶é›†çš„å…ƒæ•°æ®ï¼ˆæ­¤æ–¹æ³•åœ¨ä¹‹å‰çš„æ³¨è§£æ”¶é›†è¿‡ç¨‹é‡Œç ”ç©¶è¿‡ï¼‰
+		// »ñÈ¡Ö®Ç°½øĞĞµÄ@Autowired×¢½âÊÕ¼¯µÄÔªÊı¾İ£¨´Ë·½·¨ÔÚÖ®Ç°µÄ×¢½âÊÕ¼¯¹ı³ÌÀïÑĞ¾¿¹ı£©
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
-			// è¿›è¡Œåå°„å®Œæˆä¾èµ–æ³¨å…¥
+			// ½øĞĞ·´ÉäÍê³ÉÒÀÀµ×¢Èë
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (BeanCreationException ex) {
@@ -427,7 +427,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
-		// ä¸æŸ¥æ‰¾@Resourceæ³¨è§£çš„é€»è¾‘ä¸€æ ·ï¼Œå…ˆä»ç¼“å­˜ä¸­æŸ¥æ‰¾
+		// Óë²éÕÒ@Resource×¢½âµÄÂß¼­Ò»Ñù£¬ÏÈ´Ó»º´æÖĞ²éÕÒ
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
@@ -436,9 +436,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					// æŸ¥æ‰¾å½“å‰ç±»ä¸Šæ˜¯å¦æœ‰@Autowiredæ³¨è§£ï¼Œä¸»è¦é€»è¾‘åœ¨æ­¤æ–¹æ³•
+					// ²éÕÒµ±Ç°ÀàÉÏÊÇ·ñÓĞ@Autowired×¢½â£¬Ö÷ÒªÂß¼­ÔÚ´Ë·½·¨
 					metadata = buildAutowiringMetadata(clazz);
-					// æ”¶é›†åè®¾ç½®åˆ°ç¼“å­˜ä¸­
+					// ÊÕ¼¯ºóÉèÖÃµ½»º´æÖĞ
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}
@@ -446,7 +446,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return metadata;
 	}
 
-	/* æŸ¥æ‰¾çš„é€»è¾‘ä¸æ”¶é›†@Resourceçš„é€»è¾‘ä¸€æ ·ï¼Œæ³¨é‡Šè¯¦è§@Resourceæ³¨è§£æ”¶é›†é‡Œ */
+	/* ²éÕÒµÄÂß¼­ÓëÊÕ¼¯@ResourceµÄÂß¼­Ò»Ñù£¬×¢ÊÍÏê¼û@Resource×¢½âÊÕ¼¯Àï */
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
@@ -502,12 +502,12 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	}
 
 	/*
-	 * AccessibleObjectæ˜¯JDKåå°„åŒ…ä¸‹çš„ï¼Œæ˜¯Fieldã€Methodã€Constructorçš„çˆ¶ç±»
+	 * AccessibleObjectÊÇJDK·´Éä°üÏÂµÄ£¬ÊÇField¡¢Method¡¢ConstructorµÄ¸¸Àà
 	 */
 	@Nullable
 	private AnnotationAttributes findAutowiredAnnotation(AccessibleObject ao) {
 		if (ao.getAnnotations().length > 0) {  // autowiring annotations have to be local
-			// autowiredAnnotationTypesæ˜¯å½“å‰AutowiredAnnotationBeanPostProcessorç±»æ”¯æŒå¤„ç†çš„æ³¨è§£seté›†åˆï¼Œé€šè¿‡æ„é€ å™¨å¯ä»¥çœ‹åˆ°
+			// autowiredAnnotationTypesÊÇµ±Ç°AutowiredAnnotationBeanPostProcessorÀàÖ§³Ö´¦ÀíµÄ×¢½âset¼¯ºÏ£¬Í¨¹ı¹¹ÔìÆ÷¿ÉÒÔ¿´µ½
 			for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {
 				AnnotationAttributes attributes = AnnotatedElementUtils.getMergedAnnotationAttributes(ao, type);
 				if (attributes != null) {
@@ -596,7 +596,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 
 		/**
-		 * å±æ€§DIï¼Œä¾èµ–æ³¨å…¥
+		 * ÊôĞÔDI£¬ÒÀÀµ×¢Èë
 		 * @param bean
 		 * @param beanName
 		 * @param pvs

@@ -15,6 +15,7 @@
         <module>spring-source-study</module>
         <module>springmvc-demo-2018</module>
         <module>spring-sample</module>
+        <module>spring-sample-annotation</module>
     </modules>
 
     <!-- 版本号管理 -->

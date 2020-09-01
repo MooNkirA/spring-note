@@ -436,6 +436,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		/*
+		 * 这里又是BeanPostProcessor接口的运用，这里主要理解以下实现类
+		 * 	1、AbstractAutoProxyCreator 主要处理AOP代理生成的逻辑
+		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
@@ -604,7 +608,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// 此方法进行IOC/DI，依赖注入的核心方法，重要程度【5】
 			populateBean(beanName, mbd, instanceWrapper);
 
-			// bean实例化+ioc依赖注入完以后的调用，非常重要，重要程度【5】
+			// bean实例化+ioc依赖注入完以后的调用，AOP代理也是在此方法中生成，重要程度【5】
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -1812,8 +1816,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null),
 					beanName, "Invocation of init method failed", ex);
 		}
-		// 此部分也是一个 BeanPostProcessor 接口的运用，在这里会返回 bean 的代理实例，这个就是 AOP 的入口【暂未研究】
 		if (mbd == null || !mbd.isSynthetic()) {
+			// 此方法也是一个 BeanPostProcessor 接口的运用，在这里可能会返回 bean 的代理实例，这个就是 AOP 的入口
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 
