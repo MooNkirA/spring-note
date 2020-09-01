@@ -27,6 +27,7 @@
         <module>10-annotation-dependson</module>
         <module>11-annotation-lazy</module>
         <module>12-annotation-conditional</module>
+        <module>13-annotation-profile</module>
     </modules>
 
     <!-- 版本号管理 -->
@@ -34,6 +35,7 @@
         <spring.version>5.1.6.RELEASE</spring.version>
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <junit.version>4.12</junit.version>
+        <druid.version>1.1.9</druid.version>
     </properties>
 
     <!-- 版本控制 -->
@@ -55,6 +57,18 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <!-- 阿里druid数据源 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- spring框架测试包 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
             </dependency>
             <!-- junit测试框架 -->
             <dependency>
