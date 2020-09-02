@@ -29,6 +29,11 @@
         <module>12-annotation-conditional</module>
         <module>13-annotation-profile</module>
         <module>14-annotation-component-composite-sample</module>
+        <module>15-annotation-autowired</module>
+        <module>16-annotation-value</module>
+        <module>17-annotation-jsr-resource-inject</module>
+        <module>18-annotation-primary</module>
+        <module>19-annotation-lifecycle</module>
     </modules>
 
     <!-- 版本号管理 -->
