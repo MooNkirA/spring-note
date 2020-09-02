@@ -30,6 +30,7 @@
         <module>13-annotation-profile</module>
         <module>14-annotation-component-composite-sample</module>
         <module>15-annotation-autowired</module>
+        <module>16-annotation-value</module>
     </modules>
 
     <!-- 版本号管理 -->
