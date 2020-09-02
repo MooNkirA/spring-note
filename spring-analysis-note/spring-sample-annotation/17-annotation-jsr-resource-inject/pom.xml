@@ -9,10 +9,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>17-annotation-jsr-resource</artifactId>
+    <artifactId>17-annotation-jsr-resource-inject</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>JSR规范的@Resource注解基础使用示例</description>
+    <description>JSR规范的Resource、inject注解基础使用示例</description>
 
     <dependencies>
         <!-- spring核心依赖 -->
@@ -24,6 +24,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- JSR 330 规范中inject注解的依赖 -->
+        <!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
     </dependencies>
 

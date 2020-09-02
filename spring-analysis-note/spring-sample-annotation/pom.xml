@@ -31,7 +31,7 @@
         <module>14-annotation-component-composite-sample</module>
         <module>15-annotation-autowired</module>
         <module>16-annotation-value</module>
-        <module>17-annotation-jsr-resource</module>
+        <module>17-annotation-jsr-resource-inject</module>
     </modules>
 
     <!-- 版本号管理 -->
