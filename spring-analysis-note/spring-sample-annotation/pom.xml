@@ -32,6 +32,7 @@
         <module>15-annotation-autowired</module>
         <module>16-annotation-value</module>
         <module>17-annotation-jsr-resource-inject</module>
+        <module>18-annotation-primary</module>
     </modules>
 
     <!-- 版本号管理 -->
