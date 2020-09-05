@@ -76,6 +76,7 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 */
 	public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
 		super(parentBeanFactory);
+		// 此处的Resource对象就是spring封装的资源对象，具体的实现是ClassPathResource，用于读取xml配置文件
 		this.reader.loadBeanDefinitions(resource);
 	}
 

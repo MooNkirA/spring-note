@@ -54,6 +54,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * Scope identifier for the standard singleton scope: "singleton".
 	 * Custom scopes can be added via {@code registerScope}.
 	 * @see #registerScope
+	 *
+	 * 定义单例Bean的作用范围常量
 	 */
 	String SCOPE_SINGLETON = "singleton";
 
@@ -61,6 +63,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * Scope identifier for the standard prototype scope: "prototype".
 	 * Custom scopes can be added via {@code registerScope}.
 	 * @see #registerScope
+	 *
+	 * 定义多例Bean的作用范围常量
 	 */
 	String SCOPE_PROTOTYPE = "prototype";
 
@@ -241,6 +245,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * that autodetected post-processors (e.g. as beans in an ApplicationContext)
 	 * will always be applied after programmatically registered ones.
 	 * @param beanPostProcessor the post-processor to register
+	 *
+	 * 添加一个新的 BeanPostProcessor 后置处理器
 	 */
 	void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 

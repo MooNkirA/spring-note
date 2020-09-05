@@ -55,6 +55,7 @@ import org.springframework.lang.Nullable;
  * @see HierarchicalBeanFactory
  * @see BeanFactoryUtils
  */
+/* 此接口定义获取容器中 bean 的配置信息的相关方法 */
 public interface ListableBeanFactory extends BeanFactory {
 
 	/**
@@ -74,6 +75,8 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * and ignores any singleton beans that have been registered by
 	 * other means than bean definitions.
 	 * @return the number of beans defined in the factory
+	 *
+	 * 获取当前容器中存在的 BeanDefinition 的个数
 	 */
 	int getBeanDefinitionCount();
 
@@ -84,6 +87,8 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * other means than bean definitions.
 	 * @return the names of all beans defined in this factory,
 	 * or an empty array if none defined
+	 *
+	 * 获取容器中所有 BeanDefinition 对象的名称数组
 	 */
 	String[] getBeanDefinitionNames();
 
@@ -113,6 +118,8 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * @see #isTypeMatch(String, ResolvableType)
 	 * @see FactoryBean#getObjectType
 	 * @see BeanFactoryUtils#beanNamesForTypeIncludingAncestors(ListableBeanFactory, ResolvableType)
+	 *
+	 * 根据类型获取容器中所有该类型的 BeanDefinition 对象的名称数组
 	 */
 	String[] getBeanNamesForType(ResolvableType type);
 

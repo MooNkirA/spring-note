@@ -215,16 +215,19 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, BeanDefinitionCustomizer... definitionCustomizers) {
 
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(annotatedClass);
+		// 判断元信息中是否包含@Conditional注解，如果包含则不继续以下执行
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
 
 		abd.setInstanceSupplier(instanceSupplier);
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
+		// 设置bean的作用范围
 		abd.setScope(scopeMetadata.getScopeName());
+		// 生成容器中的唯一标识（beanName），如果没有指定，则使用默认的生成规则
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
-		// 获取注解并封装到BeanDefinition对象中
+		// 获取注解并封装到BeanDefinition对象中，主要是用来处理一些通用的属性，如：@Lazy、@Primary、@DependsOn等
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
@@ -239,12 +242,14 @@ public class AnnotatedBeanDefinitionReader {
 				}
 			}
 		}
+		// 处理使用者对BeanDefinition自定义的一些处理逻辑，BeanDefinitionCustomizer是函数式接口，可以直接用Lambda表达式来编写实现逻辑
 		for (BeanDefinitionCustomizer customizer : definitionCustomizers) {
 			customizer.customize(abd);
 		}
 
-		// 将BeanDefinition再包装成BeanDefinitionHolder对象
+		// 将BeanDefinition再包装成BeanDefinitionHolder对象，BeanDefinitionHolder其实就是对象BeanDefinition对象与beanName做了映射关系的绑定
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
+		// 判断bean生成时的代理方式
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 		// 将BeanDefinitionHolder对象注册到BeanDefinitionRegistry中
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);

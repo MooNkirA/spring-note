@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
  * @author Rob Harrop
  * @since 2.0
  */
+/* 属性访问器接口 */
 public interface AttributeAccessor {
 
 	/**
@@ -36,6 +37,7 @@ public interface AttributeAccessor {
 	 * @param name the unique attribute key
 	 * @param value the attribute value to be attached
 	 */
+	/* 设置属性值 */
 	void setAttribute(String name, @Nullable Object value);
 
 	/**
@@ -44,6 +46,7 @@ public interface AttributeAccessor {
 	 * @param name the unique attribute key
 	 * @return the current value of the attribute, if any
 	 */
+	/* 获取属性值 */
 	@Nullable
 	Object getAttribute(String name);
 
@@ -53,6 +56,7 @@ public interface AttributeAccessor {
 	 * @param name the unique attribute key
 	 * @return the last value of the attribute, if any
 	 */
+	/* 移除属性值 */
 	@Nullable
 	Object removeAttribute(String name);
 
@@ -61,11 +65,13 @@ public interface AttributeAccessor {
 	 * Otherwise return {@code false}.
 	 * @param name the unique attribute key
 	 */
+	/* 判断是否有某个属性 */
 	boolean hasAttribute(String name);
 
 	/**
 	 * Return the names of all attributes.
 	 */
+	/* 获取所有属性的名称 */
 	String[] attributeNames();
 
 }

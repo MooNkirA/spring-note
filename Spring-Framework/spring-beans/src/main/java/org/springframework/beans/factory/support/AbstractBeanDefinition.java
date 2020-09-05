@@ -54,6 +54,10 @@ import org.springframework.util.StringUtils;
  * @see RootBeanDefinition
  * @see ChildBeanDefinition
  */
+/*
+ * RootBeanDefinition，ChildBeanDefinition，GenericBeanDefinition三个类都是由AbstractBeanDefinition派生而来
+ * 该抽象类中包含了bean的所有配置项和一些支持程序运行的属性。
+ */
 @SuppressWarnings("serial")
 public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccessor
 		implements BeanDefinition, Cloneable {
@@ -136,69 +140,85 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
-
+	/* bean 对应的类实例 */
 	@Nullable
 	private volatile Object beanClass;
-
+	/* bean的作用域，对应scope属性 */
 	@Nullable
 	private String scope = SCOPE_DEFAULT;
-
+	/* 是否是抽象类，对应abstract属性 */
 	private boolean abstractFlag = false;
-
+	/* 是否延迟加载，对应lazy-init属性 */
 	private boolean lazyInit = false;
-
+	/* 自动装配模式，对应autowire属性 */
 	private int autowireMode = AUTOWIRE_NO;
-
+	/* 依赖检查，对应dependency-check属性 */
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
 
+	/* 对应depends-on，表示一个bean实例化前置依赖另一个bean */
 	@Nullable
 	private String[] dependsOn;
-
+	/* 对应autowire-candidate属性，设置为false时表示取消当前bean作为自动装配候选者的资格 */
 	private boolean autowireCandidate = true;
-
+	/* 对应primary属性，当自动装配存在多个候选者时，将其作为首选 */
 	private boolean primary = false;
-
+	/* 对应qualifier属性 */
 	private final Map<String, AutowireCandidateQualifier> qualifiers = new LinkedHashMap<>();
 
 	@Nullable
 	private Supplier<?> instanceSupplier;
-
+	/* 非配置项：表示允许访问非公开的构造器和方法，由程序设置 */
 	private boolean nonPublicAccessAllowed = true;
 
+	/*
+	 * 非配置项：表示是否允许以宽松的模式解析构造函数，由程序设置
+	 * 	例如：如果设置为true，则在下列情况时不会抛出异常
+	 * 		interface ITest{}
+	 * 		class ITestImpl implements ITest {}
+	 * 		class Main {
+	 * 			Main(ITest i){}
+	 * 			Main(ITestImpl i){}
+	 * 		}
+	 */
 	private boolean lenientConstructorResolution = true;
-
+	/* 对应factory-bean属性 */
 	@Nullable
 	private String factoryBeanName;
-
+	/* 对应factory-method属性 */
 	@Nullable
 	private String factoryMethodName;
-
+	/* 记录构造函数注入属性，对应<construct-arg/>标签 */
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;
-
+	/* 记录<property/>属性集合 */
 	@Nullable
 	private MutablePropertyValues propertyValues;
-
+	/* 记录<lookup-method/>和<replaced-method/>标签配置 */
 	@Nullable
 	private MethodOverrides methodOverrides;
-
+	/* 对应init-method属性 */
 	@Nullable
 	private String initMethodName;
-
+	/* 对应destroy-method属性 */
 	@Nullable
 	private String destroyMethodName;
-
+	/* 非配置项：是否执行init-method，由程序设置 */
 	private boolean enforceInitMethod = true;
-
+	/* 非配置项：是否执行destroy-method，由程序设置 */
 	private boolean enforceDestroyMethod = true;
-
+	/* 非配置项：表示是否是用户定义，而不是程序定义的，创建AOP时为true,由程序设置 */
 	private boolean synthetic = false;
-
+	/*
+	 * 非配置项：定义bean的应用场景，由程序设置，角色如下：
+	 * 		ROLE_APPLICATION：用户
+	 * 		ROLE_INFRASTRUCTURE：完全内部使用
+	 * 		ROLE_SUPPORT：某些复杂配置的一部分
+	 */
 	private int role = BeanDefinition.ROLE_APPLICATION;
-
+	/* bean的描述信息，对应description标签 */
 	@Nullable
 	private String description;
-
+	/* bean定义的资源 */
 	@Nullable
 	private Resource resource;
 
@@ -224,7 +244,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * bean definition.
 	 * @param original the original bean definition to copy from
 	 */
+	/* 都是通过子类的构造方法调用父类此构造方法 */
 	protected AbstractBeanDefinition(BeanDefinition original) {
+		// 创建AbstractBeanDefinition相关属性
 		setParentName(original.getParentName());
 		setBeanClassName(original.getBeanClassName());
 		setScope(original.getScope());

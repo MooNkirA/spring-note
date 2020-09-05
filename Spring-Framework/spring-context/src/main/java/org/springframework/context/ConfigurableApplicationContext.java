@@ -48,6 +48,8 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	 * @see org.springframework.context.support.AbstractXmlApplicationContext#setConfigLocation
 	 * @see org.springframework.web.context.ContextLoader#CONFIG_LOCATION_PARAM
 	 * @see org.springframework.web.servlet.FrameworkServlet#setContextConfigLocation
+	 *
+	 * 在单个字符串(String)值中，可以将任意数量的这些字符视为多个上下文配置路径之间的分隔符。
 	 */
 	String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 

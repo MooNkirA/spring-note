@@ -76,6 +76,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
+	 *
+	 * 根据名称自动装配Bean属性的常数标识
 	 */
 	int AUTOWIRE_BY_NAME = 1;
 
@@ -85,6 +87,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
+	 *
+	 * 根据类型自动装配Bean属性的常数标识
 	 */
 	int AUTOWIRE_BY_TYPE = 2;
 
@@ -93,6 +97,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * can be satisfied (involves resolving the appropriate constructor).
 	 * @see #createBean
 	 * @see #autowire
+	 *
+	 * 根据构造方法自动装配Bean属性的常数标识（实现上类似根据类型自动装配）
 	 */
 	int AUTOWIRE_CONSTRUCTOR = 3;
 
@@ -103,6 +109,9 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #autowire
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
 	 * prefer annotation-based autowiring for clearer demarcation of autowiring needs.
+	 *
+	 * 根据 bean 的自省机制决定采用 byType 还是 constructor 进行自动装配Bean属性的常数标识
+	 * 如果 bean 提供了默认的构造函数，则采用 byType，否则采用 constructor。
 	 */
 	@Deprecated
 	int AUTOWIRE_AUTODETECT = 4;
@@ -135,6 +144,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @param beanClass the class of the bean to create
 	 * @return the new bean instance
 	 * @throws BeansException if instantiation or wiring failed
+	 *
+	 * 定义创建bean的方法
 	 */
 	<T> T createBean(Class<T> beanClass) throws BeansException;
 
@@ -147,6 +158,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * use {@link #autowireBeanProperties} for those purposes.
 	 * @param existingBean the existing bean instance
 	 * @throws BeansException if wiring failed
+	 *
+	 * 定义自动注入bean的方法
 	 */
 	void autowireBean(Object existingBean) throws BeansException;
 

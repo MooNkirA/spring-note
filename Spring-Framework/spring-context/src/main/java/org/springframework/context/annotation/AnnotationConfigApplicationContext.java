@@ -61,6 +61,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
+	// AnnotationConfigApplicationContext(Class<?>... annotatedClasses) 与 AnnotationConfigApplicationContext(String... basePackages) 创建容器的第一步会调用此构造方法
 	public AnnotationConfigApplicationContext() {
 		// 创建读取注解的BeanDefinition读取器
 		this.reader = new AnnotatedBeanDefinitionReader(this);
@@ -91,8 +92,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * e.g. {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... annotatedClasses) {
+		// 子类的构造方法执行时，第一步会默认调父类的无参构造方法，即public GenericApplicationContext()
+		// this()此无参构造方法是用来注册与初始化框架的本身的类
 		this();
-		// 将传入的类注册到BeanDefinition中
+		// 将传入的类字节码对象（配置类）注册到BeanDefinition中
 		register(annotatedClasses);
 		refresh();
 	}
@@ -104,6 +107,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 */
 	public AnnotationConfigApplicationContext(String... basePackages) {
 		this();
+		// 如果入参为基础包，则进行包扫描的操作
 		scan(basePackages);
 		refresh();
 	}

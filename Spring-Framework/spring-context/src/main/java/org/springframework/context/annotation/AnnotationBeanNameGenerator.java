@@ -65,17 +65,25 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 
 	private static final String COMPONENT_ANNOTATION_CLASSNAME = "org.springframework.stereotype.Component";
 
-
+	/*
+	 * 此方法是接口中抽象方法的实现。该方法分为两个部分：
+	 * 	第一个部分：当指定了bean的名称，则直接使用指定的名称。
+	 * 	第二个部分：当没有指定bean的名称时，则使用当前类的短类名作为bean的唯一标识。
+	 */
 	@Override
 	public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+		// 判断bean的定义信息是否为基于注解的
 		if (definition instanceof AnnotatedBeanDefinition) {
+			// 解析注解中的属性，看看有没有指定的bean的唯一标识（beanName）
 			String beanName = determineBeanNameFromAnnotation((AnnotatedBeanDefinition) definition);
 			if (StringUtils.hasText(beanName)) {
 				// Explicit bean name found.
+				// 返回注解的属性指定的bean的唯一标识
 				return beanName;
 			}
 		}
 		// Fallback: generate a unique default bean name.
+		// 如上面校验注解没有指定bean的名称，则调用方法，使用注解bean名称的命名规则，生成bean的唯一标识
 		return buildDefaultBeanName(definition, registry);
 	}
 
