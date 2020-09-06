@@ -9,12 +9,18 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>14-annotation-component-composite-sample</artifactId>
+    <artifactId>20-spring-aop-proxy</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@Component及其衍生注解综合使用示例（综合之前示例所使用过的注解）</description>
+    <description>Spring aop 入门示例 proxy 代理设计模式示例</description>
 
     <dependencies>
+        <!-- 依赖项目公共模块 -->
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>sample-common</artifactId>
+        </dependency>
+
         <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>

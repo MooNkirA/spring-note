@@ -9,40 +9,33 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>14-annotation-component-composite-sample</artifactId>
+    <artifactId>21-annotation-aop-quickstart</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@Component及其衍生注解综合使用示例（综合之前示例所使用过的注解）</description>
+    <description>Spring aop 快速入门示例</description>
 
     <dependencies>
+        <!-- 依赖项目公共模块 -->
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>sample-common</artifactId>
+        </dependency>
+
         <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
-        <!-- spring操作持久层依赖 -->
+        <!-- aspectj 依赖 -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
         </dependency>
-        <!-- mysql驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- yaml文件解析器 -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
         </dependency>
     </dependencies>
 

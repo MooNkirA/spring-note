@@ -34,6 +34,9 @@
         <module>17-annotation-jsr-resource-inject</module>
         <module>18-annotation-primary</module>
         <module>19-annotation-lifecycle</module>
+        <module>20-spring-aop-proxy</module>
+        <module>sample-common</module>
+        <module>21-annotation-aop-quickstart</module>
     </modules>
 
     <!-- 版本号管理 -->
@@ -42,6 +45,10 @@
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <junit.version>4.12</junit.version>
         <druid.version>1.1.9</druid.version>
+        <snakeyaml.version>1.23</snakeyaml.version>
+        <aspectj.version>1.8.13</aspectj.version>
+        <!-- 项目模块版本号 -->
+        <project.module.version>1.0-SNAPSHOT</project.module.version>
     </properties>
 
     <!-- 版本控制 -->
@@ -82,6 +89,26 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <!-- yaml文件解析器 -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+            <!-- AspectJ 依赖 -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <!-- 项目模块版本控制 -->
+            <dependency>
+                <groupId>com.moon</groupId>
+                <artifactId>sample-common</artifactId>
+                <version>${project.module.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
