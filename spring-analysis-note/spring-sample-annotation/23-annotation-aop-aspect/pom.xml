@@ -9,10 +9,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>22-annotation-aop-enableaspectjautoproxy</artifactId>
+    <artifactId>23-annotation-aop-aspect</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@EnableAspectJAutoProxy 注解基础使用示例</description>
+    <description>@Aspect 注解基础使用示例</description>
 
     <dependencies>
         <!-- 依赖项目公共模块 -->
@@ -38,5 +38,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>

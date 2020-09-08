@@ -8,11 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
- * Spring Aspect 测试
+ * 注解 @Aspect 测试
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-9-6 22:38
+ * @date 2020-9-8 16:17
  * @description
  */
 public class SpringAspectTest {

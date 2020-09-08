@@ -27,11 +27,12 @@ public final class UserServiceImpl implements UserService {
 
     @Override
     public void saveAllUser(List<User> users) {
+        // 设置@EnableAspectJAutoProxy(exposeProxy = true)，可以通过AopContext获取，暴露aop的代理对象
+        UserService proxy = (UserService) AopContext.currentProxy();
         for (User user : users) {
             // 因为定义切入点没有包含saveAllUser方法，所以不被切面增强，就算调用切入点的方法，也不会有增强的效果
             // this.saveUser(user);
-            // 此时通过设置@EnableAspectJAutoProxy(exposeProxy = true)，暴露aop的代理对象，通过代理对象去调用切入点的方法即可
-            UserService proxy = (UserService) AopContext.currentProxy();
+            // 此时通过代理对象去调用切入点的方法即可
             proxy.saveUser(user);
         }
     }
