@@ -37,6 +37,7 @@
         <module>20-spring-aop-proxy</module>
         <module>sample-common</module>
         <module>21-annotation-aop-quickstart</module>
+        <module>22-annotation-aop-enableaspectjautoproxy</module>
     </modules>
 
     <!-- 版本号管理 -->

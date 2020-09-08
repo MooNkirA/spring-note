@@ -111,6 +111,7 @@ public abstract class AopConfigUtils {
 	/* 设置exposeProxy属性到BeanDefinition对象中 */
 	public static void forceAutoProxyCreatorToExposeProxy(BeanDefinitionRegistry registry) {
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
+			// 从BeanDefinitionRegistry注册中心中，根据之前定义的自动代理创建者的beanName，获取相应的BeanDefinition对象
 			BeanDefinition definition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			definition.getPropertyValues().add("exposeProxy", Boolean.TRUE);
 		}
