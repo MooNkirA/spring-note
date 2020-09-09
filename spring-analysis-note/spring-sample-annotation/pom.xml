@@ -39,6 +39,7 @@
         <module>21-annotation-aop-quickstart</module>
         <module>22-annotation-aop-enableaspectjautoproxy</module>
         <module>23-annotation-aop-aspect</module>
+        <module>24-annotation-aop-pointcut</module>
     </modules>
 
     <!-- 版本号管理 -->

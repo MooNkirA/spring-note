@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
  * 实际开发中，在@Aspect注解中指定切入点表达式极少用
  */
 // @Aspect("perthis(execution(* com.moon.springsample.sevice.impl.UserServiceImpl.saveAll(..)))")
-// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // 注意：通常情况下切面类是不需要多例的。
 @Order(1) // 通过@Order注解来指定多个切面同一个类型的通知方法执行的顺序
 public class LogAspect {
 

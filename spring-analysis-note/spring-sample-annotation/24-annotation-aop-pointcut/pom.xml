@@ -9,10 +9,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>23-annotation-aop-aspect</artifactId>
+    <artifactId>24-annotation-aop-pointcut</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@Aspect 注解基础使用示例</description>
+    <description>@Pointcut 注解基础使用示例</description>
 
     <dependencies>
         <!-- 依赖项目公共模块 -->
