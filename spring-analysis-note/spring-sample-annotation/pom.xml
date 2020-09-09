@@ -42,6 +42,7 @@
         <module>24-annotation-aop-pointcut</module>
         <module>25-annotation-aop-advicetype-general</module>
         <module>26-annotation-aop-advicetype-sequence</module>
+        <module>27-annotation-aop-around</module>
     </modules>
 
     <!-- 版本号管理 -->
