@@ -16,18 +16,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public void saveUser(User user, String id) {
+    public void saveUser(User user) {
         System.out.println("UserServiceImpl.saveUser()执行了保存用户" + user.toString());
-        // int a = 1 / 0; // 模拟异常
     }
 
-    @Override
-    public User findById(String id) {
-        User user = new User();
-        user.setId(id);
-        user.setUsername("长泽雅美");
-        System.out.println("准备返回的User对象是: " + user.toString());
-        // int a = 1 / 0; // 模拟异常
-        return user;
-    }
 }
