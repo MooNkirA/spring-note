@@ -43,6 +43,7 @@
         <module>25-annotation-aop-advicetype-general</module>
         <module>26-annotation-aop-advicetype-sequence</module>
         <module>27-annotation-aop-around</module>
+        <module>28-annotation-aop-declareparents</module>
     </modules>
 
     <!-- 版本号管理 -->
