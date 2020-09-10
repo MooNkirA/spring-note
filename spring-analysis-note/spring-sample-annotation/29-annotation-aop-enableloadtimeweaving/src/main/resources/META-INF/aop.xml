@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "https://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+    <aspects>
+        <!-- 1. 切面类 -->
+        <aspect name="com.moon.springsample.aspect.LoadTimeWeavingAspect"/>
+    </aspects>
+    <weaver>
+        <!-- 2. 指定需要进行织入操作的目标类范围 -->
+        <include within="com.moon.springsample.service..*"/>
+    </weaver>
+</aspectj>

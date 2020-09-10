@@ -2,8 +2,7 @@ package com.moon.springaop.test;
 
 import com.moon.springsample.config.SpringConfiguration;
 import com.moon.springsample.domain.User;
-import com.moon.springsample.extension.ValidateExtensionService;
-import com.moon.springsample.sevice.UserService;
+import com.moon.springsample.service.UserService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -19,7 +18,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class SpringDeclareParentsTest {
 
     @Test
-    public void adviceSequenceBasicTest() {
+    public void declareParentsBasicTest() {
         // 1. 创建注解扫描的容器
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         // 2.获取对象
