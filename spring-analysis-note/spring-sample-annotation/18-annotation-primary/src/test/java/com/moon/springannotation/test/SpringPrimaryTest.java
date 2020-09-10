@@ -1,7 +1,7 @@
 package com.moon.springannotation.test;
 
 import com.moon.springsample.config.SpringConfiguration;
-import com.moon.springsample.sevice.AccountService;
+import com.moon.springsample.service.AccountService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

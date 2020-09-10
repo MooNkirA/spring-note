@@ -1,13 +1,11 @@
 package com.moon.springsample.factory;
 
-import com.moon.springsample.domain.Account;
-import com.moon.springsample.sevice.AccountService;
+import com.moon.springsample.service.AccountService;
 import com.moon.springsample.utils.TransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**

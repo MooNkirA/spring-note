@@ -2,7 +2,7 @@ package com.moon.springaop.test;
 
 import com.moon.springsample.config.SpringConfiguration;
 import com.moon.springsample.domain.User;
-import com.moon.springsample.sevice.UserService;
+import com.moon.springsample.service.UserService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

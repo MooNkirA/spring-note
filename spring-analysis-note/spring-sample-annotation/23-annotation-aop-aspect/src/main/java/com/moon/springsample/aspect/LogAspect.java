@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
 
     /* @Before注解用于配置当前方法是一个前置通知 */
-    @Before("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Before("execution(* com.moon.springsample.service.impl.*.*(..))")
     public void beforeLog(JoinPoint joinPoint) {
         System.out.println("前置通知(@Before)：执行切入点方法前...记录日志");
     }

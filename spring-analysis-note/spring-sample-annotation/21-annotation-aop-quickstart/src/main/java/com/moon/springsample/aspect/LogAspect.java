@@ -29,7 +29,7 @@ public class LogAspect {
      * 定义切入点表达式
      *   表达式意思是：匹配 任意返回值 com.moon.springsample.sevice.impl包下 任意类 任意方法 任意类型参数列表
      */
-    @Pointcut("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Pointcut("execution(* com.moon.springsample.service.impl.*.*(..))")
     private void pt() {
     }
 

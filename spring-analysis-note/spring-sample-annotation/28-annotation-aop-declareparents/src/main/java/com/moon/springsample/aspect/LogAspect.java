@@ -26,7 +26,7 @@ public class LogAspect {
      *      value属性：用于指定目标类型的表达式。当在全限定类名后面跟上”+“时，表示当前类及其子类
      *      defaultImpl属性：指定提供方法或者字段的默认实现类，此示例为校验扩展实现类
      */
-    @DeclareParents(value = "com.moon.springsample.sevice.UserService+", defaultImpl = ValidateExtensionServiceImpl.class)
+    @DeclareParents(value = "com.moon.springsample.service.UserService+", defaultImpl = ValidateExtensionServiceImpl.class)
     private ValidateExtensionService validateExtensionService;
 
     /*
@@ -34,7 +34,7 @@ public class LogAspect {
      *   通过this关键字，将扩展接口的对象引用做为通知方法形参
      *   而args函数是切入点方法的形参，两个不能搞混
      */
-    @Before("execution(* com.moon.springsample.sevice.impl.*.*(..))&&this(validateExtensionService)&&args(user)")
+    @Before("execution(* com.moon.springsample.service.impl.*.*(..))&&this(validateExtensionService)&&args(user)")
     public void beforeLog(ValidateExtensionService validateExtensionService, User user) {
         // 调用扩展接口的方法
         if (validateExtensionService.checkUser(user)) {

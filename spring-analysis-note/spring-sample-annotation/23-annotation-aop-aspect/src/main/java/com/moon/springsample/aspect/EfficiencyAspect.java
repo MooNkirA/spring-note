@@ -29,7 +29,7 @@ public class EfficiencyAspect {
     /**
      * 前置通知，记录开始时间
      */
-    @Before("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Before("execution(* com.moon.springsample.service.impl.*.*(..))")
     public void before() {
         time = System.currentTimeMillis();
         System.out.println("方法执行开始时间：" + time);
@@ -38,7 +38,7 @@ public class EfficiencyAspect {
     /**
      * 最终通知，统计方法执行时长
      */
-    @After("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @After("execution(* com.moon.springsample.service.impl.*.*(..))")
     public void after() {
         System.out.println("方法执行时间为:" + ((System.currentTimeMillis() - time) / 1000));
     }

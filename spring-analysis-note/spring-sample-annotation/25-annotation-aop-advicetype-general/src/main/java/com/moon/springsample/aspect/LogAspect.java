@@ -26,7 +26,7 @@ import java.util.UUID;
 public class LogAspect {
 
     /* 定义切入点表达式：匹配 任意返回值 com.moon.springsample.sevice.impl包下 任意类 任意方法 任意类型参数列表 */
-    @Pointcut("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Pointcut("execution(* com.moon.springsample.service.impl.*.*(..))")
     private void pt() {
     }
 
@@ -38,7 +38,7 @@ public class LogAspect {
      *
      * 注：如果匹配了args方法参数，则会拦截有对应参数的方法，不再是类中任意方法，即此注解只拦截UserServiceImpl#saveUser(User user, String id)方法
      */
-    @Before(value = "execution(* com.moon.springsample.sevice.impl.*.*(..)) && args(user, id)", argNames = "user,id")
+    @Before(value = "execution(* com.moon.springsample.service.impl.*.*(..)) && args(user, id)", argNames = "user,id")
     // @Before("execution(* com.moon.springsample.sevice.impl.*.*(..)) && args(user, id)")
     public void beforeLog(User user, String id) {
         id = UUID.randomUUID() + "|" + id;
@@ -80,7 +80,7 @@ public class LogAspect {
      *
      * 注：即此示例只拦截到UserServiceImpl#findById(String id)方法
      */
-    @After(value = "execution(* com.moon.springsample.sevice.impl.*.*(..)) && args(id)", argNames = "id")
+    @After(value = "execution(* com.moon.springsample.service.impl.*.*(..)) && args(id)", argNames = "id")
     public void afterLog(String id) {
         System.out.println("最终通知(@After)：获取到的方法入参id：" + id);
         System.out.println("最终通知(@After)：执行切入点方法完成后（不管有无异常都会执行）...记录日志");

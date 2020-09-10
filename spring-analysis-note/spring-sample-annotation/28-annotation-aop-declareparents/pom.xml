@@ -12,7 +12,7 @@
     <artifactId>28-annotation-aop-declareparents</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    <description>@Around 注解使用示例</description>
+    <description>@DeclareParents 注解使用示例</description>
 
     <dependencies>
         <!-- 依赖项目公共模块 -->

@@ -29,7 +29,7 @@ import java.util.UUID;
 public class LogAspect {
 
     /* 定义切入点表达式 */
-    @Pointcut("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Pointcut("execution(* com.moon.springsample.service.impl.*.*(..))")
     private void pt() {
     }
 

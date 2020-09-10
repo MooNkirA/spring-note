@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
 
     /* 定义切入点 */
-    @Pointcut("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Pointcut("execution(* com.moon.springsample.service.impl.*.*(..))")
     private void pt() {
     }
 
@@ -45,12 +45,12 @@ public class LogAspect {
      * 同一个切面中，同一个类型的通知方法重载的情况执行顺序：
      *  比较的方法与非重载的方法一致，也是根据比较方法名 + 参数列表的逐个字母的ascII码表的值大小排序，越小越优先
      */
-    @Before("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    @Before("execution(* com.moon.springsample.service.impl.*.*(..))")
     public void beforeLog() {
         System.out.println("beforeLog()前置通知方法执行了...");
     }
 
-    @Before("execution(* com.moon.springsample.sevice.impl.*.*(..)) && args(user)")
+    @Before("execution(* com.moon.springsample.service.impl.*.*(..)) && args(user)")
     public void beforeLog(User user) {
         System.out.println("beforeLog(User user)前置通知方法执行了...");
     }
