@@ -45,6 +45,7 @@
         <module>27-annotation-aop-around</module>
         <module>28-annotation-aop-declareparents</module>
         <module>29-annotation-aop-enableloadtimeweaving</module>
+        <module>30-spring-tx-jdbctemplate-quickstart</module>
     </modules>
 
     <!-- 版本号管理 -->
