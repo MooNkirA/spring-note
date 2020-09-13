@@ -15,6 +15,12 @@
     <description>@Component及其衍生注解综合使用示例（综合之前示例所使用过的注解）</description>
 
     <dependencies>
+        <!-- 依赖项目公共模块 -->
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>sample-common</artifactId>
+        </dependency>
+
         <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
