@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 
 import javax.sql.DataSource;
 
@@ -54,6 +57,29 @@ public class JdbcConfig {
     // 方法的入参无论是否加上@Autowired 注解，都会自动注入数据源对象
     public JdbcTemplate createJdbcTemplate(@Autowired DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    /**
+     * 创建 LobHandler 对象，并注册到ioc容器中
+     *
+     * @return
+     */
+    @Bean("lobHandler")
+    public LobHandler createLobHandler() {
+        // 直接创建spring框架的提供的LobHandler实现类
+        return new DefaultLobHandler();
+    }
+
+    /**
+     * 创建 NamedParameterJdbcTemplate 对象，并注册到ioc容器中
+     *
+     * @param jdbcTemplate
+     * @return
+     */
+    @Bean("namedParameterJdbcTemplate")
+    public NamedParameterJdbcTemplate createNamedParameterJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        // NamedParameterJdbcTemplate其实就是对JdbcTemplate进行再次封装
+        return new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
 }
