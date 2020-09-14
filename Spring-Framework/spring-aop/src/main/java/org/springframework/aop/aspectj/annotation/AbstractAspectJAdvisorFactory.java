@@ -166,6 +166,9 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	 * pointcut String.
 	 * @param <A> the annotation type
 	 */
+	/*
+	 * 在protected权限的内部类中，在静态代码块中定义着和通知类型相关的注解。
+	 */
 	protected static class AspectJAnnotation<A extends Annotation> {
 
 		private static final String[] EXPRESSION_ATTRIBUTES = new String[] {"pointcut", "value"};

@@ -98,6 +98,7 @@ import org.springframework.util.StringUtils;
  * @see RowMapper
  * @see org.springframework.jdbc.support.SQLExceptionTranslator
  */
+/* JdbcTemplate实现了JdbcOperations接口，jdbc相关操作方法都定义在此接口中 */
 public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 
 	private static final String RETURN_RESULT_SET_PREFIX = "#result-set-";
@@ -153,6 +154,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	 * <p>Note: The DataSource has to be set before using the instance.
 	 * @see #setDataSource
 	 */
+	/* 使用默认构造函数构建JdbcTemplate */
 	public JdbcTemplate() {
 	}
 
@@ -161,6 +163,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	 * <p>Note: This will not trigger initialization of the exception translator.
 	 * @param dataSource the JDBC DataSource to obtain connections from
 	 */
+	/* 通过数据源构建JdbcTemplate */
 	public JdbcTemplate(DataSource dataSource) {
 		setDataSource(dataSource);
 		afterPropertiesSet();

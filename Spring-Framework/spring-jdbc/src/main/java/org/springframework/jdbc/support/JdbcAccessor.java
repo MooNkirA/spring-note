@@ -54,6 +54,7 @@ public abstract class JdbcAccessor implements InitializingBean {
 	/**
 	 * Set the JDBC DataSource to obtain connections from.
 	 */
+	/* 当使用默认构造函数构建时，提供了设置数据源的方法 */
 	public void setDataSource(@Nullable DataSource dataSource) {
 		this.dataSource = dataSource;
 	}

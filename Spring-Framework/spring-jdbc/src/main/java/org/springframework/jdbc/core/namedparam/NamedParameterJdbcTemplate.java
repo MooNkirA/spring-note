@@ -65,6 +65,10 @@ import org.springframework.util.Assert;
  * @see NamedParameterJdbcOperations
  * @see org.springframework.jdbc.core.JdbcTemplate
  */
+/*
+ * 通过观察源码可发现，NamedParameterJdbcTemplate里面封装了一个JdbcTemplate对象
+ * 只不过把它看成了接口类型JdbcOperations。
+ */
 public class NamedParameterJdbcTemplate implements NamedParameterJdbcOperations {
 
 	/** Default maximum number of entries for this template's SQL cache: 256. */
@@ -72,6 +76,7 @@ public class NamedParameterJdbcTemplate implements NamedParameterJdbcOperations 
 
 
 	/** The JdbcTemplate we are wrapping. */
+	/* 将JdbcTemplate再次包装 */
 	private final JdbcOperations classicJdbcTemplate;
 
 	private volatile int cacheLimit = DEFAULT_CACHE_LIMIT;
@@ -92,6 +97,7 @@ public class NamedParameterJdbcTemplate implements NamedParameterJdbcOperations 
 	 * <p>Creates a classic Spring {@link org.springframework.jdbc.core.JdbcTemplate} and wraps it.
 	 * @param dataSource the JDBC DataSource to access
 	 */
+	/* 使用DataSource 构建一个NamedParameterJdbcTemplate */
 	public NamedParameterJdbcTemplate(DataSource dataSource) {
 		Assert.notNull(dataSource, "DataSource must not be null");
 		this.classicJdbcTemplate = new JdbcTemplate(dataSource);
@@ -102,6 +108,7 @@ public class NamedParameterJdbcTemplate implements NamedParameterJdbcOperations 
 	 * Spring {@link org.springframework.jdbc.core.JdbcTemplate}.
 	 * @param classicJdbcTemplate the classic Spring JdbcTemplate to wrap
 	 */
+	/* 使用JdbcOperations 构建一个NamedParameterJdbcTemplate */
 	public NamedParameterJdbcTemplate(JdbcOperations classicJdbcTemplate) {
 		Assert.notNull(classicJdbcTemplate, "JdbcTemplate must not be null");
 		this.classicJdbcTemplate = classicJdbcTemplate;

@@ -94,6 +94,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 							this.beanFactory, Object.class, true, false);
 					// 循环所有beanName
 					for (String beanName : beanNames) {
+						// 判断当前beanName的示例是否一个切面类，不是则跳过循环下一个
 						if (!isEligibleBean(beanName)) {
 							continue;
 						}
