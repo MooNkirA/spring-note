@@ -149,9 +149,15 @@ import org.springframework.core.Ordered;
  * @see ProxyTransactionManagementConfiguration
  * @see org.springframework.transaction.aspectj.AspectJTransactionManagementConfiguration
  */
+/* Spring支持注解事务配置的标志，表明Spring开启注解事务配置的支持。 */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+/*
+ * 通过在@Import注解，Spring定义了一个事务管理配置类的导入器TransactionManagementConfigurationSelector，此类会给容器中导入两个组件：
+ * 		AutoProxyRegistrar
+ * 		ProxyTransactionManagementConfiguration
+ */
 @Import(TransactionManagementConfigurationSelector.class)
 public @interface EnableTransactionManagement {
 
@@ -167,6 +173,7 @@ public @interface EnableTransactionManagement {
 	 * time. This approach has no negative impact in practice unless one is explicitly
 	 * expecting one type of proxy vs another, e.g. in tests.
 	 */
+	/* 指定基于目标类代理还是基于接口代理。默认采用JDK官方的基于接口代理。 */
 	boolean proxyTargetClass() default false;
 
 	/**
@@ -179,12 +186,20 @@ public @interface EnableTransactionManagement {
 	 * scenario. For a more advanced mode of interception, consider switching this to
 	 * {@link AdviceMode#ASPECTJ}.
 	 */
+	/*
+	 * 指定事务通知是如何执行的。默认是通过代理方式执行的。
+	 * 如果是同一个类中调用的话，请采用AdviceMode.ASPECTJ
+	 */
 	AdviceMode mode() default AdviceMode.PROXY;
 
 	/**
 	 * Indicate the ordering of the execution of the transaction advisor
 	 * when multiple advices are applied at a specific joinpoint.
 	 * <p>The default is {@link Ordered#LOWEST_PRECEDENCE}.
+	 */
+	/*
+	 * 指示在特定连接点应用多个通知时事务处理的执行顺序。
+	 * 默认值是：最低优先级（Integer.MAX_VALUE）
 	 */
 	int order() default Ordered.LOWEST_PRECEDENCE;
 

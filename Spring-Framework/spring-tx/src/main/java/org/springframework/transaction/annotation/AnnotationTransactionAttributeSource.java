@@ -76,6 +76,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 * public methods that carry the {@code Transactional} annotation
 	 * or the EJB3 {@link javax.ejb.TransactionAttribute} annotation.
 	 */
+	/* 默认无参构造方法，调用有参构造方法 */
 	public AnnotationTransactionAttributeSource() {
 		this(true);
 	}
@@ -89,8 +90,10 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 * with proxy-based AOP), or protected/private methods as well
 	 * (typically used with AspectJ class weaving)
 	 */
+	/* 带参构造（表明是否为public方法） */
 	public AnnotationTransactionAttributeSource(boolean publicMethodsOnly) {
 		this.publicMethodsOnly = publicMethodsOnly;
+		// 判断是不是jta或者是ejp
 		if (jta12Present || ejb3Present) {
 			this.annotationParsers = new LinkedHashSet<>(4);
 			this.annotationParsers.add(new SpringTransactionAnnotationParser());
@@ -102,6 +105,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 			}
 		}
 		else {
+			// 当都不是的时候，构建一个SpringTransactionAnnotationParser（事务注解解析器）
 			this.annotationParsers = Collections.singleton(new SpringTransactionAnnotationParser());
 		}
 	}

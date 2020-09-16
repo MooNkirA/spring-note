@@ -40,6 +40,7 @@ import org.springframework.core.annotation.AliasFor;
  * @author Sam Brannen
  * @since 4.2
  */
+/* 事务的事件监听器，在事务提交和回滚前后可以做一些额外的功能 */
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -52,16 +53,25 @@ public @interface TransactionalEventListener {
 	 * <p>If no transaction is in progress, the event is not processed at
 	 * all unless {@link #fallbackExecution} has been enabled explicitly.
 	 */
+	/*
+	 * 指定事务监听器的执行是在何时。取值有：
+	 * 		TransactionPhase.BEFORE_COMMIT 事务提交之前
+	 * 		TransactionPhase.AFTER_COMMIT 事务提交之后（默认值）
+	 * 		TransactionPhase.AFTER_ROLLBACK 事务回滚之后
+	 * 		TransactionPhase.AFTER_COMPLETION 事务执行完成之后
+	 */
 	TransactionPhase phase() default TransactionPhase.AFTER_COMMIT;
 
 	/**
 	 * Whether the event should be processed if no transaction is running.
 	 */
+	/* 若没有事务的时候，对应的event是否已经执行。默认值为false表示没事务就不执行了 */
 	boolean fallbackExecution() default false;
 
 	/**
 	 * Alias for {@link #classes}.
 	 */
+	/* 指定事件类的字节码 */
 	@AliasFor(annotation = EventListener.class, attribute = "classes")
 	Class<?>[] value() default {};
 
@@ -72,6 +82,7 @@ public @interface TransactionalEventListener {
 	 * attribute is specified with multiple values, the annotated method
 	 * must <em>not</em> declare any parameters.
 	 */
+	/* 它和value属性的作用是一样，指定事件类的字节码 */
 	@AliasFor(annotation = EventListener.class, attribute = "classes")
 	Class<?>[] classes() default {};
 
@@ -81,6 +92,7 @@ public @interface TransactionalEventListener {
 	 * <p>The default is {@code ""}, meaning the event is always handled.
 	 * @see EventListener#condition
 	 */
+	/* 用于指定执行事件处理器的条件。取值是基于Spring的el表达式编写的 */
 	String condition() default "";
 
 }

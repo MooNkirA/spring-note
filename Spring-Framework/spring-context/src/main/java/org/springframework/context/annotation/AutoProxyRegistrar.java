@@ -57,7 +57,9 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 		boolean candidateFound = false;
+		// 获取所有通过@Import导入的注解类型字符串
 		Set<String> annoTypes = importingClassMetadata.getAnnotationTypes();
+		// 循环所有注解类型
 		for (String annoType : annoTypes) {
 			AnnotationAttributes candidate = AnnotationConfigUtils.attributesFor(importingClassMetadata, annoType);
 			if (candidate == null) {
@@ -65,9 +67,11 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 			}
 			Object mode = candidate.get("mode");
 			Object proxyTargetClass = candidate.get("proxyTargetClass");
+			// 判断注解是否有mode与proxyTargetClass属性
 			if (mode != null && proxyTargetClass != null && AdviceMode.class == mode.getClass() &&
 					Boolean.class == proxyTargetClass.getClass()) {
 				candidateFound = true;
+				// 判断如果mode属性值为AdviceMode.PROXY，则往容器注册InfrastructureAdvisorAutoProxyCreator类
 				if (mode == AdviceMode.PROXY) {
 					AopConfigUtils.registerAutoProxyCreatorIfNecessary(registry);
 					if ((Boolean) proxyTargetClass) {

@@ -56,6 +56,7 @@ import org.springframework.transaction.TransactionDefinition;
  * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute
  * @see org.springframework.transaction.interceptor.RuleBasedTransactionAttribute
  */
+/* Spring注解配置事务的核心注解，标识位置的优先级：方法 > 类 > 接口 */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -66,6 +67,7 @@ public @interface Transactional {
 	 * Alias for {@link #transactionManager}.
 	 * @see #transactionManager
 	 */
+	/* 指定事务管理器的唯一标识，等同于transactionManager属性 */
 	@AliasFor("transactionManager")
 	String value() default "";
 
@@ -78,6 +80,7 @@ public @interface Transactional {
 	 * @since 4.2
 	 * @see #value
 	 */
+	/* 指定事务管理器的唯一标识，等同于value属性 */
 	@AliasFor("value")
 	String transactionManager() default "";
 
@@ -86,6 +89,7 @@ public @interface Transactional {
 	 * <p>Defaults to {@link Propagation#REQUIRED}.
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getPropagationBehavior()
 	 */
+	/* 指定事务的传播行为 */
 	Propagation propagation() default Propagation.REQUIRED;
 
 	/**
@@ -100,6 +104,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getIsolationLevel()
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#setValidateExistingTransaction
 	 */
+	/* 指定事务的隔离级别 */
 	Isolation isolation() default Isolation.DEFAULT;
 
 	/**
@@ -110,6 +115,7 @@ public @interface Transactional {
 	 * transactions.
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getTimeout()
 	 */
+	/* 指定事务的超时时间，默认值为-1，表示永不超时（注：但只是相对而言，因为如果数据库连接超时，也是一样会失败） */
 	int timeout() default TransactionDefinition.TIMEOUT_DEFAULT;
 
 	/**
@@ -124,6 +130,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#isReadOnly()
 	 * @see org.springframework.transaction.support.TransactionSynchronizationManager#isCurrentTransactionReadOnly()
 	 */
+	/* 指定事务是否只读 */
 	boolean readOnly() default false;
 
 	/**
@@ -140,6 +147,7 @@ public @interface Transactional {
 	 * @see #rollbackForClassName
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	/* 通过指定异常类的字节码，限定事务在特定情况下回滚 */
 	Class<? extends Throwable>[] rollbackFor() default {};
 
 	/**
@@ -160,6 +168,7 @@ public @interface Transactional {
 	 * @see #rollbackFor
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	/* 通过指定异常类的全限定类名，限定事务在特定情况下回滚 */
 	String[] rollbackForClassName() default {};
 
 	/**
@@ -173,6 +182,7 @@ public @interface Transactional {
 	 * @see #noRollbackForClassName
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	/* 通过指定异常类的字节码，限定事务在特定情况下不回滚 */
 	Class<? extends Throwable>[] noRollbackFor() default {};
 
 	/**
@@ -185,6 +195,7 @@ public @interface Transactional {
 	 * @see #noRollbackFor
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	/* 通过指定异常类的全限定类名，限定事务在特定情况下不回滚 */
 	String[] noRollbackForClassName() default {};
 
 }

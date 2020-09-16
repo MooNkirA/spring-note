@@ -35,6 +35,7 @@ import org.springframework.util.ClassUtils;
  * @see TransactionManagementConfigUtils#TRANSACTION_ASPECT_CONFIGURATION_CLASS_NAME
  * @see TransactionManagementConfigUtils#JTA_TRANSACTION_ASPECT_CONFIGURATION_CLASS_NAME
  */
+/* 此类的作用是给容器导入两个组件：AutoProxyRegistrar、ProxyTransactionManagementConfiguration */
 public class TransactionManagementConfigurationSelector extends AdviceModeImportSelector<EnableTransactionManagement> {
 
 	/**
