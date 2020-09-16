@@ -73,6 +73,16 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * @see DataSourceUtils#applyTransactionTimeout
  * @see DataSourceUtils#doReleaseConnection
  */
+/*
+ * TransactionAwareDataSourceProxy是Spring提供的一个数据源代理类，它继承了DelegatingDataSource类。
+ *  而DelegatingDataSource类实现了javax.sql.DataSource接口。
+ * 	Spring通过装饰者模式，把原始DataSource中一些不希望用户直接使用的方法又套了一个壳子。
+ * 	因为数据连接泄露是个很头疼的问题，Spring框架也提供了很多种办法来避免这个问题。
+ * 	比如使用XXXTemplate，当然其背后是DataSourceUtils。
+ * 	同时还有另外一种办法，使用TransactionAwareDataSourceProxy。
+ * 	通过TransactionAwareDataSourceProxy对数据源代理后，数据源对象就有了事务上下文感知的能力了。
+ * 	通过源码会发现，其实它还是使用的DataSourceUtils
+ */
 public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 
 	private boolean reobtainTransactionalConnections = false;
@@ -116,6 +126,7 @@ public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 	 * @see DataSourceUtils#doGetConnection
 	 * @see ConnectionProxy#getTargetConnection
 	 */
+	/* 暴露出来的获取连接的方法 */
 	@Override
 	public Connection getConnection() throws SQLException {
 		return getTransactionAwareConnectionProxy(obtainTargetDataSource());
@@ -129,6 +140,7 @@ public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 	 * @see java.sql.Connection#close()
 	 * @see DataSourceUtils#doReleaseConnection
 	 */
+	/* 使用JDK的动态代理创建连接的代理对象 */
 	protected Connection getTransactionAwareConnectionProxy(DataSource targetDataSource) {
 		return (Connection) Proxy.newProxyInstance(
 				ConnectionProxy.class.getClassLoader(),
@@ -156,6 +168,7 @@ public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 	 * Invocation handler that delegates close calls on JDBC Connections
 	 * to DataSourceUtils for being aware of thread-bound transactions.
 	 */
+	/* 定义内部类，实现InvocationHandler的具体实现（增强的部分） */
 	private class TransactionAwareInvocationHandler implements InvocationHandler {
 
 		private final DataSource targetDataSource;
@@ -205,6 +218,7 @@ public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 			}
 			else if (method.getName().equals("close")) {
 				// Handle close method: only close if not within a transaction.
+				// 释放资源仍然使用的是DataSourceUtils中的方法
 				DataSourceUtils.doReleaseConnection(this.target, this.targetDataSource);
 				this.closed = true;
 				return null;
@@ -223,6 +237,7 @@ public class TransactionAwareDataSourceProxy extends DelegatingDataSource {
 			}
 			Connection actualTarget = this.target;
 			if (actualTarget == null) {
+				// 获取连接使用的也是DataSourceUtils中的方法
 				actualTarget = DataSourceUtils.doGetConnection(this.targetDataSource);
 			}
 

@@ -49,6 +49,7 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.jta.JtaTransactionManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
+/* spring中数据源的工具类。里面定义着获取连接的方法 */
 public abstract class DataSourceUtils {
 
 	/**
@@ -73,8 +74,10 @@ public abstract class DataSourceUtils {
 	 * if the attempt to get a Connection failed
 	 * @see #releaseConnection
 	 */
+	/* 获取连接的方法，它本身没有任何操作而是调用了doGetConnection */
 	public static Connection getConnection(DataSource dataSource) throws CannotGetJdbcConnectionException {
 		try {
+			// 真正获取连接的方法
 			return doGetConnection(dataSource);
 		}
 		catch (SQLException ex) {
@@ -97,43 +100,61 @@ public abstract class DataSourceUtils {
 	 * @throws SQLException if thrown by JDBC methods
 	 * @see #doReleaseConnection
 	 */
+	/* 从数据源中获取连接的方法 */
 	public static Connection doGetConnection(DataSource dataSource) throws SQLException {
 		Assert.notNull(dataSource, "No DataSource specified");
 
+		// 通过事务同步管理器对象获取连接持有者对象
 		ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+		/*
+		 * 当连接持有者不为null时，并且再满足连接持有者有连接或者是同步的事务其中任何一个条件，则直接返回连接持有者的连接对象。
+		 * synchronizedWithTransaction默认值为false。
+		 * 但是在DataSourceTransactionManager中的doBegin方法中对synchronizedWithTransaction属性赋值为true了
+		 */
 		if (conHolder != null && (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) {
 			conHolder.requested();
+			// 如果ConnectionHandle为null，则返回false，此处取反。就表示ConnectionHandle为null时，进入if代码块中，给ConnectionHolder设置一个连接
 			if (!conHolder.hasConnection()) {
 				logger.debug("Fetching resumed JDBC Connection from DataSource");
 				conHolder.setConnection(fetchConnection(dataSource));
 			}
+			// 返回ConnectionHolder对象中的连接
 			return conHolder.getConnection();
 		}
 		// Else we either got no holder or an empty thread-bound holder here.
 
 		logger.debug("Fetching JDBC Connection from DataSource");
+		// 如果不满足上面的条件，则从数据源中获取一个连接
 		Connection con = fetchConnection(dataSource);
 
+		// 判断是否激活了事务同步器
 		if (TransactionSynchronizationManager.isSynchronizationActive()) {
 			logger.debug("Registering transaction synchronization for JDBC Connection");
 			// Use same Connection for further JDBC actions within the transaction.
 			// Thread-bound object will get removed by synchronization at transaction completion.
+			// 在激活同步的条件下，如果ConnectionHolder为null就创建连接持有者对象
 			ConnectionHolder holderToUse = conHolder;
 			if (holderToUse == null) {
+				// 创建连接持有者对象
 				holderToUse = new ConnectionHolder(con);
 			}
 			else {
+				// 如已经存在的连接持有者，直接使用并把获取到的连接填充进去
 				holderToUse.setConnection(con);
 			}
 			holderToUse.requested();
+			// 注册同步器
 			TransactionSynchronizationManager.registerSynchronization(
 					new ConnectionSynchronization(holderToUse, dataSource));
+			// 设置snchronizedWithTransaction属性为true
 			holderToUse.setSynchronizedWithTransaction(true);
+			// 判断当新创建了连接持有者时
 			if (holderToUse != conHolder) {
+				// 从名称为Transactional resources的ThreadLocal中获取绑定的Map，并把数据源和ConnectionHolder存入map中
 				TransactionSynchronizationManager.bindResource(dataSource, holderToUse);
 			}
 		}
-
+		// 此时如果激活了事务同步管理器，则返回当前线程的连接。如果没激活，返回的就是数据源中拿到的连接
 		return con;
 	}
 
@@ -147,11 +168,15 @@ public abstract class DataSourceUtils {
 	 * @throws IllegalStateException if the DataSource returned a null value
 	 * @see DataSource#getConnection()
 	 */
+	/* 从数据源中获取一个连接的方法，此时没有和线程绑定 */
 	private static Connection fetchConnection(DataSource dataSource) throws SQLException {
+		// 从数据源中获取一个连接
 		Connection con = dataSource.getConnection();
+		// 判断连接是否为空。如果没有，则表示数据源中没有连接
 		if (con == null) {
 			throw new IllegalStateException("DataSource returned null from getConnection(): " + dataSource);
 		}
+		// 返回拿到的连接对象
 		return con;
 	}
 

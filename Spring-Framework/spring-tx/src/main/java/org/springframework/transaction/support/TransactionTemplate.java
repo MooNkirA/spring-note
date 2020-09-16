@@ -61,13 +61,16 @@ import org.springframework.util.Assert;
  * @see #setTransactionManager
  * @see org.springframework.transaction.PlatformTransactionManager
  */
+/* 此类是用于编程式事务的模板对象 */
 @SuppressWarnings("serial")
 public class TransactionTemplate extends DefaultTransactionDefinition
 		implements TransactionOperations, InitializingBean {
 
 	/** Logger available to subclasses. */
+	/* 定义日志组件 */
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/* 定义事务管理器对象 */
 	@Nullable
 	private PlatformTransactionManager transactionManager;
 
@@ -78,6 +81,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	 * any {@code execute} calls.
 	 * @see #setTransactionManager
 	 */
+	/* 默认构造函数 */
 	public TransactionTemplate() {
 	}
 
@@ -85,6 +89,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	 * Construct a new TransactionTemplate using the given transaction manager.
 	 * @param transactionManager the transaction management strategy to be used
 	 */
+	/* 通过事务管理器构建事务模板对象 */
 	public TransactionTemplate(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
@@ -96,6 +101,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	 * @param transactionDefinition the transaction definition to copy the
 	 * default settings from. Local properties can still be set to change values.
 	 */
+	/* 通过事务管理器和事务定义信息构建模板对象 */
 	public TransactionTemplate(PlatformTransactionManager transactionManager, TransactionDefinition transactionDefinition) {
 		super(transactionDefinition);
 		this.transactionManager = transactionManager;
@@ -105,6 +111,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	/**
 	 * Set the transaction management strategy to be used.
 	 */
+	/* 当使用默认构造函数构建事务模板对象时，可以通过此方法注入事务管理器 */
 	public void setTransactionManager(@Nullable PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
@@ -112,11 +119,13 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	/**
 	 * Return the transaction management strategy to be used.
 	 */
+	/* 获取使用的事务管理器对象 */
 	@Nullable
 	public PlatformTransactionManager getTransactionManager() {
 		return this.transactionManager;
 	}
 
+	/* 重写InitializingBean接口中的方法，用于初始化时验证是否有事务管理器 */
 	@Override
 	public void afterPropertiesSet() {
 		if (this.transactionManager == null) {
@@ -124,32 +133,47 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 		}
 	}
 
-
+	/* 编程事务控制的核心方法,重写的是TransactionOperations接口中的方法 */
 	@Override
 	@Nullable
 	public <T> T execute(TransactionCallback<T> action) throws TransactionException {
 		Assert.state(this.transactionManager != null, "No PlatformTransactionManager set");
 
+		/*
+		 * 判断当前事务管理器是否为CallbackPreferringPlatformTransactionManager类型，
+		 * 如果是的话，直接使用该接口实现类中的execute方法执行。
+		 * 而无需继续让PlatformTransactionManager的实现类控制事务，
+		 * 当前坐标环境下它只有一个实现类：WebSphereUowTransactionManager
+		 */
 		if (this.transactionManager instanceof CallbackPreferringPlatformTransactionManager) {
 			return ((CallbackPreferringPlatformTransactionManager) this.transactionManager).execute(this, action);
 		}
 		else {
+			// 需要借助PlatformTransactionManager的实现类控制事务
 			TransactionStatus status = this.transactionManager.getTransaction(this);
 			T result;
 			try {
+				/*
+				 * 执行TransactionCallback中的doInTransaction方法，此处又是策略模式。
+				 * spring只提供了一个接口（还有一个抽象实现类），而具体需要事务支持的业务代码由使用者提供。
+				 */
 				result = action.doInTransaction(status);
 			}
 			catch (RuntimeException | Error ex) {
 				// Transactional code threw application exception -> rollback
+				// 当doInTransaction执行有异常时事务回滚
 				rollbackOnException(status, ex);
 				throw ex;
 			}
 			catch (Throwable ex) {
 				// Transactional code threw unexpected exception -> rollback
+				// 当doInTransaction执行有无法预知的异常时，事务回滚。
 				rollbackOnException(status, ex);
 				throw new UndeclaredThrowableException(ex, "TransactionCallback threw undeclared checked exception");
 			}
+			// 没有异常，则事务提交
 			this.transactionManager.commit(status);
+			// 返回执行结果（有可能是结果集，也有可能是影响数据库记录的行数）
 			return result;
 		}
 	}
@@ -160,11 +184,13 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 	 * @param ex the thrown application exception or error
 	 * @throws TransactionException in case of a rollback error
 	 */
+	/* 回滚事务的方法 */
 	private void rollbackOnException(TransactionStatus status, Throwable ex) throws TransactionException {
 		Assert.state(this.transactionManager != null, "No PlatformTransactionManager set");
 
 		logger.debug("Initiating transaction rollback on application exception", ex);
 		try {
+			// 执行事务管理器中提供的回滚方法
 			this.transactionManager.rollback(status);
 		}
 		catch (TransactionSystemException ex2) {
@@ -178,7 +204,7 @@ public class TransactionTemplate extends DefaultTransactionDefinition
 		}
 	}
 
-
+	/* 重写equals方法 */
 	@Override
 	public boolean equals(Object other) {
 		return (this == other || (super.equals(other) && (!(other instanceof TransactionTemplate) ||
