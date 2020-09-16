@@ -48,6 +48,7 @@
         <module>30-spring-tx-jdbctemplate-quickstart</module>
         <module>31-spring-tx-custom-jdbctemplate</module>
         <module>31-spring-tx-custom-jdbctemplate-test</module>
+        <module>32-annotation-tx-transaction-quickstart</module>
     </modules>
 
     <!-- 版本号管理 -->
