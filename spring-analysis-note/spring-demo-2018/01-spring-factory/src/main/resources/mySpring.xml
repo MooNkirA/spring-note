@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <!-- 注意解析的顺序 -->
+    <bean id="userDao" class="com.moonzero.dao.impl.UserDaoImpl"/>
+    <bean id="userService" class="com.moonzero.service.impl.UserServiceImpl"/>
+</beans>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "hibernate-mapping-3.0.dtd" >
+<!-- 配置hibernate映射关系 -->
+<hibernate-mapping>
+    <!-- 配置实体类与数据库表之间关系 -->
+    <class name="com.moon.entity.User" table="user">
+        <!-- 配置实体类与列主键关系 -->
+        <id name="id" column="id">
+            <!-- 配置数据库表id生成策略 -->
+            <generator class="identity"/>
+        </id>
+        <!-- 配置实体类其它属性与表字段的关系 -->
+        <property name="name" column="name"/>
+        <property name="gender" column="gender"/>
+    </class>
+</hibernate-mapping>
