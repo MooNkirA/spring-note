@@ -66,6 +66,12 @@ import org.springframework.stereotype.Component;
  * @see org.springframework.stereotype.Controller
  * @see RestControllerAdvice
  */
+/*
+ * 用于给控制器提供一个增强的通知。以保证可以在多个控制器之间实现增强共享
+ * 	它可以配合以下三个注解来用：
+ * 		 @ExceptionHandler、@InitBinder、@ModelAttribute
+ * 注意：只对标识@Controller注解的控制类生效
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -80,6 +86,7 @@ public @interface ControllerAdvice {
 	 * @since 4.0
 	 * @see #basePackages()
 	 */
+	/* 用于指定对哪些包下的控制器进行增强，与basePackages属性作用一样 */
 	@AliasFor("basePackages")
 	String[] value() default {};
 
@@ -94,6 +101,7 @@ public @interface ControllerAdvice {
 	 * alternative to String-based package names.
 	 * @since 4.0
 	 */
+	/* 用于指定对哪些包下的控制器进行增强，与value属性作用一样 */
 	@AliasFor("value")
 	String[] basePackages() default {};
 
@@ -105,6 +113,7 @@ public @interface ControllerAdvice {
 	 * that serves no purpose other than being referenced by this attribute.
 	 * @since 4.0
 	 */
+	/* 用于指定特定的类型，给该类型所在的包及其子包的所有类提供增强 */
 	Class<?>[] basePackageClasses() default {};
 
 	/**
@@ -113,6 +122,7 @@ public @interface ControllerAdvice {
 	 * will be assisted by the {@code @ControllerAdvice} annotated class.
 	 * @since 4.0
 	 */
+	/* 用于指定特定的类型提供增强 */
 	Class<?>[] assignableTypes() default {};
 
 	/**
@@ -123,6 +133,7 @@ public @interface ControllerAdvice {
 	 * like {@link RestController @RestController}.
 	 * @since 4.0
 	 */
+	/* 用于指定给特定注解提供增强 */
 	Class<? extends Annotation>[] annotations() default {};
 
 }

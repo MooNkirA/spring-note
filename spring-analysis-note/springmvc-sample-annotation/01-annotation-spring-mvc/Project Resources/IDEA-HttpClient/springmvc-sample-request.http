@@ -1,0 +1,12 @@
+### @RequestMapping 注解请求测试
+POST {{baseUrl}}/springmvc/useRequestMapping?name=1
+
+### @RequestParam 注解测试1 请求参数封装到基础数据类型
+GET http://127.0.0.1:8080/useParam1?age=18&name=我是名称
+
+### @RequestParam 注解测试2 请求参数封装到对象类型参数
+GET http://127.0.0.1:8080/useParam2?id=1&username=我是名称&password=12334&age=12&gender=男
+
+### @InitBinder 注解测试 请求参数日期字符串转换成日期类型
+GET http://127.0.0.1:8080/useInitBinder?id=1&username=我是名称&password=12334&age=12&gender=男&birthday=2020-10-10
+

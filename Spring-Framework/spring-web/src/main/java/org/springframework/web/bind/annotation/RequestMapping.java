@@ -70,6 +70,7 @@ import org.springframework.core.annotation.AliasFor;
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
  * @see org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerAdapter
  */
+/* 用于建立请求URL和处理请求方法之间的对应关系 */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -84,6 +85,7 @@ public @interface RequestMapping {
 	 * @see org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder
 	 * @see org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrategy
 	 */
+	/* 给请求URL提供一个名称 */
 	String name() default "";
 
 	/**
@@ -94,6 +96,10 @@ public @interface RequestMapping {
 	 * <p><b>Supported at the type level as well as at the method level!</b>
 	 * When used at the type level, all method-level mappings inherit
 	 * this primary mapping, narrowing it for a specific handler method.
+	 */
+	/*
+	 * 用于指定请求的URL。它和path属性的作用是一样的。
+	 * 	注意细节：在配置此属性时，写不写"/"都是可以的
 	 */
 	@AliasFor("path")
 	String[] value() default {};
@@ -110,6 +116,7 @@ public @interface RequestMapping {
 	 * @see org.springframework.web.bind.annotation.ValueConstants#DEFAULT_NONE
 	 * @since 4.2
 	 */
+	/* 它是4.2版本中加入的注解，和value属性是一样的 */
 	@AliasFor("value")
 	String[] path() default {};
 
@@ -120,6 +127,10 @@ public @interface RequestMapping {
 	 * When used at the type level, all method-level mappings inherit
 	 * this HTTP method restriction (i.e. the type-level restriction
 	 * gets checked before the handler method is even resolved).
+	 */
+	/*
+	 * 用于指定请求的方式。它支持以下这些RequestMethod枚举指定的类型:
+	 * 	GET, POST, HEAD, OPTIONS, PUT, PATCH, DELETE, TRACE
 	 */
 	RequestMethod[] method() default {};
 
@@ -140,6 +151,11 @@ public @interface RequestMapping {
 	 * the type level. The primary path mapping (i.e. the specified URI value)
 	 * still has to uniquely identify the target handler, with parameter mappings
 	 * simply expressing preconditions for invoking the handler.
+	 */
+	/*
+	 * 用于指定限制请求参数的条件。它支持简单的表达式。要求请求参数的key和value必须和配置的一模一样。例如：
+	 * 		params = {"accountName"}，表示请求参数必须有accountName
+	 * 		params = {"moeny!100"}，表示请求参数中money不能是100
 	 */
 	String[] params() default {};
 
@@ -164,6 +180,10 @@ public @interface RequestMapping {
 	 * gets checked before the handler method is even resolved).
 	 * @see org.springframework.http.MediaType
 	 */
+	/*
+	 * 用于指定限制请求消息头的条件
+	 * 	如：RequestMapping(value = "/something", headers = "content-type=text/*")
+	 */
 	String[] headers() default {};
 
 	/**
@@ -182,6 +202,11 @@ public @interface RequestMapping {
 	 * this consumes restriction.
 	 * @see org.springframework.http.MediaType
 	 * @see javax.servlet.http.HttpServletRequest#getContentType()
+	 */
+	/*
+	 * 用于指定可以接收的请求正文类型（MIME类型）。例如
+	 * 		consumes = "text/plain"
+	 * 		consumes = {"text/plain", "application/*"}
 	 */
 	String[] consumes() default {};
 
@@ -203,6 +228,12 @@ public @interface RequestMapping {
 	 * When used at the type level, all method-level mappings override
 	 * this produces restriction.
 	 * @see org.springframework.http.MediaType
+	 */
+	/*
+	 * 用于指定可以生成的响应正文类型（MIME类型）。例如：
+	 * 		produces = "text/plain"
+	 * 		produces = {"text/plain", "application/*"}
+	 * 		produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 	 */
 	String[] produces() default {};
 

@@ -42,6 +42,7 @@ import java.lang.annotation.Target;
  * @see org.springframework.web.bind.WebDataBinder
  * @see org.springframework.web.context.request.WebRequest
  */
+/* 用于初始化请求参数的数据绑定器 */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -56,6 +57,7 @@ public @interface InitBinder {
 	 * attributes/parameters, with different init-binder methods typically applying to
 	 * different groups of attributes or parameters.
 	 */
+	/* 指定给哪些参数进行绑定操作 */
 	String[] value() default {};
 
 }

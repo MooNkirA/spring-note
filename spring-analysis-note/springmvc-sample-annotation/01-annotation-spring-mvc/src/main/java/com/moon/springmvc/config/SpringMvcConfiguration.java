@@ -17,6 +17,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration // 标识为配置类
 // 配置包扫描，专注于扫描springmvc相关的包
 @ComponentScan("com.moon.springmvc.web")
+// 开启对SpringMVC的注解支持，该注解会引入DelegatingWebMvcConfiguration配置类，该类会创建很功能增强的对象
+// @EnableWebMvc
 public class SpringMvcConfiguration {
 
     /**

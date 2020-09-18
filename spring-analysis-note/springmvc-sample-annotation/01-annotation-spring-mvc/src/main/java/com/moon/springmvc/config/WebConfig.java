@@ -5,8 +5,11 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import java.util.EnumSet;
 
 /**
  * Servlet3.0规范提供的标准接口ServletContainerInitializer，作用是在启动容器是做一些初始化操作，
@@ -39,7 +42,18 @@ public class WebConfig extends AbstractDispatcherServletInitializer {
         // 2. 设置使用的字符集
         characterEncodingFilter.setEncoding("UTF-8");
         // 3. 添加到容器（注：此容器不是ioc容器，而是ServletContainer）
-        servletContext.addFilter("characterEncodingFilter", characterEncodingFilter);
+        FilterRegistration.Dynamic registration = servletContext.addFilter("characterEncodingFilter", characterEncodingFilter);
+        /*
+         * 4. 给过滤器添加映射规则
+         *      第1个参数是拦截的类型
+         *      第2个参数是此过滤器的优先级设置，
+         *          true：就是此过滤器在web.xml配置的过滤器之后加载
+         *          false：就是此过滤器在web.xml配置的过滤器之前加载
+         *      第3个参数是拦截的url，"/*"代表拦截所有
+         */
+        registration.addMappingForUrlPatterns(
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE),
+                false, "/*");
     }
 
     /*

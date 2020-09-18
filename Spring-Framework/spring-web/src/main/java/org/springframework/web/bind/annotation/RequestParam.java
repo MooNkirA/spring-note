@@ -58,6 +58,10 @@ import org.springframework.core.annotation.AliasFor;
  * @see RequestHeader
  * @see CookieValue
  */
+/*
+ * 此注解是从请求正文中获取请求参数，给控制器方法形参赋值。
+ * 同时，当没有获取到请求参数时，此注解还可以给控制器方法形参提供默认值
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -66,6 +70,7 @@ public @interface RequestParam {
 	/**
 	 * Alias for {@link #name}.
 	 */
+	/* 用于指定获取请求参数的名称。它和name属性的作用是一样的 */
 	@AliasFor("name")
 	String value() default "";
 
@@ -73,6 +78,7 @@ public @interface RequestParam {
 	 * The name of the request parameter to bind to.
 	 * @since 4.2
 	 */
+	/* 它是在4.2版本中加入的。和value属性互为引用 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -85,6 +91,7 @@ public @interface RequestParam {
 	 * <p>Alternatively, provide a {@link #defaultValue}, which implicitly
 	 * sets this flag to {@code false}.
 	 */
+	/* 指定参数是否必须有值。当为true时，参数没有值时会报错 */
 	boolean required() default true;
 
 	/**
@@ -93,6 +100,7 @@ public @interface RequestParam {
 	 * <p>Supplying a default value implicitly sets {@link #required} to
 	 * {@code false}.
 	 */
+	/* 在参数没有值时的默认值 */
 	String defaultValue() default ValueConstants.DEFAULT_NONE;
 
 }
