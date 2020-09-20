@@ -38,6 +38,7 @@ import org.springframework.core.annotation.AliasFor;
  * @see RequestHeader
  * @see org.springframework.web.bind.annotation.RequestMapping
  */
+/* 此注解是从请求消息头中获取Cookie的值，并把值赋给控制器方法形参 */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -46,6 +47,7 @@ public @interface CookieValue {
 	/**
 	 * Alias for {@link #name}.
 	 */
+	/* 用于指定cookie的名称 */
 	@AliasFor("name")
 	String value() default "";
 
@@ -53,6 +55,7 @@ public @interface CookieValue {
 	 * The name of the cookie to bind to.
 	 * @since 4.2
 	 */
+	/* 4.2版本引入。和value属性互为引用 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -65,6 +68,7 @@ public @interface CookieValue {
 	 * <p>Alternatively, provide a {@link #defaultValue}, which implicitly
 	 * sets this flag to {@code false}.
 	 */
+	/* 用于指定是否必须有cookie。当取默认值时，没有cookie会报错 */
 	boolean required() default true;
 
 	/**
@@ -72,6 +76,7 @@ public @interface CookieValue {
 	 * <p>Supplying a default value implicitly sets {@link #required} to
 	 * {@code false}.
 	 */
+	/* 用于指定cookie不存在时，将默认值赋值给形参 */
 	String defaultValue() default ValueConstants.DEFAULT_NONE;
 
 }

@@ -99,6 +99,7 @@ import java.lang.annotation.Target;
  * @since 3.0
  * @see org.springframework.web.context.request.WebRequest
  */
+/* 此注解修改的方法是用于处理控制器执行产生的异常 */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -108,6 +109,7 @@ public @interface ExceptionHandler {
 	 * Exceptions handled by the annotated method. If empty, will default to any
 	 * exceptions listed in the method argument list.
 	 */
+	/* 指定用于需要捕获的异常类型 */
 	Class<? extends Throwable>[] value() default {};
 
 }

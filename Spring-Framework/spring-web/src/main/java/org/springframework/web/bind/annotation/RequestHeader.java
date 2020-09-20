@@ -41,6 +41,7 @@ import org.springframework.core.annotation.AliasFor;
  * @see RequestParam
  * @see CookieValue
  */
+/* 此注解是从请求消息头中获取消息头的值，并把值赋给控制器方法形参 */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -49,6 +50,7 @@ public @interface RequestHeader {
 	/**
 	 * Alias for {@link #name}.
 	 */
+	/* 用于指定请求消息头的名称。它和name属性作用一样 */
 	@AliasFor("name")
 	String value() default "";
 
@@ -56,6 +58,7 @@ public @interface RequestHeader {
 	 * The name of the request header to bind to.
 	 * @since 4.2
 	 */
+	/* 4.2版本引入。和value属性互为引用 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -68,6 +71,7 @@ public @interface RequestHeader {
 	 * <p>Alternatively, provide a {@link #defaultValue}, which implicitly
 	 * sets this flag to {@code false}.
 	 */
+	/* 用于指定是否必须有此消息头。当取默认值时，没有此消息头会报错 */
 	boolean required() default true;
 
 	/**
@@ -75,6 +79,7 @@ public @interface RequestHeader {
 	 * <p>Supplying a default value implicitly sets {@link #required} to
 	 * {@code false}.
 	 */
+	/* 用于指定消息头的默认值 */
 	String defaultValue() default ValueConstants.DEFAULT_NONE;
 
 }

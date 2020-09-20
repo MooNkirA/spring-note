@@ -33,5 +33,19 @@
 </form>
 <hr/>
 
+<%--ModelAttribute注解的使用--%>
+<a href="useModelAttribute?name=test">ModelAttribute注解的使用</a>
+<hr/>
+
+<%--SessionAttribute和SessionAttributes注解的使用--%>
+<a href="useSessionAttributes">SessionAttributes注解的使用</a>
+<br/>
+<a href="useSessionAttribute">SessionAttribute注解的使用</a>
+
+<%--ExceptionHandler注解的使用--%>
+<a href="useExceptionHandler">ExcpetionHandler注解的使用</a>
+<hr/>
+
+
 </body>
 </html>

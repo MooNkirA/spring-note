@@ -55,6 +55,10 @@ import org.springframework.core.annotation.AliasFor;
  * @author Sam Brannen
  * @since 2.5
  */
+/*
+ * 用于类或者接口上，作用是把数据存入会话域，相当于HttpSession的setAttribute方法
+ * 		当在控制器方法形参中加入Model或者ModelMap类型参数时，默认是存入请求域的
+ */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -64,6 +68,7 @@ public @interface SessionAttributes {
 	/**
 	 * Alias for {@link #names}.
 	 */
+	/* 指定可以存入会话域中的名称 */
 	@AliasFor("names")
 	String[] value() default {};
 
@@ -76,6 +81,7 @@ public @interface SessionAttributes {
 	 * names but rather operate on the model only.
 	 * @since 4.2
 	 */
+	/* 4.2版本中加入的属性。作用和value是一样 */
 	@AliasFor("value")
 	String[] names() default {};
 
@@ -85,6 +91,7 @@ public @interface SessionAttributes {
 	 * <p>All model attributes of these types will be stored in the session,
 	 * regardless of attribute name.
 	 */
+	/* 指定可以存入会话域中的数据类型 */
 	Class<?>[] types() default {};
 
 }

@@ -53,6 +53,11 @@ import org.springframework.ui.Model;
  * @author Rossen Stoyanchev
  * @since 2.5
  */
+/*
+ * 此注解可以用于修饰方法，或者是参数
+ * 		当修饰方法时，表示执行控制器方法之前，被此注解修饰的方法都会执行
+ * 		当修饰参数时，用于获取指定的数据给参数赋值
+ */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -60,6 +65,11 @@ public @interface ModelAttribute {
 
 	/**
 	 * Alias for {@link #name}.
+	 */
+	/*
+	 * 指定的是Model存入时的key
+	 * 	当注解写在方法上，则表示存入时的名称。（值是方法的返回值）
+	 * 	当注解写在参数上，可以从ModelMap,Model,Map中的获取数据。（前提是之前存入过）
 	 */
 	@AliasFor("name")
 	String value() default "";
@@ -73,6 +83,7 @@ public @interface ModelAttribute {
 	 * or "orderAddressList" for "List&lt;mypackage.OrderAddress&gt;".
 	 * @since 4.3
 	 */
+	/* 4.3版本收入，与value属性作用一样 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -84,6 +95,7 @@ public @interface ModelAttribute {
 	 * Set this to {@code false} to disable data binding.
 	 * @since 4.3
 	 */
+	/* 用于指定是否支持数据绑定。它是4.3版本中新加入的属性 */
 	boolean binding() default true;
 
 }

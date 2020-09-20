@@ -44,6 +44,7 @@ import org.springframework.core.annotation.AliasFor;
  * @see SessionAttributes
  * @see RequestAttribute
  */
+/* 用于方法形参上，作用是从会话域中获取数据，相当于HttpSession的getAttribute方法 */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -52,6 +53,7 @@ public @interface SessionAttribute {
 	/**
 	 * Alias for {@link #name}.
 	 */
+	/* 用于指定在会话域中数据的名称 */
 	@AliasFor("name")
 	String value() default "";
 
@@ -59,6 +61,7 @@ public @interface SessionAttribute {
 	 * The name of the session attribute to bind to.
 	 * <p>The default name is inferred from the method parameter name.
 	 */
+	/* 它和value属性作用一样 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -69,6 +72,7 @@ public @interface SessionAttribute {
 	 * Switch this to {@code false} if you prefer a {@code null} or Java 8
 	 * {@code java.util.Optional} if the attribute doesn't exist.
 	 */
+	/* 用于指定是否必须从会话域中获取到数据。默认值是true，表示如果指定名称不存在会报错 */
 	boolean required() default true;
 
 }
