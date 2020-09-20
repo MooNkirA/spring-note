@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>SpringMVC高级使用示例 - 注解驱动开发</description>
-    
+
     <modules>
         <module>01-annotation-spring-mvc</module>
     </modules>
@@ -28,6 +28,8 @@
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <javax.servlet.jsp.version>2.3.1</javax.servlet.jsp.version>
         <log4j.version>1.2.17</log4j.version>
+        <!-- jackson类库版本 -->
+        <jackson.version>2.9.0</jackson.version>
 
         <!-- 项目模块版本号 -->
         <!--<project.module.version>1.0-SNAPSHOT</project.module.version>-->
@@ -67,6 +69,22 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+            <!-- jackson依赖，提供json数据处理支持 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <!-- 项目模块版本控制 -->

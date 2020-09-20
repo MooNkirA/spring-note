@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.VersionResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
@@ -18,8 +22,21 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 // 配置包扫描，专注于扫描springmvc相关的包
 @ComponentScan("com.moon.springmvc.web")
 // 开启对SpringMVC的注解支持，该注解会引入DelegatingWebMvcConfiguration配置类，该类会创建很功能增强的对象
-// @EnableWebMvc
-public class SpringMvcConfiguration {
+@EnableWebMvc
+public class SpringMvcConfiguration implements WebMvcConfigurer {
+
+    /**
+     * 配置添加资源处理规则
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/js/**")   // 配置静态资源的映射
+                .addResourceLocations("/js/")   // 静态资源所在项目的路径
+                .resourceChain(true)
+                .addResolver(new VersionResourceResolver().addContentVersionStrategy("/**"));
+    }
 
     /**
      * 创建视图解析器(InternalResourceViewResolver)并存入ioc容器

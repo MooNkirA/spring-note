@@ -38,6 +38,7 @@ import org.springframework.http.converter.HttpMessageConverter;
  * @see ResponseBody
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
  */
+/* 用于获取全部的请求体（注：此注解没有实现将json数据封装到实体类中的功能） */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -50,6 +51,7 @@ public @interface RequestBody {
 	 * {@code null} to be passed when the body content is {@code null}.
 	 * @since 3.2
 	 */
+	/* 用于指定是否必须有请求体 */
 	boolean required() default true;
 
 }

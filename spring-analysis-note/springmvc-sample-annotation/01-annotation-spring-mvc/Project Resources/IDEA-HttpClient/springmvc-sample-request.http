@@ -31,4 +31,35 @@ GET {{baseUrl}}/useSessionAttribute
 ### @ExceptionHandler 注解测试
 GET {{baseUrl}}/useExceptionHandler?age=130
 
+### @RequestBody 注解测试
+# 此x-www-form-urlencoded类型spring mvc可以直接封装对象中
+#POST {{baseUrl}}/useRequestBody
+#Content-Type: application/x-www-form-urlencoded
+#
+#username=MooNkirA&age=18&gender=male
+
+# 此application/json类型，json格式的数据是存在请求体中，spring mvc不能直接获取绑定到方法形参中
+# 需要通过RequestBody注解，才能获取
+POST {{baseUrl}}/useRequestBody
+Content-Type: application/json
+
+{
+  "username": "MooNkirA",
+  "age": 18,
+  "ts": "male"
+}
+
+### @ResponseBody 注解标识在方法上测试
+GET {{baseUrl}}/useRequestBodyOnMethod
+
+### @EResponseBody 注解标识在类上测试
+GET {{baseUrl}}/useResponseBodyOnClass
+
+### @RestController 注解测试
+GET {{baseUrl}}/useRestController
+
+### @RestControllerAdvice 注解测试
+# 测试前，将ExceptionHandlerAdvice异常处理类中的RestControllerAdvice注解与相应方法的注释放开
+GET {{baseUrl}}/useRestControllerAdvice
+
 ###

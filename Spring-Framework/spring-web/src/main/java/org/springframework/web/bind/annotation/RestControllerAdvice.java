@@ -44,6 +44,7 @@ import org.springframework.core.annotation.AliasFor;
  * @see RestController
  * @see ControllerAdvice
  */
+/* 此注解具体@ControllerAdvice注解的功能，和@ResponseBody的功能 */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

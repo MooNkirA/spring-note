@@ -42,6 +42,7 @@ import org.springframework.stereotype.Controller;
  * @author Sam Brannen
  * @since 4.0
  */
+/* 它具备@Controller注解的全部功能，和@ResponseBody注解的功能 */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -55,6 +56,7 @@ public @interface RestController {
 	 * @return the suggested component name, if any (or empty String otherwise)
 	 * @since 4.0.1
 	 */
+	/* 用于指定存入ioc容器时bean的唯一标识 */
 	@AliasFor(annotation = Controller.class)
 	String value() default "";
 

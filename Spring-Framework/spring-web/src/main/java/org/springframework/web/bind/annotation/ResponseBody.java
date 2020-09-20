@@ -34,6 +34,7 @@ import java.lang.annotation.Target;
  * @see RequestBody
  * @see RestController
  */
+/* 用于用流输出响应正文 */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
