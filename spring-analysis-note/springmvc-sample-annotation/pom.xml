@@ -16,6 +16,7 @@
 
     <modules>
         <module>01-annotation-spring-mvc</module>
+        <module>01-crossorigin-test</module>
     </modules>
 
     <!-- 版本号管理 -->

@@ -46,7 +46,7 @@ Content-Type: application/json
 {
   "username": "MooNkirA",
   "age": 18,
-  "ts": "male"
+  "gender": "male"
 }
 
 ### @ResponseBody 注解标识在方法上测试
@@ -61,5 +61,31 @@ GET {{baseUrl}}/useRestController
 ### @RestControllerAdvice 注解测试
 # 测试前，将ExceptionHandlerAdvice异常处理类中的RestControllerAdvice注解与相应方法的注释放开
 GET {{baseUrl}}/useRestControllerAdvice
+
+### @PathVariable 注解配合restful风格的url测试 - 新增
+POST {{baseUrl}}/user
+Content-Type: application/json
+
+{
+  "username": "MooNkirA",
+  "age": 18,
+  "gender": "male"
+}
+
+### @PathVariable 注解配合restful风格的url测试 - 修改
+PUT {{baseUrl}}/user/2
+Content-Type: application/json
+
+{
+  "username": "N",
+  "age": 18,
+  "gender": "female"
+}
+
+### @PathVariable 注解配合restful风格的url测试 - 删除
+DELETE {{baseUrl}}/user/4
+
+### @PathVariable 注解配合restful风格的url测试 - 查询
+GET {{baseUrl}}/user/8
 
 ###

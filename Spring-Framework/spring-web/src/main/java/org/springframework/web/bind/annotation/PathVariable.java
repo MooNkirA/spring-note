@@ -37,6 +37,10 @@ import org.springframework.core.annotation.AliasFor;
  * @see RequestMapping
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
  */
+/*
+ * 用于获取请求url映射中占位符对应的值
+ * 	是springmvc框架支持rest风格url的标识
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -45,6 +49,7 @@ public @interface PathVariable {
 	/**
 	 * Alias for {@link #name}.
 	 */
+	/* 指定url映射中占位符的名称 */
 	@AliasFor("name")
 	String value() default "";
 
@@ -52,6 +57,7 @@ public @interface PathVariable {
 	 * The name of the path variable to bind to.
 	 * @since 4.3.3
 	 */
+	/* 4.3.3版本新加入的属性。作用和value一样 */
 	@AliasFor("value")
 	String name() default "";
 
@@ -63,6 +69,7 @@ public @interface PathVariable {
 	 * e.g. on a {@code ModelAttribute} method which serves for different requests.
 	 * @since 4.3.3
 	 */
+	/* 4.3.3版本新加入的属性，用于指定是否必须有此占位符。当取默认值时，没有会报错。 */
 	boolean required() default true;
 
 }

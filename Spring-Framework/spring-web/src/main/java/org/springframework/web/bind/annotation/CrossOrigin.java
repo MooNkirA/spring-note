@@ -47,6 +47,7 @@ import org.springframework.web.cors.CorsConfiguration;
  * @author Sam Brannen
  * @since 4.2
  */
+/* 用于指定是否支持跨域访问 */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -72,6 +73,7 @@ public @interface CrossOrigin {
 	/**
 	 * Alias for {@link #origins}.
 	 */
+	/* 和origins属性一样 */
 	@AliasFor("origins")
 	String[] value() default {};
 
@@ -90,6 +92,12 @@ public @interface CrossOrigin {
 	 * See the Spring Framework reference for more on this filter.
 	 * @see #value
 	 */
+	/*
+	 * 所有支持域的集合，例如"http://domain1.com"
+	 * 这些值都显示在请求头中的Access-Control-Allow-Origin
+	 * "*"代表所有域的请求都支持
+	 * 如果没有定义，所有请求的域都支持
+	 */
 	@AliasFor("value")
 	String[] origins() default {};
 
@@ -103,6 +111,7 @@ public @interface CrossOrigin {
 	 * {@code Last-Modified}, or {@code Pragma} as per the CORS spec.
 	 * <p>By default all requested headers are allowed.
 	 */
+	/* 允许请求头中的header，默认都支持 */
 	String[] allowedHeaders() default {};
 
 	/**
@@ -114,6 +123,7 @@ public @interface CrossOrigin {
 	 * response header of actual CORS requests.
 	 * <p>By default no headers are listed as exposed.
 	 */
+	/* 响应头中允许访问的header，默认为空 */
 	String[] exposedHeaders() default {};
 
 	/**
@@ -121,6 +131,7 @@ public @interface CrossOrigin {
 	 * <p>By default the supported methods are the same as the ones to which a
 	 * controller method is mapped.
 	 */
+	/* 用于指定支持的HTTP请求方式列表 */
 	RequestMethod[] methods() default {};
 
 	/**
@@ -136,6 +147,7 @@ public @interface CrossOrigin {
 	 * {@code Access-Control-Allow-Credentials} header is also not set and
 	 * credentials are therefore not allowed.
 	 */
+	/* 是否允许cookie随请求发送，使用时必须指定具体的域 */
 	String allowCredentials() default "";
 
 	/**
@@ -147,6 +159,7 @@ public @interface CrossOrigin {
 	 * A negative value means <em>undefined</em>.
 	 * <p>By default this is set to {@code 1800} seconds (30 minutes).
 	 */
+	/* 预请求的结果的有效期。默认值是：1800秒 (30分钟) */
 	long maxAge() default -1;
 
 }

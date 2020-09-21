@@ -11,17 +11,15 @@ import org.springframework.web.servlet.resource.VersionResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
- * SpringMVC 的配置类，用于替代springmvc.xml配置文件
+ * SpringMVC 的配置类
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-9-17 14:44
+ * @date 2020-9-21 08:42
  * @description
  */
-@Configuration // 标识为配置类
-// 配置包扫描，专注于扫描springmvc相关的包
-@ComponentScan("com.moon.springmvc.web")
-// 开启对SpringMVC的注解支持，该注解会引入DelegatingWebMvcConfiguration配置类，该类会创建很功能增强的对象
+@Configuration
+@ComponentScan("com.moon.springmvc")
 @EnableWebMvc
 public class SpringMvcConfiguration implements WebMvcConfigurer {
 
@@ -32,8 +30,8 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/js/**", "/images/**", "/css/**")   // 配置静态资源的映射
-                .addResourceLocations("/js/", "/images/", "/css/")   // 静态资源所在项目的路径
+        registry.addResourceHandler("/js/**")   // 配置静态资源的映射
+                .addResourceLocations("/js/")   // 静态资源所在项目的路径
                 .resourceChain(true)
                 .addResolver(new VersionResourceResolver().addContentVersionStrategy("/**"));
     }

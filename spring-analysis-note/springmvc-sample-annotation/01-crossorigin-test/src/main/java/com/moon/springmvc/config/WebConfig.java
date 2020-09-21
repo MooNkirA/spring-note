@@ -1,6 +1,5 @@
 package com.moon.springmvc.config;
 
-import com.moon.springmvc.filters.CrossOriginFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -13,19 +12,13 @@ import javax.servlet.ServletException;
 import java.util.EnumSet;
 
 /**
- * Servlet3.0规范提供的标准接口ServletContainerInitializer，作用是在启动容器是做一些初始化操作，
- * 所以创建`WebConfig`类可以实现ServletContainerInitializer接口，
- * 或者继承SpringMVC提供的抽象实现AbstractDispatcherServletInitializer类，
- * 重写里面的onStartUp()方法，调用执行父类的onStartUp()方法的同时，执行自己项目需要的一些初始化操作
- * <p>
- * 用于初始化Spring和SpringMVC ioc容器的配置类
+ * web项目配置类，用于初始化Spring和SpringMVC ioc容器的配置
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-9-17 15:36
+ * @date 2020-9-21 08:44
  * @description
  */
-/* 注：此类不需要加任何注解，因为它是基于Servlet3.0规范，在web项目启动处理完此类的逻辑再到spring与springmvc的容器创建 */
 public class WebConfig extends AbstractDispatcherServletInitializer {
 
     /**
@@ -44,22 +37,10 @@ public class WebConfig extends AbstractDispatcherServletInitializer {
         characterEncodingFilter.setEncoding("UTF-8");
         // 3. 添加到容器（注：此容器不是ioc容器，而是ServletContainer）
         FilterRegistration.Dynamic registration = servletContext.addFilter("characterEncodingFilter", characterEncodingFilter);
-        /*
-         * 4. 给过滤器添加映射规则
-         *      第1个参数是拦截的类型
-         *      第2个参数是此过滤器的优先级设置，
-         *          true：就是此过滤器在web.xml配置的过滤器之后加载
-         *          false：就是此过滤器在web.xml配置的过滤器之前加载
-         *      第3个参数是拦截的url，"/*"代表拦截所有
-         */
+        // 4. 给过滤器添加映射规则
         registration.addMappingForUrlPatterns(
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE),
                 false, "/*");
-        /* 注册处理跨域请求问题的过滤器 */
-        /*FilterRegistration.Dynamic crossOriginFilter = servletContext.addFilter("crossOriginFilter", new CrossOriginFilter());
-        crossOriginFilter.addMappingForUrlPatterns(
-                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE),
-                false, "/*");*/
     }
 
     /*
@@ -75,21 +56,10 @@ public class WebConfig extends AbstractDispatcherServletInitializer {
         return context;
     }
 
-    /*
-     * 用于指定DispatcherServlet的请求映射
-     *  相当于web.xml中配置的
-     *  <servlet-mapping>
-     *      <servlet-name>dispatcherServlet</servlet-name>
-     *      <url-pattern>/</url-pattern>
-     *  </servlet-mapping>
-     */
+    // 用于指定DispatcherServlet的请求映射，相当于web.xml中配置的
     @Override
     protected String[] getServletMappings() {
-        /*
-         * 配置拦截的url，说明：
-         *  1.*.do，表示以.do结尾的请求，进入前端控制器
-         *  2./，表示所有请求都进入前端控制器
-         */
+        // 配置拦截的url
         return new String[]{"/"};
     }
 

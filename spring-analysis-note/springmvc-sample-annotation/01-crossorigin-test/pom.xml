@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.moon</groupId>
         <artifactId>springmvc-sample-annotation</artifactId>
+        <groupId>com.moon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>01-annotation-spring-mvc</artifactId>
+    <artifactId>01-annotation-crossorigin-test</artifactId>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
-    <description>SpringMVC注解汇总示例工程</description>
+    <description>SpringMVC @CrossOrigin 注解测试工程，用于使用js发送ajax请求</description>
 
     <dependencies>
         <!-- Spring 核心依赖 -->
@@ -41,19 +41,7 @@
             <artifactId>log4j</artifactId>
         </dependency>
 
-        <!-- jackson依赖，提供json数据处理支持 -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
     </dependencies>
+
 
 </project>
