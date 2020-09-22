@@ -1,6 +1,5 @@
 package com.moon.springmvc.config;
 
-import com.moon.springmvc.filters.CrossOriginFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;

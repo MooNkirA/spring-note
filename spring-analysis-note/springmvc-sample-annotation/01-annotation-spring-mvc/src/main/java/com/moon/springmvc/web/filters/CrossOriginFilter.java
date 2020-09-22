@@ -1,4 +1,4 @@
-package com.moon.springmvc.filters;
+package com.moon.springmvc.web.filters;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

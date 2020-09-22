@@ -1,10 +1,14 @@
 package com.moon.springmvc.config;
 
+import com.moon.springmvc.web.interceptors.MyInterceptor1;
+import com.moon.springmvc.web.interceptors.MyInterceptor2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
@@ -53,4 +57,21 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
         return viewResolver;
     }
 
+    // 注入自定义拦截器
+    @Autowired
+    private MyInterceptor1 myInterceptor1;
+    @Autowired
+    private MyInterceptor2 myInterceptor2;
+
+    /**
+     * 注册拦截器方法
+     *
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // InterceptorRegistry中注册拦截器（注：此处的注册顺序决定了多个拦截器的执行顺序）
+        // registry.addInterceptor(myInterceptor2);
+        // registry.addInterceptor(myInterceptor1);
+    }
 }

@@ -2,8 +2,8 @@
 <html>
 <body>
 <!-- 入门案例的请求 -->
-<a href="${pageContext.request.contextPath}/hello">SpringMVC基于servlet3.0规范纯注解开发的入门</a>
-<hr/>
+<%--<a href="${pageContext.request.contextPath}/hello">SpringMVC基于servlet3.0规范纯注解开发的入门</a>--%>
+<%--<hr/>--%>
 <!-- RequestMapping注解的使用 -->
 <%--<a href="${pageContext.request.contextPath}/springmvc/useRequestMapping?name">RequestMapping注解的使用</a>
 <form action="${pageContext.request.contextPath}/springmvc/useRequestMapping" method="post">
@@ -23,15 +23,15 @@
 <!-- RequestParam注解的使用
 <a href="useParam1?name=test&age=18">RequestParam注解的使用之基本类型和String类型的入参</a>
 <a href="useRequestParam?page=1">RequestParam注解的使用</a> -->
-<form action="useParam2" method="post">
+<%--<form action="useParam2" method="post">
     用户名：<input type="text" name="username"><br/>
     密码：<input type="text" name="password"><br/>
     年龄：<input type="text" name="age"><br/>
     性别：<input type="text" name="gender"><br/>
-    <%--生日：<input type="text" name="birthday"><br/>--%>
+    &lt;%&ndash;生日：<input type="text" name="birthday"><br/>&ndash;%&gt;
     <input type="submit" value="提交">
 </form>
-<hr/>
+<hr/>--%>
 
 <!--InitBinder注解的使用
 <form action="useInitBinder" method="post">
@@ -67,7 +67,7 @@
 
 
 <!-- @RequestBody注解的使用 -->
-<script src="${pageContext.request.contextPath}/js/jquery-2.2.3.min.js"></script>
+<%--<script src="${pageContext.request.contextPath}/js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
     //页面加载事件
     $(function () {
@@ -87,16 +87,16 @@
             });
         });
     })
-</script>
+</script>--%>
 
-<a href="#" id="useRequestBodyAjax">RequestBody注解的使用</a>
+<%--<a href="#" id="useRequestBodyAjax">RequestBody注解的使用</a>--%>
 
 <%--<a href="useRequestBody">ResponseBody注解的使用</a>--%>
-<%--<a href="useResponseBody">ResponseBody注解的使用2</a>--%>
-<hr/>
+<%--<a href="useResponseBody">ResponseBody注解的使用2</a>
+<hr/>--%>
 
 <!-- SpringMVC中的拦截器 -->
-<%--<a href="${pageContext.request.contextPath}/sayHello">SpringMVC中的拦截器</a>--%>
+<a href="${pageContext.request.contextPath}/testCustomInterceptor">SpringMVC中的拦截器</a>
 
 </body>
 </html>
