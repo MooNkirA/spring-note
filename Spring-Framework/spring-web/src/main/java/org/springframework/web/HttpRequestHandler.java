@@ -73,6 +73,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter
  * @see org.springframework.remoting.caucho.HessianServiceExporter
  */
+/* 编写SpringMVC控制器，可以实现此接口 */
 @FunctionalInterface
 public interface HttpRequestHandler {
 
@@ -83,6 +84,7 @@ public interface HttpRequestHandler {
 	 * @throws ServletException in case of general errors
 	 * @throws IOException in case of I/O errors
 	 */
+	/* 用于处理器请求，并由使用者提供相应返回处理 */
 	void handleRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException;
 

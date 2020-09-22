@@ -107,6 +107,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @see org.springframework.web.context.ServletContextAware
  * @see org.springframework.web.context.support.WebApplicationObjectSupport
  */
+/* 编写SpringMVC控制器，可以实现此接口 */
 @FunctionalInterface
 public interface Controller {
 
@@ -120,6 +121,7 @@ public interface Controller {
 	 * @return a ModelAndView to render, or {@code null} if handled directly
 	 * @throws Exception in case of errors
 	 */
+	/* 用于处理请求并返回ModelAndView */
 	@Nullable
 	ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
 

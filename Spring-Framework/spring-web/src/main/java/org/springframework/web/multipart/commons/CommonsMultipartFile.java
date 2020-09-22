@@ -42,6 +42,10 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 29.09.2003
  * @see CommonsMultipartResolver
  */
+/*
+ * 通过导包就看出了，此MultipartFile的现实类是借助apache的commons-fileupload实现的文件上传
+ * 只是无须自己定义DiskFileItemFactory,DiskFileItemFactory,ServletFileUpload对象
+ */
 @SuppressWarnings("serial")
 public class CommonsMultipartFile implements MultipartFile, Serializable {
 

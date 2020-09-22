@@ -158,6 +158,7 @@ import org.springframework.web.util.WebUtils;
  * @see org.springframework.web.servlet.mvc.Controller
  * @see org.springframework.web.context.ContextLoaderListener
  */
+/* DispatcherServlet是整个流程控制的中心，由它调用其它组件处理用户的请求 */
 @SuppressWarnings("serial")
 public class DispatcherServlet extends FrameworkServlet {
 
@@ -498,14 +499,22 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the strategy objects that this servlet uses.
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
+	/* 此方法就是DispatcherServlet中的初始化方法 */
 	protected void initStrategies(ApplicationContext context) {
+		// 初始化文件上传的处理器
 		initMultipartResolver(context);
+		// 初始化国际化资源的处理器
 		initLocaleResolver(context);
+		// 初始化主题资源处理器
 		initThemeResolver(context);
+		// 初始化控制器映射的处理器，重点程度【5】
 		initHandlerMappings(context);
+		// 初始化适配器
 		initHandlerAdapters(context);
+		// 初始化异常解析器
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
+		// 初始化视图解析器
 		initViewResolvers(context);
 		initFlashMapManager(context);
 	}
@@ -589,11 +598,19 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>If no HandlerMapping beans are defined in the BeanFactory for this namespace,
 	 * we default to BeanNameUrlHandlerMapping.
 	 */
+	/* 初始化处理器映射器方法 */
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
 
 		if (this.detectAllHandlerMappings) {
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			/*
+			 * 此方法会初始化三个处理器
+			 * 	RequestMappingHandlerMapping：请求映射处理器
+			 * 		此对象中MappingRegistry属性（LinkedHashMap结构），就是用来存储所有@RequestMapping中定义的url与相应的方法的映射
+			 * 	BeanNameUrlHandlerMapping：beanName与url映射处理器
+			 * 	SimpleUrlHandlerMapping：资源处理器
+			 */
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
 			if (!matchingBeans.isEmpty()) {
@@ -905,6 +922,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
 	 * for the actual dispatching.
 	 */
+	/* 接收到请求首先执行的方法，它就相当于Servlet中的service方法 */
 	@Override
 	protected void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logRequest(request);
@@ -939,6 +957,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		try {
+			// 处理请求分发的核心方法
 			doDispatch(request, response);
 		}
 		finally {
@@ -995,6 +1014,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param response current HTTP response
 	 * @throws Exception in case of any kind of processing failure
 	 */
+	/* 处理请求分发的核心方法。它负责通过反射调用控制器方法、执行拦截器和处理结果视图 */
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
@@ -1003,6 +1023,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 
 		try {
+			// 定义视图返回值
 			ModelAndView mv = null;
 			Exception dispatchException = null;
 
@@ -1018,6 +1039,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				// 确定当前请求的相应处理程序适配器
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -1035,6 +1057,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Actually invoke the handler.
+				// 调用HandlerAdapter接口的handle方法，此时会触发相应的控制器中的请求映射方法
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1052,6 +1075,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+			// 处理请求方法调用后结果的处理
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1113,6 +1137,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
+			// 渲染返回视图的处理
 			render(mv, request, response);
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
@@ -1344,6 +1369,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		String viewName = mv.getViewName();
 		if (viewName != null) {
 			// We need to resolve the view name.
+			// 视图名称转换处理
 			view = resolveViewName(viewName, mv.getModelInternal(), locale, request);
 			if (view == null) {
 				throw new ServletException("Could not resolve view with name '" + mv.getViewName() +
@@ -1408,6 +1434,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		if (this.viewResolvers != null) {
 			for (ViewResolver viewResolver : this.viewResolvers) {
+				// 循环处理所有视图名称，根据名称转换成相应的视图对象
 				View view = viewResolver.resolveViewName(viewName, locale);
 				if (view != null) {
 					return view;

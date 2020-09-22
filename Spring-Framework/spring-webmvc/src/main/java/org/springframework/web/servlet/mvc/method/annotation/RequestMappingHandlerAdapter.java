@@ -774,6 +774,11 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		return true;
 	}
 
+	/*
+	 * 重写父类AbstractHandlerMethodAdapter的抽象方法，
+	 * 在父类中其实是实现HandlerAdapter接口的handle方法，然后在handle方法中调用此handleInternal方法
+	 * 所以可以理解此方法就是HandlerAdapter接口的handle的逻辑实现
+	 */
 	@Override
 	protected ModelAndView handleInternal(HttpServletRequest request,
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
@@ -797,6 +802,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		}
 		else {
 			// No synchronization on session demanded at all...
+			// 此方法调用控制类方法并返回ModelAndView对象
 			mav = invokeHandlerMethod(request, response, handlerMethod);
 		}
 
@@ -852,6 +858,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
+		// 将request与response封装成ServletWebRequest对象
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		try {
 			WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
@@ -867,6 +874,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			invocableMethod.setDataBinderFactory(binderFactory);
 			invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
 
+			// 创建ModelAndView对象的容器
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
 			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
@@ -892,11 +900,13 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 				invocableMethod = invocableMethod.wrapConcurrentResult(result);
 			}
 
+			// 调用控制器相应的方法
 			invocableMethod.invokeAndHandle(webRequest, mavContainer);
 			if (asyncManager.isConcurrentHandlingStarted()) {
 				return null;
 			}
 
+			// 获取控制器方法执行后返回值
 			return getModelAndView(mavContainer, modelFactory, webRequest);
 		}
 		finally {
@@ -1005,7 +1015,9 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (mavContainer.isRequestHandled()) {
 			return null;
 		}
+		// 从ModelAndView容器中获取model对象
 		ModelMap model = mavContainer.getModel();
+		// 创建真正的返回ModelAndView对象
 		ModelAndView mav = new ModelAndView(mavContainer.getViewName(), model, mavContainer.getStatus());
 		if (!mavContainer.isViewReference()) {
 			mav.setView((View) mavContainer.getView());

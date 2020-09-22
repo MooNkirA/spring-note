@@ -54,16 +54,21 @@ import org.springframework.web.util.WebUtils;
  * @see CommonsMultipartFile
  * @see CommonsMultipartResolver
  */
+/*
+ * 借助apache的commons-fileupload实现的文件上传
+ * 解析CommonsMultipartFile
+ */
 public abstract class CommonsFileUploadSupport {
 
+	// 日志组件
 	protected final Log logger = LogFactory.getLog(getClass());
-
+	// 磁盘文件工厂
 	private final DiskFileItemFactory fileItemFactory;
-
+	// 上传核心类
 	private final FileUpload fileUpload;
-
+	// 是否明确规定临时文件目录
 	private boolean uploadTempDirSpecified = false;
-
+	// 是否保留文件名
 	private boolean preserveFilename = false;
 
 
@@ -73,6 +78,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @see #newFileItemFactory
 	 * @see #newFileUpload
 	 */
+	/* 默认构造函数，构建commons-fileupload的必要对象 */
 	public CommonsFileUploadSupport() {
 		this.fileItemFactory = newFileItemFactory();
 		this.fileUpload = newFileUpload(getFileItemFactory());
@@ -84,6 +90,7 @@ public abstract class CommonsFileUploadSupport {
 	 * instance. There is hardly any need to access this.
 	 * @return the underlying DiskFileItemFactory instance
 	 */
+	/* 获取文件项工厂 */
 	public DiskFileItemFactory getFileItemFactory() {
 		return this.fileItemFactory;
 	}
@@ -93,6 +100,7 @@ public abstract class CommonsFileUploadSupport {
 	 * instance. There is hardly any need to access this.
 	 * @return the underlying FileUpload instance
 	 */
+	/* 获取上传核心对象 */
 	public FileUpload getFileUpload() {
 		return this.fileUpload;
 	}
@@ -103,6 +111,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @param maxUploadSize the maximum upload size allowed
 	 * @see org.apache.commons.fileupload.FileUploadBase#setSizeMax
 	 */
+	/* 设置上传文件的总大小 */
 	public void setMaxUploadSize(long maxUploadSize) {
 		this.fileUpload.setSizeMax(maxUploadSize);
 	}
@@ -114,6 +123,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @since 4.2
 	 * @see org.apache.commons.fileupload.FileUploadBase#setFileSizeMax
 	 */
+	/* 设置上传的单个文件大小（4.2版本引入） */
 	public void setMaxUploadSizePerFile(long maxUploadSizePerFile) {
 		this.fileUpload.setFileSizeMax(maxUploadSizePerFile);
 	}
@@ -125,6 +135,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @param maxInMemorySize the maximum in memory size allowed
 	 * @see org.apache.commons.fileupload.disk.DiskFileItemFactory#setSizeThreshold
 	 */
+	/* 设置在写入磁盘前，内存对象最大允许的大小 */
 	public void setMaxInMemorySize(int maxInMemorySize) {
 		this.fileItemFactory.setSizeThreshold(maxInMemorySize);
 	}
@@ -143,6 +154,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @see WebUtils#DEFAULT_CHARACTER_ENCODING
 	 * @see org.apache.commons.fileupload.FileUploadBase#setHeaderEncoding
 	 */
+	/* 设置解析request的字符集 */
 	public void setDefaultEncoding(String defaultEncoding) {
 		this.fileUpload.setHeaderEncoding(defaultEncoding);
 	}
@@ -151,6 +163,7 @@ public abstract class CommonsFileUploadSupport {
 	 * Determine the default encoding to use for parsing requests.
 	 * @see #setDefaultEncoding
 	 */
+	/* 获取字符集 */
 	protected String getDefaultEncoding() {
 		String encoding = getFileUpload().getHeaderEncoding();
 		if (encoding == null) {
@@ -164,6 +177,7 @@ public abstract class CommonsFileUploadSupport {
 	 * Default is the servlet container's temporary directory for the web application.
 	 * @see org.springframework.web.util.WebUtils#TEMP_DIR_CONTEXT_ATTRIBUTE
 	 */
+	/* 设置上传时临时文件目录 */
 	public void setUploadTempDir(Resource uploadTempDir) throws IOException {
 		if (!uploadTempDir.exists() && !uploadTempDir.getFile().mkdirs()) {
 			throw new IllegalArgumentException("Given uploadTempDir [" + uploadTempDir + "] could not be created");
@@ -176,6 +190,7 @@ public abstract class CommonsFileUploadSupport {
 	 * Return the temporary directory where uploaded files get stored.
 	 * @see #setUploadTempDir
 	 */
+	/* 获取是否使用具体临时文件目录 */
 	protected boolean isUploadTempDirSpecified() {
 		return this.uploadTempDirSpecified;
 	}
@@ -190,6 +205,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @see MultipartFile#getOriginalFilename()
 	 * @see CommonsMultipartFile#setPreserveFilename(boolean)
 	 */
+	/* 设置要保留的文件名 */
 	public void setPreserveFilename(boolean preserveFilename) {
 		this.preserveFilename = preserveFilename;
 	}
@@ -201,6 +217,7 @@ public abstract class CommonsFileUploadSupport {
 	 * Can be overridden to use a custom subclass, e.g. for testing purposes.
 	 * @return the new DiskFileItemFactory instance
 	 */
+	/* 创建磁盘文件项工厂 */
 	protected DiskFileItemFactory newFileItemFactory() {
 		return new DiskFileItemFactory();
 	}
@@ -211,6 +228,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @param fileItemFactory the Commons FileItemFactory to build upon
 	 * @return the Commons FileUpload instance
 	 */
+	/* 创建核心上传对象的抽象方法 */
 	protected abstract FileUpload newFileUpload(FileItemFactory fileItemFactory);
 
 
@@ -222,6 +240,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @param encoding the character encoding to use
 	 * @return an appropriate FileUpload instance.
 	 */
+	/* 预处理上传核心对象 */
 	protected FileUpload prepareFileUpload(@Nullable String encoding) {
 		FileUpload fileUpload = getFileUpload();
 		FileUpload actualFileUpload = fileUpload;
@@ -246,6 +265,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @return the Spring MultipartParsingResult
 	 * @see CommonsMultipartFile#CommonsMultipartFile(org.apache.commons.fileupload.FileItem)
 	 */
+	/* 解析得到的FileItem集合 */
 	protected MultipartParsingResult parseFileItems(List<FileItem> fileItems, String encoding) {
 		MultiValueMap<String, MultipartFile> multipartFiles = new LinkedMultiValueMap<>();
 		Map<String, String[]> multipartParameters = new HashMap<>();
@@ -300,6 +320,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @see #setPreserveFilename(boolean)
 	 * @see CommonsMultipartFile#setPreserveFilename(boolean)
 	 */
+	/* 用FileItem创建MultipartFile对象（4.3.5版本引入） */
 	protected CommonsMultipartFile createMultipartFile(FileItem fileItem) {
 		CommonsMultipartFile multipartFile = new CommonsMultipartFile(fileItem);
 		multipartFile.setPreserveFilename(this.preserveFilename);
@@ -313,6 +334,7 @@ public abstract class CommonsFileUploadSupport {
 	 * @param multipartFiles a Collection of MultipartFile instances
 	 * @see org.apache.commons.fileupload.FileItem#delete()
 	 */
+	/* 清理临时文件 */
 	protected void cleanupFileItems(MultiValueMap<String, MultipartFile> multipartFiles) {
 		for (List<MultipartFile> files : multipartFiles.values()) {
 			for (MultipartFile file : files) {

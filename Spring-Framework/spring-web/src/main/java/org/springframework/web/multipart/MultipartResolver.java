@@ -82,6 +82,10 @@ import javax.servlet.http.HttpServletRequest;
  * @see org.springframework.web.multipart.support.StringMultipartFileEditor
  * @see org.springframework.web.servlet.DispatcherServlet
  */
+/*
+ * 它是SpringMVC中文件解析器的标准
+ * 通过一个接口规定了文件解析器中必须包含的方法
+ */
 public interface MultipartResolver {
 
 	/**
@@ -91,6 +95,7 @@ public interface MultipartResolver {
 	 * @param request the servlet request to be evaluated
 	 * @return whether the request contains multipart content
 	 */
+	/* 判断是否支持文件上传 */
 	boolean isMultipart(HttpServletRequest request);
 
 	/**
@@ -110,6 +115,7 @@ public interface MultipartResolver {
 	 * @see javax.servlet.http.HttpServletRequest#getParameterNames
 	 * @see javax.servlet.http.HttpServletRequest#getParameterMap
 	 */
+	/* 解析HttpServletRequest */
 	MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException;
 
 	/**
@@ -117,6 +123,7 @@ public interface MultipartResolver {
 	 * like a storage for the uploaded files.
 	 * @param request the request to cleanup resources for
 	 */
+	/* 删除临时文件和一些清理操作 */
 	void cleanupMultipart(MultipartHttpServletRequest request);
 
 }

@@ -517,6 +517,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
+	/* 重写父类抽象方法，此方法在父类中的init()方法中调用 */
 	@Override
 	protected final void initServletBean() throws ServletException {
 		getServletContext().log("Initializing Spring " + getClass().getSimpleName() + " '" + getServletName() + "'");
@@ -526,8 +527,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
+			// 此方法是初始化servlet时的主要处理逻辑
 			this.webApplicationContext = initWebApplicationContext();
-			initFrameworkServlet();
+			initFrameworkServlet(); // 空方法，无实现
 		}
 		catch (ServletException | RuntimeException ex) {
 			logger.error("Context initialization failed", ex);
@@ -595,6 +597,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// support or the context injected at construction time had already been
 			// refreshed -> trigger initial onRefresh manually here.
 			synchronized (this.onRefreshMonitor) {
+				// 此处是模板设计模式，该方法由相应的子类来实现
 				onRefresh(wac);
 			}
 		}
