@@ -118,6 +118,7 @@ public final class SpringFactoriesLoader {
 	 * @see #loadFactories
 	 */
 	public static List<String> loadFactoryNames(Class<?> factoryClass, @Nullable ClassLoader classLoader) {
+		// 通过factoryClassName获取相应的bean全称
 		String factoryClassName = factoryClass.getName();
 		return loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());
 	}
@@ -129,6 +130,7 @@ public final class SpringFactoriesLoader {
 		}
 
 		try {
+			// 获取工程中所有META-INF/spring.factories文件,将其中的键值组合成Map
 			Enumeration<URL> urls = (classLoader != null ?
 					classLoader.getResources(FACTORIES_RESOURCE_LOCATION) :
 					ClassLoader.getSystemResources(FACTORIES_RESOURCE_LOCATION));

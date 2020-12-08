@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
  * @author Stephane Nicoll
  * @since 4.0
  */
+/* 它和ImportSelector的区别在于装载bean的时机上，DeferredImportSelector需要等所有的@Configuration都执行完毕后才会进行装载 */
 public interface DeferredImportSelector extends ImportSelector {
 
 	/**
