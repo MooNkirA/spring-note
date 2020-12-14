@@ -12,11 +12,18 @@
     <description>spring框架学习与基础使用示例工程</description>
 
     <modules>
+        <!-- 2019年源码学习笔记示例 -->
         <module>spring-source-study</module>
-        <module>springmvc-demo-2018</module>
-        <module>spring-sample-annotation</module>
+        <!-- 2018年版 Spring 基础使用示例项目 -->
         <module>spring-demo-2018</module>
+        <!-- 2018年版 Spring MVC 基础使用示例项目 -->
+        <module>springmvc-demo-2018</module>
+        <!-- 2020年版 Spring 基于注解基础使用示例项目 -->
+        <module>spring-sample-annotation</module>
+        <!-- 2018年版 Spring MVC 基于注解基础使用示例项目 -->
         <module>springmvc-sample-annotation</module>
+        <!-- 2021年源码学习笔记示例 -->
+        <module>spring-source-study-2021</module>
     </modules>
 
     <!-- 版本号管理 -->

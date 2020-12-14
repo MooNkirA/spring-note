@@ -12,7 +12,7 @@
     <artifactId>spring-source-study</artifactId>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring Framework 源码学习案例工程(包括基础使用示例、涉及设计模式示例)</description>
+    <description>Spring Framework 源码学习案例工程(包括基础使用示例、涉及设计模式示例) - 2019-2020年学习的版本</description>
 
     <!-- 版本号管理 -->
     <properties>
