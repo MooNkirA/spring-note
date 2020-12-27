@@ -1,6 +1,6 @@
 package com.moon.spring.test;
 
-import com.moon.spring.bean.Student;
+import com.moon.spring.common.bean.Student;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,6 +14,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class SpringBasicTest {
 
+    /**
+     * 最基础spring项目
+     */
     @Test
     public void testBasic() {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
