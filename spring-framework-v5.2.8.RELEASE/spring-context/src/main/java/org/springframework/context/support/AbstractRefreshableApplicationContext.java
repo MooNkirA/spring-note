@@ -119,14 +119,23 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
+		// 先做检查工作，如果BeanFactory不为空，则清除BeanFactory和里面的实例
 		if (hasBeanFactory()) {
 			destroyBeans();
 			closeBeanFactory();
 		}
 		try {
+			/*
+			 * 创建DefaultListableBeanFactory
+			 * BeanFactory是spring的实例工厂，所有spring管理的实例，都能通过BeanFactory获取
+			 */
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
+
+			// 设置是否可以循环依赖 allowCircularReferences属性：是否允许使用相同名称重新注册不同的bean实现.
 			customizeBeanFactory(beanFactory);
+
+			// 此方法是钩子方法。作用是解析xml，并把xml中的标签封装成BeanDefinition对象，重要程度【5】
 			loadBeanDefinitions(beanFactory);
 			this.beanFactory = beanFactory;
 		}
@@ -212,9 +221,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see DefaultListableBeanFactory#setAllowEagerClassLoading
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+		// 设置allowBeanDefinitionOverriding值，是否允许两个相同名称的bean，默认是不允许
 		if (this.allowBeanDefinitionOverriding != null) {
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		// 是否允许循环依赖
 		if (this.allowCircularReferences != null) {
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}

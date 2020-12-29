@@ -1,14 +1,14 @@
-package com.moon.spring.designPattern.template;
+package com.moon.spring.design.template;
 
 /**
  * 模板设计模式测试
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2019-12-21 16:54
+ * @date 2020-12-27 13:23
  * @description
  */
-public class TemplateTest {
+public class TemplateMethodTest {
 
     public static void main(String[] args) {
         // 执行A类的业务逻辑

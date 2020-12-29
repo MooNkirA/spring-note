@@ -1,11 +1,11 @@
-package com.moon.spring.designPattern.template;
+package com.moon.spring.design.template;
 
 /**
  * 基础模板子类B，实现自己的业务逻辑
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2019-12-21 16:53
+ * @date 2020-12-27 13:22
  * @description
  */
 public class TemplateClassB extends AbstractBaseTemplate {

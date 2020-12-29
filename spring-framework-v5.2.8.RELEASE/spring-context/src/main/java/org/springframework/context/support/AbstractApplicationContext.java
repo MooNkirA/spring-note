@@ -697,7 +697,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		// 核心方法，重要程度【5】
+		// 核心方法，重要程度【5】。此方法在AbstractApplicationContext类是抽象方法，这里就运用了模板方法设计模式
 		refreshBeanFactory();
 		return getBeanFactory();
 	}

@@ -15,9 +15,11 @@
     <description>
         Spring Framework 5.2.8.RELEASE 版本的源码学习案例工程(包括基础使用示例、涉及设计模式示例) - 2021年整理版本
     </description>
+
     <modules>
-        <module>01-spring-basic</module>
         <module>spring-commmon</module>
+        <module>00-spring-design-patterns</module>
+        <module>01-spring-basic</module>
         <module>02-spring-contexts</module>
     </modules>
 
