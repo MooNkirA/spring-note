@@ -307,6 +307,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 */
 	@Override
 	public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
+		// 这里又对Resource对象进行再次封装，封装成带编码的EncodedResource对象
 		return loadBeanDefinitions(new EncodedResource(resource));
 	}
 
@@ -330,11 +331,17 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
 
+		// 获取Resource对象中的xml文件流对象
 		try (InputStream inputStream = encodedResource.getResource().getInputStream()) {
+			// InputSource是jdk中的 sax xml文件解析对象，用于解析xml文件
 			InputSource inputSource = new InputSource(inputStream);
 			if (encodedResource.getEncoding() != null) {
 				inputSource.setEncoding(encodedResource.getEncoding());
 			}
+			/*
+			 * 此方法通过InputSource sax xml文件解析对象，解析xml配置文件后，封装到BeanDefinitions对象
+			 * 重要程度【5】
+			 */
 			return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 		}
 		catch (IOException ex) {
@@ -387,7 +394,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
+			// 把inputSource封装成Document文件对象，这是jdk的API
 			Document doc = doLoadDocument(inputSource, resource);
+
+			/* 此方法是重点，根据解析出来的document对象，拿到里面的标签元素封装成BeanDefinition */
 			int count = registerBeanDefinitions(doc, resource);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Loaded " + count + " bean definitions from " + resource);
@@ -506,8 +516,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see BeanDefinitionDocumentReader#registerBeanDefinitions
 	 */
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
+		// 这里又出现委托模式，XmlBeanDefinitionReader 委托给 BeanDefinitionDocumentReader 这个类进行document的解析
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
+
+		/*
+		 * createReaderContext(resource)
+		 * 	XmlReaderContext上下文对象，用于封装了XmlBeanDefinitionReader对象，用于解析xml文件过程中的上下文对象
+		 * 	在XmlReaderContext上下文对象中，可以通过getRegistry()访求获取BeanDefinitionRegistry对象
+		 * 		BeanDefinitionRegistry是BeanDefinition对象注册器，是将解析出来后的BeanDefinition缓存起来
+		 */
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}
