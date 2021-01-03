@@ -134,10 +134,11 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 					throw new FatalBeanException("Class [" + className + "] for namespace [" + namespaceUri +
 							"] does not implement the [" + NamespaceHandler.class.getName() + "] interface");
 				}
-				// 通过反射实例化对象
+				// 通过反射，实例化相应的自定义标签处理对象
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
 				// 调用处理类的init方法，在init方法中完成标签元素解析类的注册
 				namespaceHandler.init();
+				// 注册完成后，将刚刚实例化的标签处理对象namespaceHandler存放到 handlerMappings 容器中
 				handlerMappings.put(namespaceUri, namespaceHandler);
 				return namespaceHandler;
 			}
@@ -156,8 +157,10 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 * Load the specified NamespaceHandler mappings lazily.
 	 */
 	private Map<String, Object> getHandlerMappings() {
+		// 此map集合是用于存放"META-INF/spring.handlers"文件中相应的namespaceUri与解析类的映射关系
 		Map<String, Object> handlerMappings = this.handlerMappings;
 		if (handlerMappings == null) {
+			// 如果为空，此时会做映射的初始化
 			synchronized (this) {
 				handlerMappings = this.handlerMappings;
 				if (handlerMappings == null) {

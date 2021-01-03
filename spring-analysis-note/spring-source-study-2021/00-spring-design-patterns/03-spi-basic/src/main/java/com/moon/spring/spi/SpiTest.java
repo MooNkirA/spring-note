@@ -5,9 +5,9 @@ import java.util.ServiceLoader;
 /**
  * SPI 服务接口测试
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2020-1-8 17:05
+ * @date 2021-1-2 19:32
  * @description
  */
 public class SpiTest {
