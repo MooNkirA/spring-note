@@ -12,7 +12,9 @@
     <artifactId>03-spring-xml-bean</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring 框架的xml配置之bean标签的基础使用示例</description>
+    <description>
+        Spring 框架的xml配置之bean标签的基础使用示例(当前的项目都已经基于注解开发，此xml配置方式已经淘汰，只需要了解即可)
+    </description>
 
     <dependencies>
         <dependency>
@@ -25,6 +27,10 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <!--<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>-->
     </dependencies>
 
 </project>

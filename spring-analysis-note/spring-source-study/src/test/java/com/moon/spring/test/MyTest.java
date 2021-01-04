@@ -40,15 +40,6 @@ public class MyTest {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Autowired
-    private ShowSexClass showSexClass;
-
-    @Autowired
-    private OriginClass originClass;
-
-    @Autowired
-    private ConstructorArgBean constructorArgBean;
-
     /* 类路径获取配置文件上下文对象（ClassPathXmlApplicationContext） */
     @Test
     public void ClassPathXmlApplicationContextTest() {
@@ -102,26 +93,6 @@ public class MyTest {
         ApplicationContext ac = new AnnotationConfigApplicationContext(BASE_PACKAGE);
         BeanClass beanClass = (BeanClass) ac.getBean("beanClass");
         System.out.println("BeanClass -->" + beanClass);
-    }
-
-
-    /* 测试lookup-method子标签 */
-    @Test
-    public void lookUpMethod() {
-        showSexClass.getPeople().showSex();
-    }
-
-    /* 测试replaced-method子标签 */
-    @Test
-    public void replacedMethod() {
-        originClass.replaceMethod("xx");
-        originClass.replaceMethod(new ArrayList());
-    }
-
-    /* 测试constructor-arg子标签 */
-    @Test
-    public void constructorArg() {
-        System.out.println(constructorArgBean);
     }
 
     /* 自定义注解DI注入 */
