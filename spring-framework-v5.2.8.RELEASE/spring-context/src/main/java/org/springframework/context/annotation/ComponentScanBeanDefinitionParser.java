@@ -77,30 +77,56 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String FILTER_EXPRESSION_ATTRIBUTE = "expression";
 
 
+	/*
+	 * 此解析类的parse方法主要需要处理的逻辑如下：
+	 * 	1. 扫描标签设置的“base-package”属性的包路径，所有.class后缀的文件
+	 * 	2. 将第1步扫描出来的文件所有相关信息都封装到一个Metadata对象中，再去判断扫描到的类上是否有注解
+	 * 	3. 将有注解的类包装成BeanDefinition对象
+	 * 		GenericBeanDefinition genericBeanDefinition = new GenericBeanDefinition();
+	 * 		genericBeanDefinition.setBeanClass(Xxxx.class);
+	 * 	4. 完成beanDefinition对象注册到spring容器中
+	 */
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 获取标签设置的“base-package”属性的值
 		String basePackage = element.getAttribute(BASE_PACKAGE_ATTRIBUTE);
 		basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
+
+		// “base-package”可以使用逗号分隔，配置多个扫描的包路径
 		String[] basePackages = StringUtils.tokenizeToStringArray(basePackage,
 				ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 
 		// Actually scan for bean definitions and register them.
+		// 创建注解扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
+
+		// 进行扫描，并将扫描到的类封装成BeanDefinition对象。核心方法，重要程度【5】
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
+
+		/*
+		 * 注册一些XxxBeanPostProcessor类，是用于使用注解DI依赖注入（如@Autowired、@Value等） 重要程度【5】
+		 *   如：ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等
+		 */
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
 		return null;
 	}
 
 	protected ClassPathBeanDefinitionScanner configureScanner(ParserContext parserContext, Element element) {
+		// 使用默认的过滤器，默认就是扫描spring框架的@Service @Component等注解
 		boolean useDefaultFilters = true;
+		// 判断是否有配置“use-default-filters”属性
 		if (element.hasAttribute(USE_DEFAULT_FILTERS_ATTRIBUTE)) {
+			// 使用xml文件中配置“use-default-filters”的值
 			useDefaultFilters = Boolean.parseBoolean(element.getAttribute(USE_DEFAULT_FILTERS_ATTRIBUTE));
 		}
 
 		// Delegate bean definition registration to scanner class.
+		// 创建注解的扫描器
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
+		// ========以下代码不是很重要 start =============
+		// 以下都是去解析封装<context:component-scan>标签中的其他属性，但这些属性几乎用不上
 		scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
 		scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
 
@@ -121,13 +147,17 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		catch (Exception ex) {
 			parserContext.getReaderContext().error(ex.getMessage(), parserContext.extractSource(element), ex.getCause());
 		}
+		// ========以上代码不是很重要 end =============
 
+		// 解析<context:exclude-filter>与<context:include-filter>两个子标签，将配置包含与不包含的过滤器分别加入
+		// ClassPathScanningCandidateComponentProvider类的 List<TypeFilter> excludeFilters 与 List<TypeFilter> includeFilters 属性中
 		parseTypeFilters(element, scanner, parserContext);
 
 		return scanner;
 	}
 
 	protected ClassPathBeanDefinitionScanner createScanner(XmlReaderContext readerContext, boolean useDefaultFilters) {
+		// 创建ClassPathBeanDefinitionScanner扫描器（扩展：mybatis框架也使用此类，继承并扩展，使用它去扫描@Mapper注解）
 		return new ClassPathBeanDefinitionScanner(readerContext.getRegistry(), useDefaultFilters,
 				readerContext.getEnvironment(), readerContext.getResourceLoader());
 	}
@@ -148,6 +178,8 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 			annotationConfig = Boolean.parseBoolean(element.getAttribute(ANNOTATION_CONFIG_ATTRIBUTE));
 		}
 		if (annotationConfig) {
+			// 此方法注册了几个比较重要的BeanPostProcessor类（注：此方法在注解配置的方式中，AnnotationConfigApplicationContext注解上下文扫描的时候也调用了）
+			// 如：AutowiredAnnotationBeanPostProcessor, ConfigurationClassPostProcessor, CommonAnnotationBeanPostProcessor
 			Set<BeanDefinitionHolder> processorDefinitions =
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {

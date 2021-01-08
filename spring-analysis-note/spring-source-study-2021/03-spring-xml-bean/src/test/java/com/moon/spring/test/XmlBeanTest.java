@@ -1,6 +1,7 @@
 package com.moon.spring.test;
 
 import com.moon.spring.bean.ConstructorArgBean;
+import com.moon.spring.bean.DecoratorBean;
 import com.moon.spring.bean.FactoryBean;
 import com.moon.spring.bean.OriginBean;
 import com.moon.spring.bean.People;
@@ -112,6 +113,15 @@ public class XmlBeanTest {
     public void testProperty() {
         PropertyBean bean = context.getBean("propertyBean", PropertyBean.class);
         System.out.println(bean); // PropertyBean(username=MoonZero, password=123)
+    }
+
+    /**
+     * 测试使用p/c空间名称去封装装饰bean
+     */
+    @Test
+    public void testPAndCNameSpace() {
+        DecoratorBean bean = context.getBean("decoratorBean", DecoratorBean.class);
+        System.out.println(bean); // DecoratorBean(username=Moon, password=123, age=12, sex=1)
     }
 
 }

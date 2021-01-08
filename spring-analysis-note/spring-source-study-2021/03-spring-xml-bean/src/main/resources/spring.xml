@@ -1,5 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd"
@@ -91,5 +93,13 @@
         <property name="password" value="123"/>
     </bean>
 
+    <!--
+        使用p/c空间名称去封装装饰bean，
+            p空间名称前缀标签是用于替换<property>标签方式
+            c空间名称前缀标签是用于替换<constructor-arg>标签方式
+        注：基本不会使用，因为都直接使用@Value注解给属性赋值
+     -->
+    <bean class="com.moon.spring.bean.DecoratorBean" id="decoratorBean"
+          p:username="Moon" p:password="123" c:age="12" c:sex="1"/>
 
 </beans>
