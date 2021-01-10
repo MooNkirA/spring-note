@@ -162,9 +162,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		this.registry = registry;
 
+		// 判断是否使用默认的过滤器，useDefaultFilters不配置，默认值也是true
 		if (useDefaultFilters) {
+			// 注册扫描的注解，如果是默认的，即@Service @Component等
 			registerDefaultFilters();
 		}
+		// 设置环境参数
 		setEnvironment(environment);
 		setResourceLoader(resourceLoader);
 	}
@@ -250,7 +253,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	public int scan(String... basePackages) {
 		int beanCountAtScanStart = this.registry.getBeanDefinitionCount();
-
+		// 真正执行包扫描的逻辑
 		doScan(basePackages);
 
 		// Register annotation config processors, if necessary.
@@ -269,26 +272,41 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * @param basePackages the packages to check for annotated classes
 	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
 	 */
+	/*
+	 * doScan方法实现注解扫描的核心流程：
+	 * 	1. 扫描基础包basePackages路径下的所有.class文件
+	 *  2. 通过递归的方式去加载.class文件
+	 *  3. 判断.class文件中是否存在指定的注解，即includeFilters容器中包含注解，如: @Component
+	 * 	4. 将符合第3点的的类封装成BeanDefinition对象
+	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
 		for (String basePackage : basePackages) {
+			// 循环每个配置的包路径，扫描到适合要求并有注解的类并封装成BeanDefinition对象
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
+			// 循环并将BeanDefinition对象中其余属性值补全
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
+				// 从metadata对象中获取此类的作用范围，是单例还是多例
 				candidate.setScope(scopeMetadata.getScopeName());
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					// 支持了@Lazy、@DependOn等注解，即从metadata对象中获取扫描到的类上的注解的值，然后将值设置到BeanDefinition对象中
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
+
+					// 判断是否需要生成代理（不需要研究）
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+
+					// 上面的逻辑都是对BeanDefinition进行创建、设置值后，最后这里是将BeanDefinition注册到BeanDefinitionRegistry容器中
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}
@@ -303,6 +321,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * @param beanName the generated bean name for the given bean
 	 */
 	protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
+		// 往BeanDefinition对象中设置值
 		beanDefinition.applyDefaults(this.beanDefinitionDefaults);
 		if (this.autowireCandidatePatterns != null) {
 			beanDefinition.setAutowireCandidate(PatternMatchUtils.simpleMatch(this.autowireCandidatePatterns, beanName));

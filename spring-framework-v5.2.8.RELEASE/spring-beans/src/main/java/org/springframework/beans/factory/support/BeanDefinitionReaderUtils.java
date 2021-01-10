@@ -57,7 +57,9 @@ public abstract class BeanDefinitionReaderUtils {
 	public static AbstractBeanDefinition createBeanDefinition(
 			@Nullable String parentName, @Nullable String className, @Nullable ClassLoader classLoader) throws ClassNotFoundException {
 
+		// 创建GenericBeanDefinition对象
 		GenericBeanDefinition bd = new GenericBeanDefinition();
+		// 设置父类的名称（为什么需要保存父类名称）
 		bd.setParentName(parentName);
 		if (className != null) {
 			if (classLoader != null) {
@@ -100,6 +102,7 @@ public abstract class BeanDefinitionReaderUtils {
 	 * @throws BeanDefinitionStoreException if no unique name can be generated
 	 * for the given bean definition
 	 */
+	/* 生成bean的唯一标识（默认规则） */
 	public static String generateBeanName(
 			BeanDefinition definition, BeanDefinitionRegistry registry, boolean isInnerBean)
 			throws BeanDefinitionStoreException {
@@ -161,9 +164,12 @@ public abstract class BeanDefinitionReaderUtils {
 
 		// Register bean definition under primary name.
 		String beanName = definitionHolder.getBeanName();
+
+		// 完成BeanDefinition的注册，重要程度【5】
 		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());
 
 		// Register aliases for bean name, if any.
+		// 建立别名和id的映射，这样就可以根据别名获取到id
 		String[] aliases = definitionHolder.getAliases();
 		if (aliases != null) {
 			for (String alias : aliases) {

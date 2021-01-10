@@ -86,6 +86,7 @@ import org.springframework.util.ClassUtils;
  */
 public class ClassPathScanningCandidateComponentProvider implements EnvironmentCapable, ResourceLoaderAware {
 
+	/* 默认扫描是当前包及其子包下的任意类名的.class文件 */
 	static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
 
@@ -203,8 +204,13 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	@SuppressWarnings("unchecked")
 	protected void registerDefaultFilters() {
+		/*
+		 * 在当前类属性includeFilters过滤器（List<TypeFilter>）中添加需要扫描的注解类型，并包装成AnnotationTypeFilter
+		 *   此处只需要添加“@Component”注解即可，因为@Service, @Controller等注解是继承了@Component，所以相关子类注解也能扫描到
+		 */
 		this.includeFilters.add(new AnnotationTypeFilter(Component.class));
 		ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader();
+		// ======后面的代码不重要========
 		try {
 			this.includeFilters.add(new AnnotationTypeFilter(
 					((Class<? extends Annotation>) ClassUtils.forName("javax.annotation.ManagedBean", cl)), false));
@@ -417,6 +423,8 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		try {
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
+
+			// 此处使用递归去寻找文件（.class）
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
 			boolean traceEnabled = logger.isTraceEnabled();
 			boolean debugEnabled = logger.isDebugEnabled();
@@ -426,8 +434,11 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						// 包装了当前寻找的类的基本信息的对象，MetadataReader是一个很深的类，很信息都可以从此类获取，但暂时不深究
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						// 判断类上是否标识了includeFilters集合中包含的注解，有则代表当前类需要实例化
 						if (isCandidateComponent(metadataReader)) {
+							// 将metadataReader包装成BeanDefinition对象，metadataReader里已经包含实例化时需要的部分信息
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
 							if (isCandidateComponent(sbd)) {
@@ -463,6 +474,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		catch (IOException ex) {
 			throw new BeanDefinitionStoreException("I/O failure during classpath scanning", ex);
 		}
+		// 将找到符合要求的BeanDefinition对象Set集合返回
 		return candidates;
 	}
 
@@ -486,6 +498,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * @return whether the class qualifies as a candidate component
 	 */
 	protected boolean isCandidateComponent(MetadataReader metadataReader) throws IOException {
+		// 匹配过滤器
 		for (TypeFilter tf : this.excludeFilters) {
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
 				return false;

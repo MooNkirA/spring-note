@@ -100,7 +100,6 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		// Actually scan for bean definitions and register them.
 		// 创建注解扫描器
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
-
 		// 进行扫描，并将扫描到的类封装成BeanDefinition对象。核心方法，重要程度【5】
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
 
@@ -123,7 +122,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		// Delegate bean definition registration to scanner class.
-		// 创建注解的扫描器
+		// 创建注解的扫描器，此方法的主要逻辑是往注解扫描器中注册相关注解过滤器AnnotationTypeFilter（存放到一个List集合中），用于过滤哪些注解需要扫描
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
 		// ========以下代码不是很重要 start =============
 		// 以下都是去解析封装<context:component-scan>标签中的其他属性，但这些属性几乎用不上
@@ -178,8 +177,11 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 			annotationConfig = Boolean.parseBoolean(element.getAttribute(ANNOTATION_CONFIG_ATTRIBUTE));
 		}
 		if (annotationConfig) {
-			// 此方法注册了几个比较重要的BeanPostProcessor类（注：此方法在注解配置的方式中，AnnotationConfigApplicationContext注解上下文扫描的时候也调用了）
-			// 如：AutowiredAnnotationBeanPostProcessor, ConfigurationClassPostProcessor, CommonAnnotationBeanPostProcessor
+			/*
+			 * 此方法注册了几个比较重要的BeanPostProcessor类 重要程度【5】
+			 * （注：此方法在注解配置的方式中，AnnotationConfigApplicationContext注解上下文扫描的时候也调用了）
+			 * 	如：AutowiredAnnotationBeanPostProcessor, ConfigurationClassPostProcessor, CommonAnnotationBeanPostProcessor
+			 */
 			Set<BeanDefinitionHolder> processorDefinitions =
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {
