@@ -22,8 +22,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @date 2021-1-3 12:40
  * @description
  */
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration(locations = {"classpath:spring.xml"}) // 测试注解方式配置spring时注释掉
 public class XmlBeanTest {
 
     private ApplicationContext context;

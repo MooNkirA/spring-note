@@ -562,7 +562,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				/*
 				 * 在Singleton的Bean对象初始化前，对Bean工厂进行一些处理
-				 * 此方法完成实例化实现了以下两个接口的类，并且调用postProcessBeanDefinitionRegistry()方法
+				 * 此方法完成实例化以下两个接口的实现类，并且调用postProcessBeanDefinitionRegistry()方法
 				 * 		BeanDefinitionRegistryPostProcessor
 				 *  	BeanFactoryPostProcessor
 				 */
@@ -767,6 +767,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>Must be called before singleton instantiation.
 	 */
 	protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+		// 此方法完成 BeanFactoryPostProcessor 与 BeanDefinitionRegistryPostProcessor 接口所有实现类的实例化与postProcessBeanDefinitionRegistry()方法的调用 重要程度【5】
 		PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime
@@ -1043,6 +1044,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Override
 	public void close() {
 		synchronized (this.startupShutdownMonitor) {
+			// 关闭web容器
 			doClose();
 			// If we registered a JVM shutdown hook, we don't need it anymore now:
 			// We've already explicitly closed the context.

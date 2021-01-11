@@ -9,19 +9,14 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>03-spring-xml-bean</artifactId>
+    <artifactId>04-spring-xml-context-component-scan</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>
-        Spring 框架的xml配置之bean标签的基础使用示例(当前的项目都已经基于注解开发，此xml配置方式已经淘汰，只需要了解即可)
+        Spring 框架的xml配置之默认自定义context:component-scan标签的基础使用示例(注：用于debug自定义标签的解析流程)
     </description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.moon</groupId>
-            <artifactId>spring-commmon</artifactId>
-        </dependency>
-
         <!-- spring框架最核心的依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
