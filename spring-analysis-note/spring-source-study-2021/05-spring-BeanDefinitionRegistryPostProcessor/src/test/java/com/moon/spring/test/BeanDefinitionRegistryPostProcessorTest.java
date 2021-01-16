@@ -5,6 +5,7 @@ import com.moon.spring.bean.BeanToDelete;
 import com.moon.spring.bean.BeanToEdit;
 import org.junit.Test;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -33,6 +34,30 @@ public class BeanDefinitionRegistryPostProcessorTest {
         } catch (BeansException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    /* 自定义注解扫描测试 */
+    @Test
+    public void testCustomAnnotationScan() {
+        // 读取spring类路径下的配置文件(xml文件中只配置了扫描 com.moon.spring 包)
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+        // 获取实例工厂
+        ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+        // 输出工厂所有bean实例名称
+        String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
+        for (String name : beanDefinitionNames) {
+            System.out.println(name);
+        }
+        /*
+         * 输出结果节选如下：
+         *   beanCustomComponent
+         *   otherPackageBeanCustomAnnotation
+         *   otherPackageBeanCustomComponent
+         * 从结果总结：
+         *  1. 通过实现BeanDefinitionRegistryPostProcessor接口中增加需要扫描的自定义注解，只在定义时设置的包扫描路径才生效，原xml配置的包扫描路径无法扫描到此自定义注解
+         *  2. 设置扫描自定义注解的路径，也会扫描Spring原生@Component及其衍生注解
+         *  3. 自定义注解继承了Spring原生@Component注解，作用的类也同样可以被扫描并注册到spring容器中
+         */
     }
 
 }

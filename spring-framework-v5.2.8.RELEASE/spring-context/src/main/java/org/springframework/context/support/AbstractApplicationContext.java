@@ -565,6 +565,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				 * 此方法完成实例化以下两个接口的实现类，并且调用postProcessBeanDefinitionRegistry()方法
 				 * 		BeanDefinitionRegistryPostProcessor
 				 *  	BeanFactoryPostProcessor
+				 *  注：BeanDefinitionRegistryPostProcessor接口继承了BeanFactoryPostProcessor
 				 */
 				// Invoke factory processors registered as beans in the context.
 				invokeBeanFactoryPostProcessors(beanFactory);
@@ -827,7 +828,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void initApplicationEventMulticaster() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		// 判断spring容器中是否存在事件监听器applicationEventMulticaster
 		if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
+			// 从容器中获取事件监听器实例
 			this.applicationEventMulticaster =
 					beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
 			if (logger.isTraceEnabled()) {
@@ -835,7 +838,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 		else {
+			// 没有则创建一个新的事件监听器
 			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+			// 将监听器实例注册到spring容器中
 			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No '" + APPLICATION_EVENT_MULTICASTER_BEAN_NAME + "' bean, using " +

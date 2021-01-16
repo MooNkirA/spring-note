@@ -106,6 +106,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		/*
 		 * 注册一些XxxBeanPostProcessor类，是用于使用注解DI依赖注入（如@Autowired、@Value等） 重要程度【5】
 		 *   如：ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等
+		 * 	这些BeanPostProcessor接口实现都会在AbstractApplicationContext的refresh()核心方法中的registerBeanPostProcessors方法中进行提前实例化
 		 */
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 

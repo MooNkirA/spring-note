@@ -7,10 +7,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
-import sun.plugin.com.BeanClass;
 
 /**
  * 自定义 BeanDefinitionRegistryPostProcessor 实现基础功能示例
@@ -100,7 +100,11 @@ public class CustomBeanDefinitionRegistryPostProcessor implements BeanDefinition
             System.out.println(registry.getBeanDefinition(bdName));
         }
 
-
+        /* 修改BeanFactory相关的参数 */
+        DefaultListableBeanFactory beanFactory1 = (DefaultListableBeanFactory) beanFactory;
+        beanFactory1.setAllowBeanDefinitionOverriding(true);
+        beanFactory1.setAllowCircularReferences(true);
+        beanFactory1.setAllowRawInjectionDespiteWrapping(true);
     }
 
     /**
