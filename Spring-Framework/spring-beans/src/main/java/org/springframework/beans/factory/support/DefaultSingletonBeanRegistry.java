@@ -161,6 +161,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				/* 此部分是自己新增的代码end */
 
 				this.singletonFactories.put(beanName, singletonFactory);
+				// 删除二级缓存
 				this.earlySingletonObjects.remove(beanName);
 				this.registeredSingletons.add(beanName);
 			}
@@ -223,7 +224,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		synchronized (this.singletonObjects) {
 			// 从缓存中获取实例，如果有则直接返回
 			Object singletonObject = this.singletonObjects.get(beanName);
-			if (singletonObject == null) { // 第一次实例化时进入此分支
+			// 第一次实例化时进入此分支
+			if (singletonObject == null) {
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,
 							"Singleton bean creation not allowed while singletons of this factory are in destruction " +

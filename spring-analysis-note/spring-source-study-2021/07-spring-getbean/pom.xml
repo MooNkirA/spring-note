@@ -3,26 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>00-spring-extension</artifactId>
+        <artifactId>spring-source-study-2021</artifactId>
         <groupId>com.moon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>custom-scanner</artifactId>
+    <artifactId>07-spring-getbean</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>
-        Spring Framework 应用案例 - 自定义类实例扫描器
-        案例实现的需求：如果出现大量类需要注册到Spring进行管理，但又不想每个类上都加上 @Component 等注解，实现指定包的路径即可将此包下所有bean扫描到并且实例化
-        实现思路：可以通过实现 ImportBeanDefinitionRegistrar（或者 ImportSelector）接口来批量注册bean对象到容器中，再使用 @Import 注解引入其实现类即可
-    </description>
+    <description>Spring 框架 Bean 对象实例与获取示例</description>
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.moon</groupId>
+            <artifactId>spring-commmon</artifactId>
         </dependency>
+
+        <!-- spring框架最核心的依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

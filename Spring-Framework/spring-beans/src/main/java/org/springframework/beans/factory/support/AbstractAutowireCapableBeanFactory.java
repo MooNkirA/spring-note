@@ -550,7 +550,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeanCreationException {
 
 		// Instantiate the bean.
-		BeanWrapper instanceWrapper = null;	// 创建bean会封装到这个BeanWrapper对象中，并且将一个装饰器，类型转换器都封装到这个类中
+		// 创建bean会封装到这个BeanWrapper对象中，并且将一个装饰器，类型转换器都封装到这个类中
+		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}

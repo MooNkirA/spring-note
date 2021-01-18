@@ -25,6 +25,8 @@
         <module>04-spring-xml-context-component-scan</module>
         <module>05-spring-BeanDefinitionRegistryPostProcessor</module>
         <module>00-spring-extension</module>
+        <module>06-spring-event</module>
+        <module>07-spring-getbean</module>
     </modules>
 
     <!-- 版本号管理 -->
