@@ -38,7 +38,7 @@
         <commonscodec.version>1.9</commonscodec.version>
 
         <!-- json支持,jackson包版本 -->
-        <jackson.version>2.7.4</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
 
         <!-- fastjson版本
         <fastjson.version>1.2.43</fastjson.version>
