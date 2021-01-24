@@ -55,8 +55,7 @@
         注：spring框架有这种功能，但没有什么应用场景
     -->
     <bean class="com.moon.spring.service.FactoryBeanCreator" id="factoryBeanCreator"/>
-    <bean class="com.moon.spring.bean.FactoryBean" id="factoryBean"
-          factory-bean="factoryBeanCreator" factory-method="factoryMethod"/>
+    <bean id="factoryBean" factory-bean="factoryBeanCreator" factory-method="factoryMethod"/>
 
     <!--
         lookup-method子标签测试

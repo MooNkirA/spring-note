@@ -126,6 +126,7 @@ class ConstructorResolver {
 			@Nullable Constructor<?>[] chosenCtors, @Nullable Object[] explicitArgs) {
 
 		BeanWrapperImpl bw = new BeanWrapperImpl();
+		// 此方法是设置类型转换器，注册自定义编辑器，暂时忽略不研究
 		this.beanFactory.initBeanWrapper(bw);
 
 		Constructor<?> constructorToUse = null;
@@ -168,8 +169,10 @@ class ConstructorResolver {
 				}
 			}
 
+			// mbd.hasConstructorArgumentValues()方法返回的是false，因为是@Autowired的构造函数，不是<constructor-arg>标签
 			if (candidates.length == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Constructor<?> uniqueCandidate = candidates[0];
+				// 如果是无参构造函数
 				if (uniqueCandidate.getParameterCount() == 0) {
 					synchronized (mbd.constructorArgumentLock) {
 						mbd.resolvedConstructorOrFactoryMethod = uniqueCandidate;
@@ -202,8 +205,10 @@ class ConstructorResolver {
 			LinkedList<UnsatisfiedDependencyException> causes = null;
 
 			for (Constructor<?> candidate : candidates) {
+				// 获取到构造函数的参数类型
 				int parameterCount = candidate.getParameterCount();
 
+				// 如果之前的构造器已经有一个被处理过，则后面的构造器就不用处理了
 				if (constructorToUse != null && argsToUse != null && argsToUse.length > parameterCount) {
 					// Already found greedy constructor that can be satisfied ->
 					// do not look any further, there are only less greedy constructors left.
@@ -221,9 +226,11 @@ class ConstructorResolver {
 						if (paramNames == null) {
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
+								// 获取构造函数中参数的名称
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
+						// 获取到参数的值，逻辑比较深，这里会触发构造函数中参数的getBean操作，会实例化参数的值。暂时不研究，等主流程弄懂后再去细细打磨
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -291,6 +298,7 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved constructor arguments");
+		// 通过反射实例化，根据有参构造函数的实例化，
 		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));
 		return bw;
 	}
@@ -302,7 +310,7 @@ class ConstructorResolver {
 			InstantiationStrategy strategy = this.beanFactory.getInstantiationStrategy();
 			if (System.getSecurityManager() != null) {
 				return AccessController.doPrivileged((PrivilegedAction<Object>) () ->
-						strategy.instantiate(mbd, beanName, this.beanFactory, constructorToUse, argsToUse),
+						strategy.instantiate(mbd, beanName, this.beanFactory, constructorToUse, argsToUse), // 反射调用过程
 						this.beanFactory.getAccessControlContext());
 			}
 			else {
@@ -392,34 +400,47 @@ class ConstructorResolver {
 	public BeanWrapper instantiateUsingFactoryMethod(
 			String beanName, RootBeanDefinition mbd, @Nullable Object[] explicitArgs) {
 
+		// 创建一个包装类
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
 		Object factoryBean;
 		Class<?> factoryClass;
+		// 此标识用于判断配置的factory-method方法是否为静态方法
 		boolean isStatic;
 
+		// 获取factoryBean的name
 		String factoryBeanName = mbd.getFactoryBeanName();
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"factory-bean reference points back to the same bean definition");
 			}
+			// 如果配置了factory-bean属性，则先实例此factoryBean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
+			/*
+			 * 判断当前正在实例化的bean是单例的，并且根据beanName在容器中找到此实例已存在，抛出异常。
+			 * 	因为配置了factory-method属性，当前实例是从factory-method属性相应的方法来实例化的
+			 */
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
+			// 获取配置的factory-bean的Class对象
 			factoryClass = factoryBean.getClass();
+			// 设置方法标识为false，即factoryMethod要为非静态方法
 			isStatic = false;
 		}
 		else {
 			// It's a static factory method on the bean class.
+			// 当配置的factory-method为静态方法，此时如果没有配置class属性，则抛出异常
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
 			}
 			factoryBean = null;
+			// 如果没有配置factory-bean属性，则获取当前类的Class类对象
 			factoryClass = mbd.getBeanClass();
+			// 设置方法标识为true，即factoryMethod需要为静态方法
 			isStatic = true;
 		}
 
@@ -443,6 +464,7 @@ class ConstructorResolver {
 				}
 			}
 			if (argsToResolve != null) {
+				// 对方法参数的解析，获取参数列表，再一个个去判断参数类型，还要判断参数上是否有注解，比较难理解。暂时未研究
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve, true);
 			}
 		}
@@ -632,6 +654,7 @@ class ConstructorResolver {
 			}
 		}
 
+		// 将获取的bean实例包装到BeanWrapperImpl对象中。完成反射调用，重要程度【5】
 		bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, factoryMethodToUse, argsToUse));
 		return bw;
 	}
@@ -647,6 +670,7 @@ class ConstructorResolver {
 						this.beanFactory.getAccessControlContext());
 			}
 			else {
+				// 进行反射调用，factoryMethod方法返回值就是需要创建的实例
 				return this.beanFactory.getInstantiationStrategy().instantiate(
 						mbd, beanName, this.beanFactory, factoryBean, factoryMethod, args);
 			}
