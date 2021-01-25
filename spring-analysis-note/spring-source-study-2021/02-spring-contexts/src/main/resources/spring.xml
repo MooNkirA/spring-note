@@ -5,6 +5,6 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd"
        default-lazy-init="false">
 
-    <bean id="student" class="com.moon.spring.common.bean.Student"/>
+    <bean id="student" class="com.moon.spring.bean.Student"/>
 
 </beans>

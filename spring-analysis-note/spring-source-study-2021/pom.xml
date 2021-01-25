@@ -27,6 +27,7 @@
         <module>00-spring-extension</module>
         <module>06-spring-event</module>
         <module>07-spring-getbean</module>
+        <module>08-spring-getbean-autowired</module>
     </modules>
 
     <!-- 版本号管理 -->
@@ -113,14 +114,21 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <!--
+                可选依赖，如果你在项目B中把C依赖声明为可选，你就需要在依赖于B的项目（例如项目A）中显式的引用对C的依赖。
+                可选依赖阻断依赖的传递性。
+             -->
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

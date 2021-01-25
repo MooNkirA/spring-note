@@ -21,12 +21,6 @@
             <groupId>com.moon</groupId>
             <artifactId>spring-commmon</artifactId>
         </dependency>
-
-        <!-- spring框架最核心的依赖 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -20,7 +20,7 @@ import java.util.Properties;
 public class SceneTypeFilter extends AbstractTypeHierarchyTraversingFilter {
 
     // 定义路径校验类对象（Spring框架提供的工具类）
-    private PathMatcher pathMatcher;
+    private final PathMatcher pathMatcher;
 
     /*
      *  定义场景名称，此值应该是通过配置去修改，不能使用硬编码方式

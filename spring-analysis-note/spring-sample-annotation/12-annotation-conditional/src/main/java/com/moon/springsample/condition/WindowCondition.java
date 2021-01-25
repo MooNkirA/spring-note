@@ -56,11 +56,8 @@ public class WindowCondition implements Condition {
         String osName = environment.getProperty("os.name");
         // osName = "os.Linux"; // 这里用于模拟linux系统环境
         // 3. 根据名称判断当前系统类型，包含Windows则说明是windows系统
-        if (osName.contains("Windows")) {
-            // 返回true，代表将bean注册到容器中
-            return true;
-        }
+        // 返回true，代表将bean注册到容器中
+        return osName.contains("Windows");
         // 返回false，代表不注册到容器中
-        return false;
     }
 }

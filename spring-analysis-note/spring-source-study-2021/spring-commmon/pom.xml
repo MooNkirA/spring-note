@@ -15,6 +15,15 @@
     <description>Spring Framework 基础入门示例项目公共模块</description>
 
     <dependencies>
+        <!--
+            spring框架最核心的依赖，一个最基本的spring项目只需要引入此依赖即可
+                此依赖包括：spring-context,spring-aop,spring-beans,spring-core,spring-expression
+        -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

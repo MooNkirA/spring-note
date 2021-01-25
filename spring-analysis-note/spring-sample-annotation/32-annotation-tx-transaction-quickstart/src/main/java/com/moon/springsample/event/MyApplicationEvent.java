@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationEvent;
 public class MyApplicationEvent extends ApplicationEvent {
 
     // 定义属性接收事件源
-    private Object source;
+    private final Object source;
 
     /* 因为父类定义有参构造方法，所以子类必须提供有参构造 */
     public MyApplicationEvent(Object source) {

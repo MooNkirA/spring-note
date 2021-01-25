@@ -1,6 +1,6 @@
 package com.moon.spring.test;
 
-import com.moon.spring.common.bean.Student;
+import com.moon.spring.bean.Student;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

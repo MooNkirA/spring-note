@@ -1215,7 +1215,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		/*
-		 * 判断是否有FactoryMethodName属性，有以下两种情况：
+		 * 判断是否有FactoryMethodName属性并进行处理，有以下两种情况：
 		 * 	1. 在类上方法上标识了 @Bean 注解
 		 *  2. 使用xml配置，在bean标签里配置属性factory-method
 		 */
@@ -1336,7 +1336,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
 					/*
-					 * 此处只有AutowiredAnnotationBeanPostProcessor类会启作用，其他的实现类（不关注此功能的）只需要返回null即可
+					 * 此处只有AutowiredAnnotationBeanPostProcessor类会起作用，其他的实现类（不关注此功能的）只需要返回null即可
 					 * 	这里是spring进行了功能的埋点，日后如果需要进行功能扩展，
 					 * 	只需要实现SmartInstantiationAwareBeanPostProcessor接口，将业务逻辑写在determineCandidateConstructors方法中
 					 */

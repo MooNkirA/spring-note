@@ -9,10 +9,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>07-spring-getbean</artifactId>
+    <artifactId>08-spring-getbean-autowired</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring 框架 Bean 对象实例与获取示例</description>
+    <description>Spring 框架 @Autowired 注解解析流程测试项目</description>
 
     <dependencies>
         <dependency>

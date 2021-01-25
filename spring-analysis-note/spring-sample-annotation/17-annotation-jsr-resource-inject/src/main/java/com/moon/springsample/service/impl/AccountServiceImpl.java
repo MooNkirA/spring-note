@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     // @Inject // @Inject注解没有任何属性，只能按类型匹配注入，如果容器中存在多个同类型的bean实例，此时会报错
     // @Named("accountDaoImplTwo") // 配合JSR-330规范中的@Named注解使用之后，可以变成根据bean名称（byName）去匹配注入。(注：@Named不能脱离@Inject单独使用)
     // @Qualifier("accountDaoImplOne") // @Inject也可以配合 @Qualifier 注解指定bean对象id来实现按名称（byName）自动注入（注：同理@Autowired与@Named也可以配合使用）
-    private AccountDao accountDao;
+    private final AccountDao accountDao;
 
     /* 实现依赖注入方式三：使用@Inject注解（标识在构造方法上） */
     @Inject // 此时要求容器中必须有AccountDao对象，但是需要注意的是：因为JRE无法决定构造方法注入的优先级，所以规范中规定类中只能有一个构造方法标识`@Inject`注解

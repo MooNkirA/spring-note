@@ -8,6 +8,6 @@ package com.moon.springsample.service;
  */
 public interface AccountService {
 
-    public void deleteAccount();
+    void deleteAccount();
 
 }

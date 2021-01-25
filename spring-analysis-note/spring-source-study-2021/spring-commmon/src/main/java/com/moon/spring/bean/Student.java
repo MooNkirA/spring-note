@@ -1,4 +1,4 @@
-package com.moon.spring.common.bean;
+package com.moon.spring.bean;
 
 import lombok.Data;
 

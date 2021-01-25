@@ -30,12 +30,9 @@ public class LinuxCondition implements Condition {
         String osName = environment.getProperty("os.name");
         // osName = "os.Linux"; // 这里用于模拟linux系统环境
         // 3. 根据名称判断当前系统类型，包含"Linux"则说明是Linux系统
-        if (osName.contains("Linux")) {
-            // 返回true，代表将bean注册到容器中
-            return true;
-        }
+        // 返回true，代表将bean注册到容器中
+        return osName.contains("Linux");
         // 返回false，代表不注册到容器中
-        return false;
     }
 
 }

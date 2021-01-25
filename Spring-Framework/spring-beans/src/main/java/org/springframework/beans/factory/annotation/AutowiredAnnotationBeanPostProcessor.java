@@ -274,7 +274,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
-		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass); // 第一次时缓存里没有当前类的所有构造器数据
+		// 第一次时缓存里没有当前类的所有构造器数据
+		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
 			synchronized (this.candidateConstructorsCache) {
@@ -595,12 +596,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			this.required = required;
 		}
 
-		/**
+		/*
 		 * 属性DI，依赖注入
-		 * @param bean
-		 * @param beanName
-		 * @param pvs
-		 * @throws Throwable
 		 */
 		@Override
 		protected void inject(Object bean, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {

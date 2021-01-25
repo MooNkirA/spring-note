@@ -33,7 +33,7 @@ public class MyTransactionalEventListener {
         Object targetName = map.get("targetName");
         Object money = map.get("money");
         // 3. 输出
-        System.out.println("事务提交了，" + sourceName + "给" + targetName + "转了" + String.valueOf(money) + "钱！转账成功");
+        System.out.println("事务提交了，" + sourceName + "给" + targetName + "转了" + money + "钱！转账成功");
     }
 
     /**
@@ -50,7 +50,7 @@ public class MyTransactionalEventListener {
         Object targetName = map.get("targetName");
         Object money = map.get("money");
         // 3. 输出
-        System.out.println("事务回滚了，" + sourceName + "给" + targetName + "转了" + String.valueOf(money) + "钱！转账失败");
+        System.out.println("事务回滚了，" + sourceName + "给" + targetName + "转了" + money + "钱！转账失败");
     }
 
 }

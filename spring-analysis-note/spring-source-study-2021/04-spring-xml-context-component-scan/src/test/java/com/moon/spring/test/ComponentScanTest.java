@@ -1,6 +1,6 @@
 package com.moon.spring.test;
 
-import com.moon.spring.bean.Cat;
+import com.moon.spring.component.RedisComponent;
 import com.moon.spring.config.MySqlConfig;
 import com.moon.spring.controller.UserController;
 import com.moon.spring.dao.UserDao;
@@ -23,8 +23,8 @@ public class ComponentScanTest {
     public void componentScanTest() {
         // 读取spring类路径下的配置文件
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        Cat cat = applicationContext.getBean("cat", Cat.class);
-        System.out.println(cat);
+        RedisComponent redisComponent = applicationContext.getBean("redisComponent", RedisComponent.class);
+        System.out.println(redisComponent);
         MySqlConfig mySqlConfig = applicationContext.getBean("mySqlConfig", MySqlConfig.class);
         System.out.println(mySqlConfig);
         UserController userController = applicationContext.getBean("userController", UserController.class);

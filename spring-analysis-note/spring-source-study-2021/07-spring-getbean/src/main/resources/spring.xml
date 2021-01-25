@@ -6,6 +6,6 @@
        default-lazy-init="false">
 
     <!-- 注册bean到spring容器方式1: 使用xml配置文件配置 -->
-    <bean id="student" class="com.moon.spring.common.bean.Student"/>
+    <bean id="student" class="com.moon.spring.bean.Student"/>
 
 </beans>
