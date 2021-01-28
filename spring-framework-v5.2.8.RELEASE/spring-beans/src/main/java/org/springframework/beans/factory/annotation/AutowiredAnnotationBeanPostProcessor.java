@@ -160,6 +160,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
+		// 实例化时，设置当前类所处理的注解类型
 		this.autowiredAnnotationTypes.add(Autowired.class);
 		this.autowiredAnnotationTypes.add(Value.class);
 		try {
@@ -351,7 +352,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 										". Found constructor with 'required' Autowired annotation already: " +
 										requiredConstructor);
 							}
-							// 获取到@Autowired注解里面的required属性的值
+							// 获取到@Autowired注解里面的required属性的值，默认值为true
 							boolean required = determineRequiredStatus(ann);
 							if (required) {
 								if (!candidates.isEmpty()) {
@@ -362,6 +363,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 								}
 								requiredConstructor = candidate;
 							}
+							// 收集所有构造函数
 							candidates.add(candidate);
 						}
 						else if (candidate.getParameterCount() == 0) {
@@ -396,6 +398,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					else {
 						candidateConstructors = new Constructor<?>[0];
 					}
+					// 将收集到当前正在实例化的类的所有构造函数加入到candidateConstructorsCache缓存(Map结构)中
 					this.candidateConstructorsCache.put(beanClass, candidateConstructors);
 				}
 			}

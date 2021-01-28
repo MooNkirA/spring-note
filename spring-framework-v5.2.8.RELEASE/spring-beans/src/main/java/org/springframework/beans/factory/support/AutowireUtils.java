@@ -65,6 +65,7 @@ abstract class AutowireUtils {
 	 * @param constructors the constructor array to sort
 	 */
 	public static void sortConstructors(Constructor<?>[] constructors) {
+		// EXECUTABLE_COMPARATOR为排序器
 		Arrays.sort(constructors, EXECUTABLE_COMPARATOR);
 	}
 
