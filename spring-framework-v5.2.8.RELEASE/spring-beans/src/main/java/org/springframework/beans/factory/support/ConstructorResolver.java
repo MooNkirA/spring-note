@@ -410,7 +410,7 @@ class ConstructorResolver {
 		// 此标识用于判断配置的factory-method方法是否为静态方法
 		boolean isStatic;
 
-		// 获取factoryBean的name
+		// 获取factoryBean的name（相当于factory-method所在的类的名称）
 		String factoryBeanName = mbd.getFactoryBeanName();
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
@@ -433,7 +433,7 @@ class ConstructorResolver {
 		}
 		else {
 			// It's a static factory method on the bean class.
-			// 当配置的factory-method为静态方法，此时如果没有配置class属性，则抛出异常
+			// 如果没配置factory-bean属性（即factoryBeanName值为空），进入此分支，此时如果也没有配置class属性，则抛出异常
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
@@ -486,8 +486,13 @@ class ConstructorResolver {
 			}
 			if (candidates == null) {
 				candidates = new ArrayList<>();
+				// 获取类中所有方法对象
 				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);
 				for (Method candidate : rawCandidates) {
+					/*
+					 * 判断当前循环的方法是否与上面的isStatic标识一致，并且方法的名称等于配置的factoryMethod属性值
+					 * 注：Modifier.isStatic()方法是jdk的方法，用于判断方法是否为静态方法
+					 */
 					if (Modifier.isStatic(candidate.getModifiers()) == isStatic && mbd.isFactoryMethod(candidate)) {
 						candidates.add(candidate);
 					}
@@ -503,6 +508,7 @@ class ConstructorResolver {
 						mbd.constructorArgumentsResolved = true;
 						mbd.resolvedConstructorArguments = EMPTY_ARGS;
 					}
+					// 返回调用factoryMethod配置的方法，将方法返回的实例包装成BeanWrapper
 					bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, uniqueCandidate, EMPTY_ARGS));
 					return bw;
 				}

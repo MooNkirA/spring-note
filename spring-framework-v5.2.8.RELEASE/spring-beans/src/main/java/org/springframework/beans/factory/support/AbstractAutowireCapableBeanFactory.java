@@ -574,9 +574,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 创建实例，重要程度【5】，但还没有涉及DI（依赖注入）
+			// 缓存中没有，则创建实例，重要程度【5】，但还没有涉及DI（依赖注入）
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
+		// 此方法从包装对象中获取实例对象
 		Object bean = instanceWrapper.getWrappedInstance();
 		Class<?> beanType = instanceWrapper.getWrappedClass();
 		if (beanType != NullBean.class) {
@@ -1224,6 +1225,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
+		// 没有配置factory-method与@Bean注解
 		// Shortcut when re-creating the same bean...
 		boolean resolved = false;
 		boolean autowireNecessary = false;

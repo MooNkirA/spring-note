@@ -8,13 +8,13 @@
        default-lazy-init="false">
 
     <!-- 传统标签 -->
-    <bean id="student" class="com.moon.spring.common.bean.Student"/>
+    <bean id="student" class="com.moon.spring.bean.Student"/>
 
     <!--
         description子标签与meta子标签，在解析封装到BeanDefinition对象中时，
         会有一个相关的属性进去存储这部分配置值，一般只是起java doc的注释作用
      -->
-    <bean class="com.moon.spring.common.bean.Student" id="student2">
+    <bean class="com.moon.spring.bean.Student" id="student2">
         <description>com.moon.spring.common.bean.Student</description>
         <meta key="key1" value="value1"/>
     </bean>
@@ -52,6 +52,7 @@
     <!--
        factory-bean 属性与 factory-method 属性测试
         即是将FactoryBean实例化的操作不交给spring去管理，而通过FactoryBeanCreator这个类中相应配置factory-method去进行FactoryBean的实例化，此时class属性失效
+        从源码分析可知，如果不配置factory-bean属性。则必须配置class设置，并且factory-method指定的方法为静态方法
         注：spring框架有这种功能，但没有什么应用场景
     -->
     <bean class="com.moon.spring.service.FactoryBeanCreator" id="factoryBeanCreator"/>

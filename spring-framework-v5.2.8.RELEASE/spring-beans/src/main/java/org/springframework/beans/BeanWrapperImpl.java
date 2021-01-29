@@ -141,6 +141,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 	 * @since 4.3
 	 * @see #setWrappedInstance(Object)
 	 */
+	/* 对入参的对象进行包装 */
 	public void setBeanInstance(Object object) {
 		this.wrappedObject = object;
 		this.rootObject = object;
