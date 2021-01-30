@@ -172,7 +172,7 @@ class ConstructorResolver {
 			// mbd.hasConstructorArgumentValues()方法返回的是false，因为是@Autowired的构造函数，不是<constructor-arg>标签
 			if (candidates.length == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Constructor<?> uniqueCandidate = candidates[0];
-				// 如果是无参构造函数
+				// 如果是无参构造函数，走此分支
 				if (uniqueCandidate.getParameterCount() == 0) {
 					synchronized (mbd.constructorArgumentLock) {
 						mbd.resolvedConstructorOrFactoryMethod = uniqueCandidate;
@@ -199,14 +199,14 @@ class ConstructorResolver {
 				minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
 			}
 
-			// 对收集到的构造函数排序
+			// 对收集到的构造函数排序（实例化时只使用排到最前的）
 			AutowireUtils.sortConstructors(candidates);
 			int minTypeDiffWeight = Integer.MAX_VALUE;
 			Set<Constructor<?>> ambiguousConstructors = null;
 			LinkedList<UnsatisfiedDependencyException> causes = null;
 
 			for (Constructor<?> candidate : candidates) {
-				// 获取到构造函数的参数类型
+				// 获取到构造函数的参数个数
 				int parameterCount = candidate.getParameterCount();
 
 				// 如果之前的构造器已经有一个被处理过，则后面的构造器就不用处理了
@@ -220,6 +220,7 @@ class ConstructorResolver {
 				}
 
 				ArgumentsHolder argsHolder;
+				// 获取构造函数参数的类型（多个）数组
 				Class<?>[] paramTypes = candidate.getParameterTypes();
 				if (resolvedValues != null) {
 					try {
@@ -231,7 +232,7 @@ class ConstructorResolver {
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
-						// 获取到参数的值，逻辑比较深，这里会触发构造函数中参数的getBean操作，会实例化参数的值。暂时不研究，等主流程弄懂后再去细细打磨
+						// 获取到参数的值，逻辑比较深，如果构造函数的参数是引入类型，则这里会触发参数的getBean操作，会实例化参数的值。暂时不研究，等主流程弄懂后再去细细打磨
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -299,7 +300,7 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved constructor arguments");
-		// 通过反射实例化，根据有参构造函数的实例化，
+		// 通过反射实例化，根据有参构造函数的实例化
 		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));
 		return bw;
 	}
@@ -315,6 +316,7 @@ class ConstructorResolver {
 						this.beanFactory.getAccessControlContext());
 			}
 			else {
+				// 反射创建实例
 				return strategy.instantiate(mbd, beanName, this.beanFactory, constructorToUse, argsToUse);
 			}
 		}
@@ -759,6 +761,7 @@ class ConstructorResolver {
 		Set<ConstructorArgumentValues.ValueHolder> usedValueHolders = new HashSet<>(paramTypes.length);
 		Set<String> autowiredBeanNames = new LinkedHashSet<>(4);
 
+		// 循环所有参数
 		for (int paramIndex = 0; paramIndex < paramTypes.length; paramIndex++) {
 			Class<?> paramType = paramTypes[paramIndex];
 			String paramName = (paramNames != null ? paramNames[paramIndex] : "");
@@ -816,6 +819,7 @@ class ConstructorResolver {
 							"] - did you specify the correct bean references as arguments?");
 				}
 				try {
+					// 这里就是参数为引用类型时，会调用getBean方法实例化参数
 					Object autowiredArgument = resolveAutowiredArgument(
 							methodParam, beanName, autowiredBeanNames, converter, fallback);
 					args.rawArguments[paramIndex] = autowiredArgument;
@@ -912,6 +916,7 @@ class ConstructorResolver {
 			return injectionPoint;
 		}
 		try {
+			// 处理依赖注入
 			return this.beanFactory.resolveDependency(
 					new DependencyDescriptor(param, true), beanName, autowiredBeanNames, typeConverter);
 		}

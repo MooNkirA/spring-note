@@ -160,7 +160,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
-		// 实例化时，设置当前类所处理的注解类型
+		// 实例化时，设置当前类所处理的注解类型 分别是 @Autowired 和 @Value
 		this.autowiredAnnotationTypes.add(Autowired.class);
 		this.autowiredAnnotationTypes.add(Value.class);
 		try {
@@ -262,6 +262,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
 			throws BeanCreationException {
 
+		// 此if代码块处理的逻辑实际没有什么作用，重要程度【2】
 		// Let's check for lookup methods here...
 		if (!this.lookupMethodsChecked.contains(beanName)) {
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
@@ -304,12 +305,12 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
-			synchronized (this.candidateConstructorsCache) {
+			synchronized (this.candidateConstructorsCache) { // 上锁后再尝试从缓存中拿一次数据
 				candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
-						// 获取bean对应的所有构造器
+						// 获取当前创建的bean类的所有构造函数对象
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -330,7 +331,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 						else if (primaryConstructor != null) {
 							continue;
 						}
-						// 获取到构造函数上的@Autowired注解信息,这个方法暂时未研究
+						// 获取到构造函数上标识的@Autowired注解信息,这个方法暂时未研究
 						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
@@ -346,7 +347,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 							}
 						}
 						if (ann != null) {
+							// 当构造函数上有@Autowired注解时，进入此分支
 							if (requiredConstructor != null) {
+								// 当找到有一个构造函数上有@Autowired注解后，给requiredConstructor赋值，所以如果循环还找到有第二个构造函数上@Autowired注解，会抛出异常
 								throw new BeanCreationException(beanName,
 										"Invalid autowire-marked constructor: " + candidate +
 										". Found constructor with 'required' Autowired annotation already: " +
@@ -367,13 +370,16 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 							candidates.add(candidate);
 						}
 						else if (candidate.getParameterCount() == 0) {
+							// 当类中存在一个无标识@Autowired注解的有参构造时，进入此分支
 							defaultConstructor = candidate;
 						}
 					}
+					// 循环结束后，判断收集的构造函数集合是否为空
 					if (!candidates.isEmpty()) {
 						// Add default constructor to list of optional constructors, as fallback.
 						if (requiredConstructor == null) {
 							if (defaultConstructor != null) {
+								// 收集没有标识@Autowired标识的有参构造函数
 								candidates.add(defaultConstructor);
 							}
 							else if (candidates.size() == 1 && logger.isInfoEnabled()) {
@@ -383,6 +389,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 										"default constructor to fall back to: " + candidates.get(0));
 							}
 						}
+						// 创建构造函数数组，用于返回
 						candidateConstructors = candidates.toArray(new Constructor<?>[0]);
 					}
 					else if (rawCandidates.length == 1 && rawCandidates[0].getParameterCount() > 0) {
@@ -403,6 +410,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				}
 			}
 		}
+		// 返回构造函数数组
 		return (candidateConstructors.length > 0 ? candidateConstructors : null);
 	}
 
@@ -548,6 +556,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		// autowiredAnnotationTypes是当前AutowiredAnnotationBeanPostProcessor类支持处理的注解set集合，通过构造器可以看到
 		for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {
 			MergedAnnotation<?> annotation = annotations.get(type);
+			// 找到了构造函数上有 @Autowired 或 @Value，返回注解
 			if (annotation.isPresent()) {
 				return annotation;
 			}

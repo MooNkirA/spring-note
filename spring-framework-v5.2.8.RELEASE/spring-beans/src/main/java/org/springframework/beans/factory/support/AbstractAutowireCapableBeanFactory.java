@@ -574,7 +574,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 缓存中没有，则创建实例，重要程度【5】，但还没有涉及DI（依赖注入）
+			// 缓存中没有，则创建实例，但还没有涉及DI（依赖注入）。重要程度【5】
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		// 此方法从包装对象中获取实例对象
@@ -600,7 +600,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 							"Post-processing of merged bean definition failed", ex);
 				}
-				mbd.postProcessed = true;
+				mbd.postProcessed = true; // 更新标识，表示当前创建中的实例已经使用MergedBeanDefinitionPostProcessor
 			}
 		}
 
@@ -1225,7 +1225,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
-		// 没有配置factory-method与@Bean注解
+		// 没有配置 factory-method 或 @Bean 注解
 		// Shortcut when re-creating the same bean...
 		boolean resolved = false;
 		boolean autowireNecessary = false;

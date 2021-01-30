@@ -12,7 +12,9 @@
     <artifactId>08-spring-getbean-autowired</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring 框架 @Autowired 注解解析流程测试项目</description>
+    <description>
+        Spring 框架对构造函数的解析与 @Autowired 注解解析流程测试项目
+    </description>
 
     <dependencies>
         <dependency>

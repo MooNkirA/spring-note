@@ -52,7 +52,9 @@ import org.springframework.util.ClassUtils;
 abstract class AutowireUtils {
 
 	public static final Comparator<Executable> EXECUTABLE_COMPARATOR = (e1, e2) -> {
+		// 先判断方法是否为public
 		int result = Boolean.compare(Modifier.isPublic(e2.getModifiers()), Modifier.isPublic(e1.getModifiers()));
+		// 再判断方法的参数个数
 		return result != 0 ? result : Integer.compare(e2.getParameterCount(), e1.getParameterCount());
 	};
 

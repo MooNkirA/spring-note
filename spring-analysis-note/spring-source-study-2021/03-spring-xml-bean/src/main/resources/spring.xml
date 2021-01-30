@@ -51,8 +51,10 @@
 
     <!--
        factory-bean 属性与 factory-method 属性测试
-        即是将FactoryBean实例化的操作不交给spring去管理，而通过FactoryBeanCreator这个类中相应配置factory-method去进行FactoryBean的实例化，此时class属性失效
-        从源码分析可知，如果不配置factory-bean属性。则必须配置class设置，并且factory-method指定的方法为静态方法
+        即是将FactoryBean实例化的操作不交给spring去管理，而通过FactoryBeanCreator这个类中相应配置factory-method去进行FactoryBean的实例化，
+        从源码分析可知，主要的调用形式有以下两种：
+        1. 配置`factory-bean`属性，`factory-method`指定类中的非静态方法，此时class属性失效
+        2. 如不配置`factory-bean`属性，则必须配置`class`属性，并且`factory-method`指定类中的静态方法
         注：spring框架有这种功能，但没有什么应用场景
     -->
     <bean class="com.moon.spring.service.FactoryBeanCreator" id="factoryBeanCreator"/>
