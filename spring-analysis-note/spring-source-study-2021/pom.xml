@@ -28,6 +28,7 @@
         <module>06-spring-event</module>
         <module>07-spring-getbean</module>
         <module>08-spring-getbean-autowired</module>
+        <module>09-spring-beanpostprocessor</module>
     </modules>
 
     <!-- 版本号管理 -->

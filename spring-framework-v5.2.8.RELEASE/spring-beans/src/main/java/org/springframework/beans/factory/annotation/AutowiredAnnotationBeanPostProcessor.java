@@ -508,7 +508,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 						}
 						return;
 					}
+					// 获取注解中的required属性值
 					boolean required = determineRequiredStatus(ann);
+					// 将找到的Field对象与required值封装到AutowiredFieldElement对象（AutowiredAnnotationBeanPostProcessor的内部类）
 					currElements.add(new AutowiredFieldElement(field, required));
 				}
 			});
@@ -533,8 +535,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 									method);
 						}
 					}
+					// 获取注解中的required属性值
 					boolean required = determineRequiredStatus(ann);
 					PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
+					// 将找到的Method对象与required值封装到AutowiredMethodElement对象（AutowiredAnnotationBeanPostProcessor的内部类）
 					currElements.add(new AutowiredMethodElement(method, required, pd));
 				}
 			});
@@ -703,6 +707,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				}
 			}
 			if (value != null) {
+				// 反射注入
 				ReflectionUtils.makeAccessible(field);
 				field.set(bean, value);
 			}
@@ -727,6 +732,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			this.required = required;
 		}
 
+		/*
+		 * 方法的DI注入
+		 */
 		@Override
 		protected void inject(Object bean, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
 			if (checkPropertySkipping(pvs)) {
@@ -790,6 +798,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			}
 			if (arguments != null) {
 				try {
+					// 反射调用方法
 					ReflectionUtils.makeAccessible(method);
 					method.invoke(bean, arguments);
 				}

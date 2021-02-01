@@ -143,6 +143,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 			this.singletonFactories.remove(beanName);
 			// 将创建好的bean的名称从二级缓存中移除
 			this.earlySingletonObjects.remove(beanName);
+			// 保存已注册到容器的bean实例的名称
 			this.registeredSingletons.add(beanName);
 		}
 	}
@@ -281,7 +282,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
-					// 创建对象成功时，把对象缓存到singletonObjects缓存中，bean创建完成时放入一级缓存
+					// 创建对象成功后，把bean对象实例缓存到singletonObjects一级缓存中，删除二、三级缓存，并注册bean实例化名称到容器中
 					addSingleton(beanName, singletonObject);
 				}
 			}

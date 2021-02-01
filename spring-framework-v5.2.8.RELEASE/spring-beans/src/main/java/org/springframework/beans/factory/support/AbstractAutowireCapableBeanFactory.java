@@ -577,7 +577,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// 缓存中没有，则创建实例，但还没有涉及DI（依赖注入）。重要程度【5】
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
-		// 此方法从包装对象中获取实例对象
+		// 从包装对象中获取实例对象
 		Object bean = instanceWrapper.getWrappedInstance();
 		Class<?> beanType = instanceWrapper.getWrappedClass();
 		if (beanType != NullBean.class) {
@@ -606,9 +606,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
-		/* 判断单例的bean是否需要提前暴露 */
+		/*
+		 * 判断单例的bean是否需要提前暴露
+		 * 	判断依据是：当前实例化的bean是否为单例、是否允许循环依赖、是否正在创建中
+		 *
+		 * isSingletonCurrentlyInCreation(beanName) 方法的作用是：
+		 * 	判断singletonsCurrentlyInCreation容器中，是否存在当前bean的名称，从而判断当前bean是否正在创建中
+		 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
-				// 判断singletonsCurrentlyInCreation容器中，是否存在当前bean的名称，从而判断当前bean是否正在创建中
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
@@ -1442,13 +1447,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Give any InstantiationAwareBeanPostProcessors the opportunity to modify the
 		// state of the bean before properties are set. This can be used, for example,
 		// to support styles of field injection.
-		/* 此方法很有意思，实现接口可以让所有类都不能依赖注入，但没有什么用处 */
+		/*
+		 * 此方法很有意思，但没有什么用处
+		 * 实现InstantiationAwareBeanPostProcessor接口，在重写的postProcessAfterInstantiation方法中，
+		 * 如果使方法返回false，可以让所有类都不能依赖注入
+		 */
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof InstantiationAwareBeanPostProcessor) {
 					InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
 					if (!ibp.postProcessAfterInstantiation(bw.getWrappedInstance(), beanName)) {
-						// 此属性代表是否需要DI（依赖注入）
+						// 一旦进入此判断分支，程序不会再往下执行，代表不能继续执行依赖注入的逻辑
 						return;
 					}
 				}
@@ -1475,7 +1484,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		boolean needsDepCheck = (mbd.getDependencyCheck() != AbstractBeanDefinition.DEPENDENCY_CHECK_NONE);
 
 		PropertyDescriptor[] filteredPds = null;
-		/* 重点关注此部分代码，重要程度【5】 */
+		/* 依赖注入核心代码，重要程度【5】 */
 		if (hasInstAwareBpps) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();

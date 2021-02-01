@@ -288,11 +288,18 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		}
 	}
 
-
+	/*
+	 * 1、扫描类里面的属性或者方法
+	 * 2、判断属性或者方法上面是否有@PostConstruct @PreDestroy @Resource注解
+	 * 3、如果有注解的属性或者方法，包装成一个类
+	 */
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 调用父类（InitDestroyAnnotationBeanPostProcessor）的方法，扫描@PostConstruct、@PreDestroy注解
 		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);
+		// 扫描目标类的属性和方法上面是否有@Resource注解，如果有则收集起来封装成InjectionMetadata对象
 		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);
+		// 设置InjectionMetadata对象的checkedElements属性
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -335,16 +342,20 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	private InjectionMetadata findResourceMetadata(String beanName, final Class<?> clazz, @Nullable PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
+		// 先从缓存中查询
 		// Quick check on the concurrent map first, with minimal locking.
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
+			// 如果缓存中没有，则收集并设置到缓存中
 			synchronized (this.injectionMetadataCache) {
 				metadata = this.injectionMetadataCache.get(cacheKey);
 				if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
+					// 收集@Resource注解，主要逻辑在此方法上
 					metadata = buildResourceMetadata(clazz);
+					// 收集后将数据缓存起来
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}
@@ -363,6 +374,8 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		do {
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
 
+			/* 循环类中所有Field属性 */
+			/* doWithLocalFields(Class<?> clazz, FieldCallback fc)方法，循环获取targetClass目标类的所有Field对象，再调用FieldCallback的doWith方法 */
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
 				if (webServiceRefClass != null && field.isAnnotationPresent(webServiceRefClass)) {
 					if (Modifier.isStatic(field.getModifiers())) {
@@ -376,16 +389,19 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					}
 					currElements.add(new EjbRefElement(field, field, null));
 				}
+				// 判断Field对象上是否有@Resource注解
 				else if (field.isAnnotationPresent(Resource.class)) {
 					if (Modifier.isStatic(field.getModifiers())) {
 						throw new IllegalStateException("@Resource annotation is not supported on static fields");
 					}
 					if (!this.ignoredResourceTypes.contains(field.getType().getName())) {
+						// 包装ResourceElement对象，并加入到容器中
 						currElements.add(new ResourceElement(field, field, null));
 					}
 				}
 			});
 
+			/* 与上面的处理逻辑相似，循环类中所有Method方法对象 */
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 				Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
@@ -412,6 +428,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 						PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
 						currElements.add(new EjbRefElement(method, bridgedMethod, pd));
 					}
+					// 判断Method对象上是否有@Resource注解
 					else if (bridgedMethod.isAnnotationPresent(Resource.class)) {
 						if (Modifier.isStatic(method.getModifiers())) {
 							throw new IllegalStateException("@Resource annotation is not supported on static methods");
@@ -428,11 +445,14 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 				}
 			});
 
+			// 将收集的有@Resource注解的字段与方法加到List集合中
 			elements.addAll(0, currElements);
+			// 递归查找父类
 			targetClass = targetClass.getSuperclass();
 		}
 		while (targetClass != null && targetClass != Object.class);
 
+		// 包装成InjectionMetadata对象并返回
 		return InjectionMetadata.forElements(elements, clazz);
 	}
 

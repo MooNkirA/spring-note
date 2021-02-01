@@ -146,14 +146,18 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 查询入参的beanType的类，与生命周期相关的方法
 		LifecycleMetadata metadata = findLifecycleMetadata(beanType);
+		// 设置LifecycleMetadata对象的checkedInitMethods与checkedDestroyMethods属性
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		// 获取生命周期相关方法的Metadata对象
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			// 调用@PostConstruct注解的方法
 			metadata.invokeInitMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
@@ -174,6 +178,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			// 反射调用销毁的方法
 			metadata.invokeDestroyMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
@@ -197,8 +202,10 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 
 	private LifecycleMetadata findLifecycleMetadata(Class<?> clazz) {
+		// 先从缓存里查找当前类的LifecycleMetadata对象，此对象就是包装了目标对象与相关的生命周期方法
 		if (this.lifecycleMetadataCache == null) {
 			// Happens after deserialization, during destruction...
+			// 没有则去初始化类与LifecycleMetadata对象的映射，放到缓存中
 			return buildLifecycleMetadata(clazz);
 		}
 		// Quick check on the concurrent map first, with minimal locking.
@@ -217,6 +224,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	}
 
 	private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
+		// 判断当前实例化类的方法上是否有@PostConstruct或者@PreDestroy注解
 		if (!AnnotationUtils.isCandidateClass(clazz, Arrays.asList(this.initAnnotationType, this.destroyAnnotationType))) {
 			return this.emptyLifecycleMetadata;
 		}
@@ -225,11 +233,14 @@ public class InitDestroyAnnotationBeanPostProcessor
 		List<LifecycleElement> destroyMethods = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
+		// 循环类中所有的方法
 		do {
 			final List<LifecycleElement> currInitMethods = new ArrayList<>();
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
+			/* doWithLocalMethods(Class<?> clazz, MethodCallback mc)，此方法就是循环调用函数式接口MethodCallback里的doWith()方法，方法里通过反射调用Method对象 */
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
+				// 判断方法上是否有@PostConstruct注解，包装成LifecycleElement对象，加入到LifecycleMetadata.initMethods容器中
 				if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
 					LifecycleElement element = new LifecycleElement(method);
 					currInitMethods.add(element);
@@ -237,6 +248,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 						logger.trace("Found init method on class [" + clazz.getName() + "]: " + method);
 					}
 				}
+				// 判断方法上是否有@PreDestroy注解，包装成LifecycleElement对象，加入到LifecycleMetadata.destroyMethods容器中
 				if (this.destroyAnnotationType != null && method.isAnnotationPresent(this.destroyAnnotationType)) {
 					currDestroyMethods.add(new LifecycleElement(method));
 					if (logger.isTraceEnabled()) {
@@ -245,12 +257,15 @@ public class InitDestroyAnnotationBeanPostProcessor
 				}
 			});
 
+			// 使用List集合收集所有初始化和销毁方法
 			initMethods.addAll(0, currInitMethods);
 			destroyMethods.addAll(currDestroyMethods);
+			// 循环递归查询父类
 			targetClass = targetClass.getSuperclass();
 		}
 		while (targetClass != null && targetClass != Object.class);
 
+		// 包装成LifecycleMetadata对象并返回
 		return (initMethods.isEmpty() && destroyMethods.isEmpty() ? this.emptyLifecycleMetadata :
 				new LifecycleMetadata(clazz, initMethods, destroyMethods));
 	}
@@ -324,12 +339,13 @@ public class InitDestroyAnnotationBeanPostProcessor
 		public void invokeInitMethods(Object target, String beanName) throws Throwable {
 			Collection<LifecycleElement> checkedInitMethods = this.checkedInitMethods;
 			Collection<LifecycleElement> initMethodsToIterate =
-					(checkedInitMethods != null ? checkedInitMethods : this.initMethods);
+					(checkedInitMethods != null ? checkedInitMethods : this.initMethods); // 获取之前收集 @PostConstruct 注解的 initMethods 容器中
 			if (!initMethodsToIterate.isEmpty()) {
 				for (LifecycleElement element : initMethodsToIterate) {
 					if (logger.isTraceEnabled()) {
 						logger.trace("Invoking init method on bean '" + beanName + "': " + element.getMethod());
 					}
+					// 反射调用
 					element.invoke(target);
 				}
 			}

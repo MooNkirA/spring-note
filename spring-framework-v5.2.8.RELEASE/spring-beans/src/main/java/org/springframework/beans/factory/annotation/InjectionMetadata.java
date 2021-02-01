@@ -120,13 +120,16 @@ public class InjectionMetadata {
 
 	public void inject(Object target, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
 		Collection<InjectedElement> checkedElements = this.checkedElements;
+		// injectedElements集合是以前收集到的@Autowired注解的字段、方法对象
 		Collection<InjectedElement> elementsToIterate =
 				(checkedElements != null ? checkedElements : this.injectedElements);
 		if (!elementsToIterate.isEmpty()) {
+			// 循环所有需要注入的元素
 			for (InjectedElement element : elementsToIterate) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Processing injected element of bean '" + beanName + "': " + element);
 				}
+				// 循环调用每个元素/方法进行注入处理
 				element.inject(target, beanName, pvs);
 			}
 		}
@@ -174,6 +177,7 @@ public class InjectionMetadata {
 
 	/**
 	 * A single injected element.
+	 * 单个注入元素
 	 */
 	public abstract static class InjectedElement {
 
