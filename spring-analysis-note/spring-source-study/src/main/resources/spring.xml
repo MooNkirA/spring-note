@@ -22,9 +22,4 @@
     <!-- 自定义标签 -->
     <moon:redis id="redis" ip="127.0.0.1" port="6379"/>
 
-    <!-- 配置init-method属性示例
-            用于定义 Bean 的初始化方法，会在 Bean 组装之后调用。注意：该方法必须是一个无参数的方法
-     -->
-    <bean id="initMethodBean" class="com.moon.spring.bean.InitMethodBean" init-method="initMethod"/>
-
 </beans>

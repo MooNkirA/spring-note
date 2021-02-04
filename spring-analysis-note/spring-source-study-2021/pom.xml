@@ -29,6 +29,8 @@
         <module>07-spring-getbean</module>
         <module>08-spring-getbean-autowired</module>
         <module>09-spring-beanpostprocessor</module>
+        <module>10-spring-aware-interface</module>
+        <module>11-spring-initializingbean</module>
     </modules>
 
     <!-- 版本号管理 -->

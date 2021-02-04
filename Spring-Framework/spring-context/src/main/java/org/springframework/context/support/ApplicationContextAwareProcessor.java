@@ -93,12 +93,14 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 			}, acc);
 		}
 		else {
+			// 调用Aware接口的方法
 			invokeAwareInterfaces(bean);
 		}
 
 		return bean;
 	}
 
+	/* ApplicationContextAwareProcessor 调用所支持的 Aware 接口类型的方法 */
 	private void invokeAwareInterfaces(Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof EnvironmentAware) {

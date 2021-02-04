@@ -413,9 +413,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object result = existingBean;
 		/*
 		 * 循环容器中所有BeanPostProcessor，着重理解以下几个实现类
-		 *  1、ApplicationContextAwareProcessor  对某个Aware接口方法的调用
+		 *  1、ApplicationContextAwareProcessor  对某些Aware接口方法的调用
 		 *  2、InitDestroyAnnotationBeanPostProcessor  @PostConstruct注解方法的调用
-		 *  3、ImportAwareBeanPostProcessor  对ImportAware类型实例setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
+		 *  3、ImportAwareBeanPostProcessor  对ImportAware接口类型实例的setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
@@ -1864,11 +1864,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			// 对类中某些特殊方法的调用，比如@PostConstruct，Aware接口。重要程度【5】
-			// ApplicationContextAwareProcessor 对Aware接口的调用如：
-			// EnvironmentAware EmbeddedValueResolverAware  ResourceLoaderAware ApplicationEventPublisherAware MessageSourceAware  ApplicationContextAware
-			
-			// ImportAwareBeanPostProcessor 对ImportAware的支持
+			/*
+			 * 对类中某些特殊方法的调用，比如@PostConstruct，Aware接口。重要程度【5】（此处又是BeanPostProcessor接口的运用）
+			 * ApplicationContextAwareProcessor 对Aware接口的调用如：
+			 * 	EnvironmentAware EmbeddedValueResolverAware  ResourceLoaderAware ApplicationEventPublisherAware MessageSourceAware  ApplicationContextAware
+			 * ImportAwareBeanPostProcessor 对ImportAware的支持
+			 */
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 

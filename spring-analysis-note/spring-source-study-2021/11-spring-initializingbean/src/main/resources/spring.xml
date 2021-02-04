@@ -1,0 +1,13 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false">
+
+    <!--
+        配置init-method属性示例
+            用于定义 Bean 实例创建后的执行初始化方法，会在 Bean 组装之后调用。注意：该方法必须是一个无参数的方法
+     -->
+    <bean class="com.moon.spring.bean.CustomInitializingBean" id="customInitializingBean" init-method="initMehtod"/>
+
+</beans>

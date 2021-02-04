@@ -402,6 +402,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 		public void invoke(Object target) throws Throwable {
 			ReflectionUtils.makeAccessible(this.method);
+			// 反射调用，从源码可以知道，调用的方法是没有入参的。
 			this.method.invoke(target, (Object[]) null);
 		}
 
