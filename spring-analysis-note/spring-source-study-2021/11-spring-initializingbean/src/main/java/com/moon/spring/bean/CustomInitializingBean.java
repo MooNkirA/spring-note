@@ -22,7 +22,7 @@ public class CustomInitializingBean implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("CustomInitializingBean类实现InitializingBeanr接口的afterPropertiesSet()方法执行了....");
+        System.out.println("CustomInitializingBean类实现InitializingBean接口的afterPropertiesSet()方法执行了....");
     }
 
     /*

@@ -5,6 +5,7 @@ import com.moon.spring.aware.CustomBeanClassLoaderAware;
 import com.moon.spring.aware.CustomBeanFactoryAware;
 import com.moon.spring.aware.CustomBeanNameAware;
 import com.moon.spring.aware.CustomEnvironmentAware;
+import com.moon.spring.aware.CustomImportAware;
 import org.junit.Test;
 import org.springframework.beans.factory.Aware;
 import org.springframework.context.ApplicationContext;
@@ -64,6 +65,18 @@ public class AwareInterfaceTest {
     public void testBeanClassLoaderAware() {
         CustomBeanClassLoaderAware customBeanClassLoaderAware = context.getBean("customBeanClassLoaderAware", CustomBeanClassLoaderAware.class);
         System.out.println(customBeanClassLoaderAware);
+    }
+
+    /* ImportAware 接口测试 */
+    @Test
+    public void testImportAware() {
+        String[] beanNamesForType = context.getBeanNamesForType(CustomImportAware.class);
+        for (String beanName : beanNamesForType) {
+            System.out.println(beanName);
+        }
+        // 注意：通过@Import注解导入的类，在spring容器中注册的名称不是默认的“类名首字母小写”，而是“类的全限定名”
+        CustomImportAware customImportAware = context.getBean("com.moon.spring.aware.CustomImportAware", CustomImportAware.class);
+        System.out.println(customImportAware);
     }
 
 }

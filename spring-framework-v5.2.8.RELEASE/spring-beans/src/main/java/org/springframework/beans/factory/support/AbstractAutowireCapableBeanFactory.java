@@ -416,6 +416,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		 *  1、ApplicationContextAwareProcessor  对某些Aware接口方法的调用
 		 *  2、InitDestroyAnnotationBeanPostProcessor  @PostConstruct注解方法的调用
 		 *  3、ImportAwareBeanPostProcessor  对ImportAware接口类型实例的setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
+		 * 	4、BeanValidationPostProcessor 对象创建完成，在bean对象属性赋值后进行校验
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
@@ -435,6 +436,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		/*
 		 * 这里又是BeanPostProcessor接口的运用，这里主要理解以下实现类
 		 * 	1、AbstractAutoProxyCreator 主要处理AOP代理生成的逻辑
+		 *  2、ApplicationListenerDetector 主要将所有实现ApplicationListener接口的事件监听类加入到监听集合中
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
@@ -646,6 +648,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		/* TODO: 暂时不研究，是生成多个切面时会进入此代码块 */
 		if (earlySingletonExposure) {
 			Object earlySingletonReference = getSingleton(beanName, false);
 			if (earlySingletonReference != null) {
@@ -1869,6 +1872,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			 * ApplicationContextAwareProcessor 对Aware接口的调用如：
 			 * 	EnvironmentAware EmbeddedValueResolverAware  ResourceLoaderAware ApplicationEventPublisherAware MessageSourceAware  ApplicationContextAware
 			 * ImportAwareBeanPostProcessor 对ImportAware的支持
+			 * InitDestroyAnnotationBeanPostProcessor  对@PostConstruct注解方法的调用
 			 */
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
