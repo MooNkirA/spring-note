@@ -5,9 +5,9 @@ package com.moon.spring.lambda;
  * 然后就是在这个接口里面只能有一个抽象方法。
  * 这种类型的接口也称为SAM接口，即Single Abstract Method interfaces。
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2020-5-3 10:50
+ * @date 2021-2-4 22:30
  * @description
  */
 @FunctionalInterface
@@ -15,7 +15,6 @@ public interface FunctionInterface {
 
     /* 接口方法 */
     int doSomething(String s);
-
 
     /*
      * 函数式接口里允许定义默认方法

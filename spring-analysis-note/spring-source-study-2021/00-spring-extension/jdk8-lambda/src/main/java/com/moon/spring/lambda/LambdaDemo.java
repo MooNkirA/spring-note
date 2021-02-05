@@ -4,9 +4,9 @@ package com.moon.spring.lambda;
  * Lambda表达式，不要关心接口是什么，接口里面方法是什么，只需要关心方法里面写什么代码就可以了
  * 方法引用：不要关心接口是什么，接口里面方法是什么，只要关心如何调用方法就可以了
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2020-5-3 10:43
+ * @date 2021-2-4 22:32
  * @description
  */
 public class LambdaDemo {
