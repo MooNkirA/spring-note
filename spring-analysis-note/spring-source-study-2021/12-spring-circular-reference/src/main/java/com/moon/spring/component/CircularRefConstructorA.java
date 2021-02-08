@@ -1,19 +1,21 @@
-package com.moon.spring.bean;
+package com.moon.spring.component;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * 循环依赖示例Bean - 构造函数方式注入
  *
- * @author MoonZero
+ * @author MooNkirA
  * @version 1.0
- * @date 2020-5-28 23:31
+ * @date 2021-2-7 22:54
  * @description
  */
-@Data
 // @Component
+@Getter
+@Setter
 public class CircularRefConstructorA {
 
     /**

@@ -1,6 +1,7 @@
-package com.moon.spring.bean;
+package com.moon.spring.component;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Component;
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-6-2 23:14
+ * @date 2021-2-7 22:56
  * @description
  */
-@Data
-@Component
+@Getter
+@Setter
+// @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CircularRefPropertyA {
 

@@ -16,18 +16,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Setter
-public class CircularRefB {
+public class CircularRefC {
 
     // 在依赖注入时，如果属性是引用类型，会触发该类型的getBean操作
     @Autowired
     private CircularRefA circularRefA;
     @Autowired
-    private CircularRefC circularRefC;
+    private CircularRefB circularRefB;
 
-    public CircularRefB() {
-        System.out.println("============CircularRefB()无参构造函数触发===========");
-        System.out.println("CircularRefB自动注入属性circularRefA:" + circularRefA);
-        System.out.println("CircularRefB自动注入属性circularRefC:" + circularRefC);
+    public CircularRefC() {
+        System.out.println("============CircularRefC()无参构造函数触发===========");
+        System.out.println("CircularRefC自动注入属性circularRefA:" + circularRefA);
+        System.out.println("CircularRefC自动注入属性circularRefB:" + circularRefB);
     }
 
 }

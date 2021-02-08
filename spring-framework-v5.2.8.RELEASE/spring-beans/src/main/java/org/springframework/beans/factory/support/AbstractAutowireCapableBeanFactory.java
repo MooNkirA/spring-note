@@ -1009,6 +1009,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
+					/*
+					 * 此处调用BeanPostProcessor其实是直接将bean返回。
+					 * 为什么要设计成使用BeanPostProcessor接口的方式调用再返回对象，原因是为什么以后的扩展。
+					 * 如果需要对象这些bean实例做增强的处理操作，只需要实现SmartInstantiationAwareBeanPostProcessor接口，
+					 * 在getEarlyBeanReference方法增加一些增加处理即可，所以这种设计就是为了灵活的扩展
+					 */
 					exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);
 				}
 			}

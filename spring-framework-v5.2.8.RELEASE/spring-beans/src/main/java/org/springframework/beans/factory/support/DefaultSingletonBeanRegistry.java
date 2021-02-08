@@ -161,11 +161,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		synchronized (this.singletonObjects) {
 			// 如果一级缓存不存在
 			if (!this.singletonObjects.containsKey(beanName)) {
-				// 设置三级缓存
 				/* 此部分是自己新增的代码start */
 				System.out.println("========set value to 3 level cache[singletonFactories] -> beanName :: " + beanName + " ; value :: " + singletonFactory);
 				/* 此部分是自己新增的代码end */
-
+				// 设置三级缓存
 				this.singletonFactories.put(beanName, singletonFactory);
 				// 删除二级缓存
 				this.earlySingletonObjects.remove(beanName);
