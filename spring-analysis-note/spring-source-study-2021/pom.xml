@@ -32,6 +32,7 @@
         <module>10-spring-aware-interface</module>
         <module>11-spring-initializingbean</module>
         <module>12-spring-circular-reference</module>
+        <module>13-spring-disposablebean</module>
     </modules>
 
     <!-- 版本号管理 -->

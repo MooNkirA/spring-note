@@ -678,7 +678,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Register bean as disposable.
 		try {
-			// 注册bean销毁时的处理类DisposableBeanAdapter
+			// 注册bean销毁时的处理类DisposableBeanAdapter，注册此类是为了等tomcat这些应用服务器进行调用
 			registerDisposableBeanIfNecessary(beanName, bean, mbd);
 		}
 		catch (BeanDefinitionValidationException ex) {
