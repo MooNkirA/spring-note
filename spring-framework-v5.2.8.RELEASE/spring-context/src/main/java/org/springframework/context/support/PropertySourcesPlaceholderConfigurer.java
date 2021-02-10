@@ -124,24 +124,32 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 	 * ignored</strong>. This method is designed to give the user fine-grained control over property
 	 * sources, and once set, the configurer makes no assumptions about adding additional sources.
 	 */
+	/*
+	 * 新版本参数占位符赋值处理都是调用此方法执行
+	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		if (this.propertySources == null) {
 			this.propertySources = new MutablePropertySources();
 			if (this.environment != null) {
+				// 把environment对象封装成PropertySource对象后，加到MutablePropertySources中的list中
 				this.propertySources.addLast(
+					// 把environment对象封装成的PropertySource对象
 					new PropertySource<Environment>(ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME, this.environment) {
 						@Override
 						@Nullable
 						public String getProperty(String key) {
+							// source就是PropertySource类的泛型T，即environment对象
 							return this.source.getProperty(key);
 						}
 					}
 				);
 			}
 			try {
+				// 加载本地配置文件中的属性值，并包装成properties对象后，最终包装成PropertySource对象
 				PropertySource<?> localPropertySource =
 						new PropertiesPropertySource(LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME, mergeProperties());
+				// 加入到MutablePropertySources中的list中，根据localOverride标识决定排序
 				if (this.localOverride) {
 					this.propertySources.addFirst(localPropertySource);
 				}
@@ -153,7 +161,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 				throw new BeanInitializationException("Could not load properties", ex);
 			}
 		}
-
+		// 处理占位符赋值的主要逻辑
 		processProperties(beanFactory, new PropertySourcesPropertyResolver(this.propertySources));
 		this.appliedPropertySources = this.propertySources;
 	}
@@ -165,10 +173,13 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 	protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess,
 			final ConfigurablePropertyResolver propertyResolver) throws BeansException {
 
+		// 设置占位符的前缀后缀
 		propertyResolver.setPlaceholderPrefix(this.placeholderPrefix);
 		propertyResolver.setPlaceholderSuffix(this.placeholderSuffix);
+		// 设分割符“:”
 		propertyResolver.setValueSeparator(this.valueSeparator);
 
+		// @Value注解的依赖注入会调到此匿名对象，重要程度【4】
 		StringValueResolver valueResolver = strVal -> {
 			String resolved = (this.ignoreUnresolvablePlaceholders ?
 					propertyResolver.resolvePlaceholders(strVal) :
@@ -178,7 +189,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 			}
 			return (resolved.equals(this.nullValue) ? null : resolved);
 		};
-
+		// 核心流程。把占位符${xxx}替换成真正的值
 		doProcessProperties(beanFactoryToProcess, valueResolver);
 	}
 
