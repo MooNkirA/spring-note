@@ -33,6 +33,7 @@
         <module>11-spring-initializingbean</module>
         <module>12-spring-circular-reference</module>
         <module>13-spring-disposablebean</module>
+        <module>14-spring-properties-resolve</module>
     </modules>
 
     <!-- 版本号管理 -->

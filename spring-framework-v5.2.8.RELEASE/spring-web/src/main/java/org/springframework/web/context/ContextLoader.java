@@ -514,6 +514,7 @@ public class ContextLoader {
 		servletContext.log("Closing Spring root WebApplicationContext");
 		try {
 			if (this.context instanceof ConfigurableWebApplicationContext) {
+				// 调用web上下文关闭的方法
 				((ConfigurableWebApplicationContext) this.context).close();
 			}
 		}

@@ -1,0 +1,61 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false">
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.moon.spring"/>
+    <!-- xml设置读取配置文件方式1 -->
+    <!--<context:property-placeholder location="classpath:application.properties"/>-->
+    <!--
+        xml设置读取配置文件方式2-1：配置实例PropertySourcesPlaceholderConfigurer 或者 PropertyPlaceholderConfigurer（已过时）
+    -->
+    <!--<bean id="propertyConfigurerForProject"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="1"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="location">
+            <value>classpath:application.properties</value>
+        </property>
+    </bean>-->
+    <!--<bean id="propertySourcesPlaceholderConfigurer"
+          class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="order" value="1"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="location">
+            <value>classpath:application.properties</value>
+        </property>
+    </bean>-->
+    <!--
+        xml设置读取配置文件方式2-2：
+            也可以自定义properties文件处理类，该类继承spring框架的PropertySourcesPlaceholderConfigurer类或者PropertyPlaceholderConfigurer类（已过时），
+            此方式应该与注解的@PropertySource的实现原理一样，通过locations属性指定需要读取的配置文件位置
+    -->
+    <!--<bean class="com.moon.spring.config.PropertyConfiguration" id="propertyConfiguration">
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+            </list>
+        </property>
+    </bean>-->
+
+    <!-- 配置读取配置文件 -->
+    <bean class="com.moon.spring.bean.PropertiesXmlBean" id="propertiesXmlBean">
+        <!--
+            通过property标签可以给属性注入相应的值，
+            但此时将value部分设置为占位符${}，实现读取properties文件指定的key，有两种解决方案：
+
+            第1种：使用传统的xml配置文件方式，设置context:property-placeholder标签(也可以自定义)，指定要读取的配置文件
+            第2种：xml文件的解析是将每个bean标签封装在一个BeanDefinition对象，可以通过实现 BeanDefinitionRegistryPostProcessor 接口
+                  在spring容器启动的过程中，修改 BeanDefinition 的 MutablePropertyValues 属性即可
+        -->
+        <property name="name" value="${moon.name}"/>
+        <property name="password" value="${moon.password}"/>
+    </bean>
+
+</beans>

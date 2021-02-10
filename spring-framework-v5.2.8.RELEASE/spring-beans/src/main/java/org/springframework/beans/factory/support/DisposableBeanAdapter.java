@@ -261,6 +261,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 					}, this.acc);
 				}
 				else {
+					// 调用实例了 DisposableBean 接口的 destroy 方法
 					((DisposableBean) this.bean).destroy();
 				}
 			}

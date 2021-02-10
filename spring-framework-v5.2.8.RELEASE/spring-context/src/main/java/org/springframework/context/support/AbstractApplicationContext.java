@@ -1137,6 +1137,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#destroySingletons()
 	 */
 	protected void destroyBeans() {
+		// 获取Bean实例工厂，销毁单例实例容器
 		getBeanFactory().destroySingletons();
 	}
 
