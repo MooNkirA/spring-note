@@ -3,17 +3,17 @@ package com.moon.spring.bean;
 import lombok.Data;
 
 /**
- * 传统通过xml配置注入properties文件值
+ * 用于测试手动注册到spring容器
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2021-2-9 14:05
+ * @date 2021-2-11 17:14
  * @description
  */
 @Data
-public class PropertiesXmlBean {
+public class Bird {
 
     private String name;
-    private String password;
+    private String color;
 
 }

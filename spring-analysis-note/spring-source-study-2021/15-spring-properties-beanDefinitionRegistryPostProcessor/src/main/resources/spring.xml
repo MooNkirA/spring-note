@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false">
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.moon.spring"/>
+
+    <bean class="com.moon.spring.bean.PropertyBean" id="propertyBean">
+        <!--
+            通过property标签可以给属性注入相应的值，
+            但此时将value部分设置为占位符${}，实现读取properties文件指定的key，有两种解决方案：
+
+            第1种：使用传统的xml配置文件方式，设置context:property-placeholder标签(也可以自定义)，指定要读取的配置文件
+            第2种：xml文件的解析是将每个bean标签封装在一个BeanDefinition对象，可以通过实现 BeanDefinitionRegistryPostProcessor 接口
+                  在spring容器启动的过程中，修改 BeanDefinition 的 MutablePropertyValues 属性即可
+        -->
+        <property name="username" value="${moon.name}"/>
+        <property name="password" value="${moon.password}"/>
+    </bean>
+
+</beans>

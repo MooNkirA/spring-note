@@ -76,18 +76,21 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 
 	@Nullable
 	protected <T> T getProperty(String key, Class<T> targetValueType, boolean resolveNestedPlaceholders) {
+		// 其实就是从MutablePropertySources中的list中获取每一个PropertySource对象然后调用getProperty方法
 		if (this.propertySources != null) {
 			for (PropertySource<?> propertySource : this.propertySources) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Searching for key '" + key + "' in PropertySource '" +
 							propertySource.getName() + "'");
 				}
+				// 调用getProperty方法，属性值的来源分别是Environment对象和本地配置文件
 				Object value = propertySource.getProperty(key);
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {
 						value = resolveNestedPlaceholders((String) value);
 					}
 					logKeyFound(key, propertySource, value);
+					// 参数转换
 					return convertValueIfNecessary(value, targetValueType);
 				}
 			}

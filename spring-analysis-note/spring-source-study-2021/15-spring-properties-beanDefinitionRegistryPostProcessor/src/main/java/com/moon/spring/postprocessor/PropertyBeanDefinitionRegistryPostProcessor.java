@@ -15,6 +15,8 @@ import java.util.Optional;
 
 /**
  * xml属性注入方案2: 通过修改 BeanDefinition 的 MutablePropertyValues 实现表达式注入
+ * <p>
+ * 注：测试此方案，不需要在xml中配置 context:property-placeholder 标签
  *
  * @author MooNkirA
  * @version 1.0
@@ -29,8 +31,9 @@ public class PropertyBeanDefinitionRegistryPostProcessor implements BeanDefiniti
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        /* ========================= 案例1：通过Environment对象手动替换属性值的占位符 ========================= */
         // 通过BeanDefinitionRegistry注册中心获取指定的BeanDefinition(或者全部BeanDefinition，逐个循环处理)
-        MutablePropertyValues propertyValues = registry.getBeanDefinition("propertiesXmlBean").getPropertyValues();
+        MutablePropertyValues propertyValues = registry.getBeanDefinition("propertyBean").getPropertyValues();
         // 循环所有属性
         for (PropertyValue propertyValue : propertyValues.getPropertyValueList()) {
             TypedStringValue typedStringValue = (TypedStringValue) propertyValue.getValue();

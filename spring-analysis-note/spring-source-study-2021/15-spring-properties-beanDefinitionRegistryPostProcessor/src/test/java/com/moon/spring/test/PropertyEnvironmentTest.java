@@ -1,22 +1,19 @@
 package com.moon.spring.test;
 
-import com.moon.spring.bean.Bird;
-import com.moon.spring.bean.Cat;
-import com.moon.spring.bean.Fish;
 import com.moon.spring.bean.PropertyBean;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * 属性注入配置文件值测试
+ * Environment 对象手动设置占位符
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2021-2-9 14:15
+ * @date 2021-2-11 19:22
  * @description
  */
-public class PropertiesTest {
+public class PropertyEnvironmentTest {
 
     private final ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 

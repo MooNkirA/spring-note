@@ -127,6 +127,7 @@ public class PropertyPlaceholderHelper {
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, @Nullable Set<String> visitedPlaceholders) {
 
+		// 判断如果没有占位符，则直接返回
 		int startIndex = value.indexOf(this.placeholderPrefix);
 		if (startIndex == -1) {
 			return value;
@@ -145,16 +146,21 @@ public class PropertyPlaceholderHelper {
 					throw new IllegalArgumentException(
 							"Circular placeholder reference '" + originalPlaceholder + "' in property definitions");
 				}
+				// 递归解析，为了防止出现 “${${}}” 这种可能
 				// Recursive invocation, parsing placeholders contained in the placeholder key.
 				placeholder = parseStringValue(placeholder, placeholderResolver, visitedPlaceholders);
 				// Now obtain the value for the fully resolved key...
+				// 调用 this::getPropertyAsRawString 解析的占位符程式：${monn.name:abc}，前部分为属性值，后部分为默认值
 				String propVal = placeholderResolver.resolvePlaceholder(placeholder);
 				if (propVal == null && this.valueSeparator != null) {
 					int separatorIndex = placeholder.indexOf(this.valueSeparator);
 					if (separatorIndex != -1) {
 						String actualPlaceholder = placeholder.substring(0, separatorIndex);
+						// 获取":"号后面的默认值
 						String defaultValue = placeholder.substring(separatorIndex + this.valueSeparator.length());
+						// 对":"前面的参数解析
 						propVal = placeholderResolver.resolvePlaceholder(actualPlaceholder);
+						// 如果解析不到，则用默认值
 						if (propVal == null) {
 							propVal = defaultValue;
 						}

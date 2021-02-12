@@ -144,10 +144,12 @@ public abstract class PropertiesLoaderSupport {
 	 * loaded properties and properties set on this FactoryBean.
 	 */
 	protected Properties mergeProperties() throws IOException {
+		// 创建Properties对象，是Map的子类
 		Properties result = new Properties();
 
 		if (this.localOverride) {
 			// Load properties from file upfront, to let local properties override.
+			// 从文件预先加载属性，以使本地属性被覆盖。
 			loadProperties(result);
 		}
 
@@ -159,6 +161,7 @@ public abstract class PropertiesLoaderSupport {
 
 		if (!this.localOverride) {
 			// Load properties from file afterwards, to let those properties override.
+			// 之后从文件加载属性，以使这些属性被覆盖。
 			loadProperties(result);
 		}
 
@@ -173,11 +176,13 @@ public abstract class PropertiesLoaderSupport {
 	 */
 	protected void loadProperties(Properties props) throws IOException {
 		if (this.locations != null) {
+			// 变量 locations 就是xml配置中<context:property-placeholder>标签的location属性
 			for (Resource location : this.locations) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Loading properties file from " + location);
 				}
 				try {
+					// 读取配置文件，将数据封装到Properties对象中
 					PropertiesLoaderUtils.fillProperties(
 							props, new EncodedResource(location, this.fileEncoding), this.propertiesPersister);
 				}

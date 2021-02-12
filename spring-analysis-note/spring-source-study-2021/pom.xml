@@ -34,6 +34,8 @@
         <module>12-spring-circular-reference</module>
         <module>13-spring-disposablebean</module>
         <module>14-spring-properties-resolve</module>
+        <module>15-spring-properties-beanDefinitionRegistryPostProcessor</module>
+        <module>16-spring-beanclass-placeholder</module>
     </modules>
 
     <!-- 版本号管理 -->

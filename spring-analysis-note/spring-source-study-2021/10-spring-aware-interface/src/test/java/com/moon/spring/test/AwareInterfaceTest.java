@@ -6,9 +6,11 @@ import com.moon.spring.aware.CustomBeanFactoryAware;
 import com.moon.spring.aware.CustomBeanNameAware;
 import com.moon.spring.aware.CustomEnvironmentAware;
 import com.moon.spring.aware.CustomImportAware;
+import com.moon.spring.aware.CustomResourceLoaderAware;
 import org.junit.Test;
 import org.springframework.beans.factory.Aware;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -78,5 +80,13 @@ public class AwareInterfaceTest {
         CustomImportAware customImportAware = context.getBean("com.moon.spring.aware.CustomImportAware", CustomImportAware.class);
         System.out.println(customImportAware);
     }
+
+    /* ResourceLoaderAware 接口测试 */
+    @Test
+    public void testResourceLoaderAware() {
+        CustomResourceLoaderAware customResourceLoaderAware = context.getBean("customResourceLoaderAware", CustomResourceLoaderAware.class);
+        System.out.println(customResourceLoaderAware);
+    }
+
 
 }
