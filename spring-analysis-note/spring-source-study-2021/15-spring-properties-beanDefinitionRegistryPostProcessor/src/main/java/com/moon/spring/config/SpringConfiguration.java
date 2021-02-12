@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
  * @description
  */
 @Configuration
+// @PropertySource注解只是引入配置文件，无法实现将注入属性值替换相应占位符的值
 @PropertySource("classpath:application.properties")
 public class SpringConfiguration {
 }

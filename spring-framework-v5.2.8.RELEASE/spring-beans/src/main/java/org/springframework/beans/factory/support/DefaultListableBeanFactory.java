@@ -884,9 +884,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			// 如果配置的bean不是抽象的，单例的，非懒加载的就实例化
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
+					// 如果是FactoryBean接口类型，则拼加"&"前缀
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 
-					// 判断bean是否实现了FactoryBean接口，暂时未研究
+					// 判断bean是否实现了FactoryBean接口
 					if (bean instanceof FactoryBean) {
 						FactoryBean<?> factory = (FactoryBean<?>) bean;
 						boolean isEagerInit;
@@ -1237,6 +1238,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
+			// 此方法会判断构造函数上是否有@Lazy注解，如果有则返回代理对象
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {
@@ -1263,6 +1265,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
 			if (value != null) {
 				if (value instanceof String) {
+					// 此方法从embeddedValueResolvers的容器中获取属性字符处理器，然后对占位符进行转换成真正的值
 					String strVal = resolveEmbeddedValue((String) value);
 					BeanDefinition bd = (beanName != null && containsBean(beanName) ?
 							getMergedBeanDefinition(beanName) : null);

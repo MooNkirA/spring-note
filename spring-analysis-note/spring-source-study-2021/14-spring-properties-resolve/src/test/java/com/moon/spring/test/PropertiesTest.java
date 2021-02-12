@@ -1,8 +1,6 @@
 package com.moon.spring.test;
 
-import com.moon.spring.bean.Bird;
-import com.moon.spring.bean.Cat;
-import com.moon.spring.bean.Fish;
+import com.moon.spring.bean.PlaceholderValueBean;
 import com.moon.spring.bean.PropertyBean;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +23,13 @@ public class PropertiesTest {
     public void testPropertiesByXml() {
         PropertyBean bean = context.getBean("propertyBean", PropertyBean.class);
         System.out.println(bean.getUsername() + " :: " + bean.getPassword());
+    }
+
+    /* 测试xml配置中的property占位符赋值 */
+    @Test
+    public void testPlaceholderByValueAnnotation() {
+        PlaceholderValueBean bean = context.getBean("placeholderValueBean", PlaceholderValueBean.class);
+        System.out.println(bean.getName() + " :: " + bean.getPassword());
     }
 
 }

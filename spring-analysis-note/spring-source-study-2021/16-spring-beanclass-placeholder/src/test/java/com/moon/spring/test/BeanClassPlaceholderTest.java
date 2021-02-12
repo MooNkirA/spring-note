@@ -3,10 +3,10 @@ package com.moon.spring.test;
 import com.moon.spring.bean.Bird;
 import com.moon.spring.bean.Cat;
 import com.moon.spring.bean.Fish;
+import com.moon.spring.config.SpringConfiguration;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * BeanClass属性占位符测试
@@ -18,7 +18,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class BeanClassPlaceholderTest {
 
-    private final ApplicationContext context = new AnnotationConfigApplicationContext("com.moon.spring");
+    private final ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
     /* 测试spring对beanClass属性占位符赋值 */
     @Test

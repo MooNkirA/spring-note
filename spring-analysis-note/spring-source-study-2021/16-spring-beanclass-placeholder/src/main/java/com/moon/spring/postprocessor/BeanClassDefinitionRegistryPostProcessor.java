@@ -18,7 +18,8 @@ import java.util.Properties;
  * 通过BeanDefinitionRegistry注册中心设置BeanClass占位符
  * <p>
  * 注：此案例主要是测试Spring是否能解析占位符的beanClass，
- * 需要将xml配置文件中的context:property-placeholder标签放开，注释SpringConfiguration注解配置
+ * 需要将xml配置文件中的context:property-placeholder标签放开，或者在配置中手动创建 PropertySourcesPlaceholderConfigurer 类。
+ * 此示例使用后者
  *
  * @author MooNkirA
  * @version 1.0

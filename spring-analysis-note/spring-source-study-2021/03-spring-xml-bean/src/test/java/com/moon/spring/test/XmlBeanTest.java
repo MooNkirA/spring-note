@@ -2,14 +2,13 @@ package com.moon.spring.test;
 
 import com.moon.spring.bean.ConstructorArgBean;
 import com.moon.spring.bean.DecoratorBean;
-import com.moon.spring.bean.FactoryBean;
 import com.moon.spring.bean.OriginBean;
 import com.moon.spring.bean.People;
 import com.moon.spring.bean.PropertyBean;
 import com.moon.spring.bean.Son;
 import com.moon.spring.bean.Woman;
+import com.moon.spring.bean.XmlFactoryBean;
 import com.moon.spring.service.PeopleService;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,13 +23,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class XmlBeanTest {
 
-    private ApplicationContext context;
-
-    @Before
-    public void init() {
-        // 读取spring类路径下的配置文件
-        context = new ClassPathXmlApplicationContext("spring.xml");
-    }
+    // 读取spring类路径下的配置文件
+    private final ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 
     /**
      * 测试<bean>标签中的abstract与parent属性
@@ -65,7 +59,7 @@ public class XmlBeanTest {
      */
     @Test
     public void testFactoryBeanAndFactoryMethod() {
-        FactoryBean factoryBean = context.getBean("factoryBean", FactoryBean.class);
+        XmlFactoryBean factoryBean = context.getBean("factoryBean", XmlFactoryBean.class);
         System.out.println(factoryBean.toString());
     }
 

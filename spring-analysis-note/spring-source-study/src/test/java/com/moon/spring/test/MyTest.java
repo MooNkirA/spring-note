@@ -1,27 +1,18 @@
 package com.moon.spring.test;
 
-import com.moon.spring.bean.ConstructorArgBean;
-import com.moon.spring.bean.CustomAnnotationClass;
-import com.moon.spring.bean.OriginClass;
-import com.moon.spring.bean.PropertyClass;
-import com.moon.spring.bean.ShowSexClass;
-import com.moon.spring.bean.Student;
-import com.moon.spring.beanDefinition.BeanClass;
-import com.moon.spring.config.ComponentScanConfig;
-import com.moon.spring.factorybean.FactoryBeanDemo;
-import com.moon.spring.factorybean.FactoryBeanOther;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import redis.clients.jedis.Jedis;
 
-import java.util.ArrayList;
+import com.moon.spring.bean.CustomAnnotationClass;
+import com.moon.spring.bean.Student;
+import com.moon.spring.beanDefinition.BeanClass;
+import com.moon.spring.config.ComponentScanConfig;
+
+import redis.clients.jedis.Jedis;
 
 /**
  * 测试类
@@ -113,18 +104,6 @@ public class MyTest {
     public void customTagTest() {
         jedis.set("moon", "this is a custom tag");
         System.out.println(jedis.get("moon"));
-    }
-
-    /* FactoryBean接口实现测试 */
-    @Test
-    public void factoryBeanTest() {
-        // 实现了FactoryBean接口的类，通过bean的id只能获取该类实现了getObject()方法返回的对象实例
-        FactoryBeanOther other = (FactoryBeanOther) applicationContext.getBean("factoryBeanDemo");
-        System.out.println(other); // com.moon.spring.factorybean.FactoryBeanOther@4cc8eb05
-
-        // 如果要获取实现了FactoryBean接口的类的实例，只能通过【"&" + beanName】来获取实例
-        FactoryBeanDemo factoryBeanDemo = (FactoryBeanDemo) applicationContext.getBean("&factoryBeanDemo");
-        System.out.println(factoryBeanDemo); // com.moon.spring.factorybean.FactoryBeanDemo@51f116b8
     }
 
     /* 测试Spring Bean的实例作用范围 */
