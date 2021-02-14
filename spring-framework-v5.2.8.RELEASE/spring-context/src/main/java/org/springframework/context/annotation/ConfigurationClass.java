@@ -46,25 +46,27 @@ import org.springframework.util.ClassUtils;
  * @see BeanMethod
  * @see ConfigurationClassParser
  */
+/* 表示用户自定义的Configuration类，包含一些配置信息 */
 final class ConfigurationClass {
 
+	// 类的注解相关元数据
 	private final AnnotationMetadata metadata;
-
+	// 文件流，可以理解就是一个文件
 	private final Resource resource;
 
 	@Nullable
 	private String beanName;
-
+	// 用来存放外部类，即一些内部类也使用@Component注解的
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
-
+	// 存放类中标识了@Bean注解的方法
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
 
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
-
+	// 存放类中实现了ImportBeanDefinitionRegistrar接口的注解元信息
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();
-
+	// 存放需要跳过的标识了@Bean注解的方法
 	final Set<String> skippedBeanMethods = new HashSet<>();
 
 

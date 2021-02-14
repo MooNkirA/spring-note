@@ -97,7 +97,7 @@ abstract class ConfigurationClassUtils {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
-		// 非扫描注解产生的BeanDefinition
+		// 非扫描注解产生的BeanDefinition（如自己创建的BeanDefinition）
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.

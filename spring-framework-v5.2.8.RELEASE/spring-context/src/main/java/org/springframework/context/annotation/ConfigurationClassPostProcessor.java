@@ -268,6 +268,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		// 获取所有的beanNames
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
+		// 此循环所有BeanDefinition的作用是判断要创建的类上是否有需要处理的注解
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
 			// 如果有该标识就不再处理
@@ -315,12 +316,13 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
-		// 此处有一个重要的类ConfigurationClassParser，是对@ComponentScan @Configuration支持
+		// 此处创建一个重要的ConfigurationClassParser类（对候选BeanDefinition的解析），是对@ComponentScan @Configuration支持
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
 
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
+		// 用于存放已经处理过的类，因为有些类会通过@Import重复导入一些类
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
 			// ConfigurationClassParser类的解析核心流程，重要程度【5】
@@ -337,7 +339,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			// 设置beanDefinition的属性值，具体执行 @import/@importSource/@Bean 的逻辑。重要程度【5】
+			// 设置beanDefinition的属性值，具体执行 @Import/@ImportSource/@Bean 的逻辑。重要程度【5】
 			this.reader.loadBeanDefinitions(configClasses);
 			// 已经解析完成了的类
 			alreadyParsed.addAll(configClasses);

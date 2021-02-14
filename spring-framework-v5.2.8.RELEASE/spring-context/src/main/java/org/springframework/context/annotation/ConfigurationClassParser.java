@@ -174,7 +174,7 @@ class ConfigurationClassParser {
 				if (bd instanceof AnnotatedBeanDefinition) {
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
-				// 非扫描注解得到的BeanDefinition
+				// 非扫描注解得到的BeanDefinition(如自己手动创建的BeanDefinition注册到BeanDefinitionRegistry)
 				else if (bd instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) bd).hasBeanClass()) {
 					parse(((AbstractBeanDefinition) bd).getBeanClass(), holder.getBeanName());
 				}
@@ -248,11 +248,13 @@ class ConfigurationClassParser {
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy. --> 翻译：递归处理配置类及其超类层次结构
-		// 封装成SourceClass对象，此对象主要封装了处理类的Class对象与类相关信息的metadata对象
-		// 这个对象理解为跟类或者接口对应，然后把metadata对象包装进去了
+		/*
+		 * 封装成SourceClass对象(ConfigurationClassParser的内部类)，此对象主要封装了处理类的Class对象与类相关信息的metadata对象
+		 * 这个对象理解为跟类或者接口对应，然后把metadata对象包装进去了
+		 */
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		do {
-			// 处理相关注解，核心代码，重要程度【5】
+			// 处理相关注解解析，核心代码，重要程度【5】
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
 		}
 		while (sourceClass != null);
@@ -273,15 +275,15 @@ class ConfigurationClassParser {
 			ConfigurationClass configClass, SourceClass sourceClass, Predicate<String> filter)
 			throws IOException {
 
-		// 判断类上面是否有Component注解
+		// 判断类上面是否有@Component注解
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
-			// Recursively process any member (nested) classes first
+			// Recursively process any member (nested) classes first --> 翻译：首先递归处理任何成员（嵌套）类
 			// 递归处理有@Component注解的内部类
 			processMemberClasses(configClass, sourceClass, filter);
 		}
 
 		// Process any @PropertySource annotations
-		// 处理PropertySources和 PropertySource注解
+		// 处理 @PropertySources 和 @PropertySource 注解
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
 				org.springframework.context.annotation.PropertySource.class)) {
@@ -299,7 +301,7 @@ class ConfigurationClassParser {
 		// 从metaData对象中获取是否有@ComponentScans或@ComponentScan注解
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
-		//是否需要跳过
+		// 判断是否存在@ComponentScans注解，并且是否需要跳过
 		if (!componentScans.isEmpty() &&
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
@@ -374,12 +376,12 @@ class ConfigurationClassParser {
 	private void processMemberClasses(ConfigurationClass configClass, SourceClass sourceClass,
 			Predicate<String> filter) throws IOException {
 
-		// 获取该类的内部类并又包装成sourceClass对象
+		// 获取当前类的内部类并又包装成sourceClass对象
 		Collection<SourceClass> memberClasses = sourceClass.getMemberClasses();
 		if (!memberClasses.isEmpty()) {
 			List<SourceClass> candidates = new ArrayList<>(memberClasses.size());
 			for (SourceClass memberClass : memberClasses) {
-				// 如果类是候选的
+				// 判断内部类是候选的
 				if (ConfigurationClassUtils.isConfigurationCandidate(memberClass.getMetadata()) &&
 						!memberClass.getMetadata().getClassName().equals(configClass.getMetadata().getClassName())) {
 					candidates.add(memberClass);
@@ -395,7 +397,10 @@ class ConfigurationClassParser {
 				else {
 					this.importStack.push(configClass);
 					try {
-						// candidate 子  configClass 父，candidate 是 configClass的内部类
+						/*
+						 * candidate 是 configClass 的内部类，此处将内部类包装成ConfigurationClass类
+						 *  即相对来说变成了外部类，然后调用processConfigurationClass方法，进行递归处理
+						 */
 						processConfigurationClass(candidate.asConfigClass(configClass), filter);
 					}
 					finally {
@@ -512,7 +517,7 @@ class ConfigurationClassParser {
 		// 获取Environment对象中的MutablePropertySources
 		MutablePropertySources propertySources = ((ConfigurableEnvironment) this.environment).getPropertySources();
 
-		// 如果已经存在了该配置文件的PropertySource则合并久的
+		// 如果已经存在了该配置文件的PropertySource则进行合并
 		if (this.propertySourceNames.contains(name)) {
 			// We've already added a version, we need to extend it
 			PropertySource<?> existing = propertySources.get(name);
@@ -531,6 +536,7 @@ class ConfigurationClassParser {
 					CompositePropertySource composite = new CompositePropertySource(name);
 					composite.addPropertySource(newSource);
 					composite.addPropertySource(existing);
+					// 合并
 					propertySources.replace(name, composite);
 				}
 				return;
@@ -546,6 +552,7 @@ class ConfigurationClassParser {
 			// 把propertySource对象存入MutablePropertySources的list中
 			propertySources.addBefore(firstProcessed, propertySource);
 		}
+		// 将解析过的@PropertySource的name值加到集合中
 		this.propertySourceNames.add(name);
 	}
 

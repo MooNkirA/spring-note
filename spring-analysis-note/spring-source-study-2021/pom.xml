@@ -14,6 +14,8 @@
     <name>${project.artifactId}</name>
     <description>
         Spring Framework 5.2.8.RELEASE 版本的源码学习案例工程(包括基础使用示例、涉及设计模式示例) - 2021年整理版本
+        此示例项目示例只是配合源码断点调试学习，很多用法可能没有涉及，具体 Spring 框架的详细基础使用的案例，
+        详见【spring-sample-annotation】与【springmvc-sample-annotation】工程
     </description>
 
     <modules>
@@ -38,6 +40,8 @@
         <module>16-spring-beanclass-placeholder</module>
         <module>17-spring-factorybean</module>
         <module>18-spring-bean-scope</module>
+        <module>19-spring-anno-propertysource</module>
+        <module>20-spring-anno-componentscan</module>
     </modules>
 
     <!-- 版本号管理 -->
