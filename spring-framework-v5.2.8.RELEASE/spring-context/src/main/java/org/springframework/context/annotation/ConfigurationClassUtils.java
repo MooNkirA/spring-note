@@ -63,6 +63,7 @@ abstract class ConfigurationClassUtils {
 
 	private static final Log logger = LogFactory.getLog(ConfigurationClassUtils.class);
 
+	/** 存放支持的注解类型名称 */
 	private static final Set<String> candidateIndicators = new HashSet<>(8);
 
 	static {
@@ -90,11 +91,13 @@ abstract class ConfigurationClassUtils {
 		}
 
 		AnnotationMetadata metadata;
+		// 如果是扫描注解产生的BeanDefinition
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
+		// 非扫描注解产生的BeanDefinition
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.
@@ -121,10 +124,17 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
+		// 从metadata中获取@Configuration注解
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
+		// 判断如果有@Configuration注解，设置一个标识（CONFIGURATION_CLASS_FULL="full"），代表完全匹配标识
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		/*
+		 * 判断是否有@Component、@ComponentScan、@Import、@ImportResource注解或者方法上面有@Bean注解，
+		 * 或者类上面没注解（xml配置实例化）但方法上面有@Bean注解
+		 * 如果是，则设置一个标识（CONFIGURATION_CLASS_LITE="lite"），代表部分匹配标识
+		 */
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
@@ -132,6 +142,7 @@ abstract class ConfigurationClassUtils {
 			return false;
 		}
 
+		// 获取@Order注解值，用于排序
 		// It's a full or lite configuration candidate... Let's determine the order value, if any.
 		Integer order = getOrder(metadata);
 		if (order != null) {
@@ -155,6 +166,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Any of the typical annotations found?
+		// 判断是否包含@Component,@ComponentScan,@Import,@ImportResource
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -163,6 +175,7 @@ abstract class ConfigurationClassUtils {
 
 		// Finally, let's look for @Bean methods...
 		try {
+			// 判断是否有@Bean注解
 			return metadata.hasAnnotatedMethods(Bean.class.getName());
 		}
 		catch (Throwable ex) {

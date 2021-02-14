@@ -408,11 +408,19 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					if (!StringUtils.hasLength(scopeName)) {
 						throw new IllegalStateException("No scope name defined for bean ´" + beanName + "'");
 					}
+					// 从scopes的Map容器中，根据scopeName获取Scope接口实例
 					Scope scope = this.scopes.get(scopeName);
 					if (scope == null) {
 						throw new IllegalStateException("No Scope registered for scope name '" + scopeName + "'");
 					}
 					try {
+						/*
+						 * 此处会调用Scope接口的get方法，其中第二个入参为ObjectFactory对象
+						 * 在实现Scope接口的get方法中，调用ObjectFactory.getObject()方法，
+						 * 即调用到此lambda表达式的代码，会返回spring创建的实例
+						 *
+						 * 注：这里spring只会创建，不会保存到缓存中，意味着实例的管理由自己来实现
+						 */
 						Object scopedInstance = scope.get(beanName, () -> {
 							beforePrototypeCreation(beanName);
 							try {
@@ -1240,10 +1248,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					"Bean name '" + beanName + "' does not correspond to an object in a mutable scope");
 		}
 		String scopeName = mbd.getScope();
+		// 从scope容器中获取自定义的scope对象
 		Scope scope = this.scopes.get(scopeName);
 		if (scope == null) {
 			throw new IllegalStateException("No Scope SPI registered for scope name '" + scopeName + "'");
 		}
+		// 调用自定义的scope对象的remove方法
 		Object bean = scope.remove(beanName);
 		if (bean != null) {
 			destroyBean(beanName, bean, mbd);
@@ -1886,12 +1896,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		// 判断如果传入的实例不是FactoryBean接口类型的，或者beanName是以&号开头的，则直接返回传入的实例（相当于此方法没有任何作用）
+		/*
+		 * 代码执行到这里，说明beanName不是以"&"开头的，
+		 * 此时判断如果传入的实例不是FactoryBean接口类型的，则直接返回传入的实例（相当于此方法没有任何作用）
+		 */
 		if (!(beanInstance instanceof FactoryBean)) {
 			return beanInstance;
 		}
 
-		// 以下逻辑说明了实例beanInstance是FactoryBean接口类型的，并且beanName不是以&开头
+		// 以下逻辑说明了当前实例beanInstance是FactoryBean接口类型的，并且beanName不是以&开头
 		Object object = null;
 		if (mbd != null) {
 			mbd.isFactoryBean = true;
@@ -1901,6 +1914,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
+			// 如果缓存没有实例，执行创建实例。其实就是调用`FactoryBean`接口的`getObject`方法获取实例
 			// Return bean instance from factory.
 			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
 			// Caches object obtained from FactoryBean if it is a singleton.
@@ -1908,7 +1922,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
-			// 重点关注此方法，重要程度【5】
+			// 重点关注此方法，调用接口的`getObject`方法获取实例，重要程度【5】
 			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}
 		return object;

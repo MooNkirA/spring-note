@@ -106,56 +106,11 @@ public class MyTest {
         System.out.println(jedis.get("moon"));
     }
 
-    /* 测试Spring Bean的实例作用范围 */
-    @Test
-    public void prototypeTest() {
-        /*
-         * 测试单例与多例
-         *      单例情况：每个线程获取的实例的hashCode都一样
-         *      多例情况：每个线程获取的实例的hashCode都不一样
-         *      多例情况，一个线程多次获取实例，其hashCode也是不一样
-         */
-        for (int i = 0; i < 10; i++) {
-            int finalI = i;
-            new Thread(() -> {
-                if (finalI % 2 == 0) {
-                    System.out.println(Thread.currentThread().getName() + " --> " + applicationContext.getBean("prototypeBean"));
-                    System.out.println(Thread.currentThread().getName() + " --> " + applicationContext.getBean("prototypeBean"));
-                } else {
-                    System.out.println(Thread.currentThread().getName() + " --> " + applicationContext.getBean("prototypeBean"));
-                }
-            }).start();
-        }
-    }
-
     /* 测试多例情况下循环依赖时会出现报错 */
     @Test
     public void circularRefPropertyTest() {
         // 注：因为多例情况，spring容器启动时是不会创建实例，所以这里需要手动调用getBean()方法，此时才会去创建实例
         applicationContext.getBean("circularRefPropertyA");
-    }
-
-    /* 测试request与Session作用域 */
-    @Test
-    public void requestSessoinScopeTest() {
-        applicationContext.getBean("requestScopeBean");
-    }
-
-    /* 测试自定义作用域 */
-    @Test
-    public void customScopeTest() {
-        for (int i = 0; i < 10; i++) {
-            int finalI = i;
-            new Thread(() -> {
-                if (finalI % 2 == 0) {
-                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
-                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
-                } else {
-                    System.out.println(Thread.currentThread().getName() + "-->" + applicationContext.getBean("customScopeBean"));
-                }
-
-            }).start();
-        }
     }
 
 }

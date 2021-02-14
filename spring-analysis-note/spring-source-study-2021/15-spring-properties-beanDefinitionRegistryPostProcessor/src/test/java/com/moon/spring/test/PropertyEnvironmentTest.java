@@ -1,5 +1,6 @@
 package com.moon.spring.test;
 
+import com.moon.spring.bean.PlaceholderBean;
 import com.moon.spring.bean.PropertyBean;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +23,9 @@ public class PropertyEnvironmentTest {
     public void testPropertiesByXml() {
         PropertyBean bean = context.getBean("propertyBean", PropertyBean.class);
         System.out.println(bean.getUsername() + " :: " + bean.getPassword());
+
+        PlaceholderBean placeholderBean = context.getBean("placeholderBean", PlaceholderBean.class);
+        System.out.println(placeholderBean.getName() + " :: " + placeholderBean.getPassword());
     }
 
 }

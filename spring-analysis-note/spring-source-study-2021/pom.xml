@@ -37,6 +37,7 @@
         <module>15-spring-properties-beanDefinitionRegistryPostProcessor</module>
         <module>16-spring-beanclass-placeholder</module>
         <module>17-spring-factorybean</module>
+        <module>18-spring-bean-scope</module>
     </modules>
 
     <!-- 版本号管理 -->

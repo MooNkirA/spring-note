@@ -62,8 +62,21 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
+	/*
+	 * AnnotationConfigApplicationContext(Class<?>... annotatedClasses)
+	 * AnnotationConfigApplicationContext(String... basePackages)
+	 * 	以上两个构造函数，创建容器的第一步会调用此无参构造方法
+	 */
 	public AnnotationConfigApplicationContext() {
+		// 创建读取注解的BeanDefinition读取器
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		/*
+		 * 创建扫描器，用于扫描包或类，封装成BeanDefinition对象
+		 * 		spring默认的扫描器其实不是这个scanner对象
+		 * 		而是在后面自己又重新new了一个ClassPathBeanDefinitionScanner
+		 * 		spring在执行工程后置处理器ConfigurationClassPostProcessor时，去扫描包时会new一个ClassPathBeanDefinitionScanner
+		 * 	这个scanner是为了可以手动调用AnnotationConfigApplicationContext对象的scan方法
+		 */
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -84,7 +97,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+		// 子类的构造方法执行时，第一步会默认调父类的无参构造方法，即public GenericApplicationContext()
+		// 调用无参构造方法，用来注册与初始化框架的本身一些核心类，主要完成一些解析器与扫描器的注册
 		this();
+		// 将传入的类字节码对象（配置类）注册到BeanDefinition中
 		register(componentClasses);
 		refresh();
 	}
@@ -97,6 +113,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 */
 	public AnnotationConfigApplicationContext(String... basePackages) {
 		this();
+		// 如果入参为基础包，则进行包扫描的操作
 		scan(basePackages);
 		refresh();
 	}

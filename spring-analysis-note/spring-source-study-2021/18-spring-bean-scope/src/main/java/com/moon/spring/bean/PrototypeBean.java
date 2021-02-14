@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2020-5-31 18:29
+ * @date 2021-2-13 11:31
  * @description
  */
 @Component
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class PrototypeBean {
 
     public PrototypeBean() {
+        System.out.println("PrototypeBean类的无参构造函数执行了....");
     }
 
 }

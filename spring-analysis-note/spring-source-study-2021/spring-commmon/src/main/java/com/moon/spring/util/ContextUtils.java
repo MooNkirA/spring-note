@@ -22,6 +22,10 @@ public class ContextUtils {
         return new AnnotationConfigApplicationContext(basePackages);
     }
 
+    public static AnnotationConfigApplicationContext getAnnotationContext(Class<?>... componentClasses) {
+        return new AnnotationConfigApplicationContext(componentClasses);
+    }
+
     public static ClassPathXmlApplicationContext getXmlContext(String configLocation) {
         return new ClassPathXmlApplicationContext(configLocation);
     }
