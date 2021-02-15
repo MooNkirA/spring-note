@@ -24,6 +24,7 @@ import java.util.Properties;
  * @date 2020-8-29 21:33
  * @description
  */
+/* 注：实现ImportBeanDefinitionRegistrar接口的类，必须配合@Import注解导入的方式，接口的方法才会被spring所调用 */
 public class CustomImportDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
     // 定义ASPECTJ的表达式变量，注：这里不能通过@Value注解来赋值

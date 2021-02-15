@@ -118,11 +118,17 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 		// 获取spring中所有jar包里面的 "META-INF/spring.handlers"文件（该文件是一个namespaceUri对应一个处理类的全类名），并且建立映射关系
 		Map<String, Object> handlerMappings = getHandlerMappings();
 
-		// 根据namespaceUri，如：http://www.springframework.org/schema/p，获取到这个命名空间对应的处理类
+		/*
+		 * 根据namespaceUri，如：http://www.springframework.org/schema/p，获取到这个命名空间对应的处理类
+		 * 注：刚开始时，通过读取spring.handlers文件，此时handlerMappings容器中是标签名称与处理类全类名的映射。
+		 * 如果在下面判断不是NamespaceHandler类型后，就会根据处理类全类名通过反射实例化处理类并存入handlerMappings容器中，
+		 * 下次再解析同一种自定义标签，handlerMappings容器中已经是标签名与处理类（NamespaceHandler）的映射。
+		 */
 		Object handlerOrClassName = handlerMappings.get(namespaceUri);
 		if (handlerOrClassName == null) {
 			return null;
 		}
+		// 已经反射实例化后，直接判断类型后强转并返回
 		else if (handlerOrClassName instanceof NamespaceHandler) {
 			return (NamespaceHandler) handlerOrClassName;
 		}

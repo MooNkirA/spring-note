@@ -310,13 +310,13 @@ class ConfigurationClassParser {
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
-				// 这里又去递归，扫描到@Component生成beanDefinition后，又递归去校验类上面是否有特殊注解
+				// 扫描到@Component生成beanDefinition后，又递归去校验类上面是否有特殊注解
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
 						bdCand = holder.getBeanDefinition();
 					}
-					// 判断是否是候选的BeanDefinition，如果是又parse
+					// 判断是否是候选的BeanDefinition，如果是则又递归调用parse方法
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
@@ -325,7 +325,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
-		// 解析@Import注解，其注解的作用是引入一个类，getImports(sourceClass) 获取类上面的@Import注解并封装成SourceClass
+		// 解析@Import注解，其注解的作用是引入一个（或多个）类，getImports(sourceClass) 获取类上面的@Import注解导入的类并封装成SourceClass的set集合
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -344,7 +344,7 @@ class ConfigurationClassParser {
 
 		// 处理@Bean注解，重点
 		// Process individual @Bean methods
-		// 收集有@bean 注解的方法
+		// 收集有@Bean 注解的方法
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			// 加入到ConfigurationClass中
@@ -584,12 +584,16 @@ class ConfigurationClassParser {
 			throws IOException {
 
 		if (visited.add(sourceClass)) {
+			// 获取当前类所有注解
 			for (SourceClass annotation : sourceClass.getAnnotations()) {
 				String annName = annotation.getMetadata().getClassName();
+				// 判断如果当前是@Import注解，则跳过；不是则递归再调用collectImports方法
 				if (!annName.equals(Import.class.getName())) {
+					// 递归调用
 					collectImports(annotation, imports, visited);
 				}
 			}
+			// 最后将@Import注解的value属性配置的多个类又包装成SourceClass对象，增加到Set<SourceClass> imports 集合容器中
 			imports.addAll(sourceClass.getAnnotationAttributes(Import.class.getName(), "value"));
 		}
 	}
@@ -598,7 +602,7 @@ class ConfigurationClassParser {
 			Collection<SourceClass> importCandidates, Predicate<String> exclusionFilter,
 			boolean checkForCircularImports) {
 
-		// 如果没有@Import注解直接返回，不处理
+		// 如果收集@Import注解导入的类set集合为空，则不处理直接返回
 		if (importCandidates.isEmpty()) {
 			return;
 		}
@@ -653,7 +657,7 @@ class ConfigurationClassParser {
 						// 如果当前的类既不是ImportSelector也不是ImportBeanDefinitionRegistar就进行@Configuration的解析处理
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
-						// 如果都不是，则走这里
+						// 如果都不是，则调用@Configuration的处理方法
 						processConfigurationClass(candidate.asConfigClass(configClass), exclusionFilter);
 					}
 				}

@@ -25,6 +25,7 @@ import java.util.Set;
  * @date 2020-8-29 14:06
  * @description
  */
+/* 注：实现ImportSelector接口的类，必须配合@Import注解导入的方式，接口的方法才会被spring所调用 */
 public class CustomImportSelector implements ImportSelector {
 
     // 定义ASPECTJ的表达式变量，注：这里不能通过@Value注解来赋值
