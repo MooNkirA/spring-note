@@ -1,6 +1,9 @@
 package com.moon.spring.aware;
 
 import org.springframework.context.annotation.ImportAware;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
@@ -24,7 +27,16 @@ public class CustomImportAware implements ImportAware {
     @Override
     public void setImportMetadata(AnnotationMetadata importMetadata) {
         System.out.println("CustomImportAware.setImportMetadata()方法执行了....");
-        System.out.println(importMetadata);
+
+        /* 获取使用@Import注解导入的类的所有注解元信息 */
+        MergedAnnotations annotations = importMetadata.getAnnotations();
+        if (importMetadata.hasAnnotation(PropertySource.class.getName())) {
+            MergedAnnotation<PropertySource> propertySource = annotations.get(PropertySource.class);
+            String[] values = propertySource.getStringArray("value");
+            for (String s : values) {
+                System.out.println("SpringConfiguration类上的@PropertySource注解的value值是：" + s);
+            }
+        }
     }
 
 }

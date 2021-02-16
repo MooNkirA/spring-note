@@ -56,7 +56,8 @@ public class CustomImportSelector implements ImportSelector {
      * 需求：
      * 导入的过滤规则是FilterType的ASPECTJ的类型
      *
-     * @param importingClassMetadata
+     * @param importingClassMetadata 使用@Import注解的类上所有的注解信息，
+     *                               此示例即SpringConfiguration类上所有注解信息
      * @return
      */
     @Override

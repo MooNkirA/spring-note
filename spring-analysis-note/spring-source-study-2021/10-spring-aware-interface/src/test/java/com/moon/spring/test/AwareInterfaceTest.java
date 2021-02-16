@@ -86,6 +86,8 @@ public class AwareInterfaceTest {
     public void testResourceLoaderAware() {
         CustomResourceLoaderAware customResourceLoaderAware = context.getBean("customResourceLoaderAware", CustomResourceLoaderAware.class);
         System.out.println(customResourceLoaderAware);
+        // 调用获取Metadata元数据的方法
+        customResourceLoaderAware.getMetadata();
     }
 
 

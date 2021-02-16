@@ -47,6 +47,13 @@ public class CustomImportDefinitionRegistrar implements ImportBeanDefinitionRegi
         }
     }
 
+    /**
+     * 此方法无返回值，需要在方法中手动注册bean到注册中心容器中
+     *
+     * @param importingClassMetadata 使用@Import注解的类上所有的注解信息，
+     *                               此示例即SpringConfiguration类上所有注解信息
+     * @param registry               BeanDefinition注册中心
+     */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         // 1. 定义扫描包的名称字符串集合

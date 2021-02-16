@@ -2,6 +2,9 @@ package com.moon.spring.test;
 
 import com.moon.spring.bean.Bird;
 import com.moon.spring.bean.Cat;
+import com.moon.spring.bean.Parent;
+import com.moon.spring.bean.Son;
+import com.moon.spring.bean.Student;
 import com.moon.spring.config.AppConfig;
 import com.moon.spring.util.ContextUtils;
 import org.junit.Test;
@@ -21,10 +24,21 @@ public class ImportTest {
 
     @Test
     public void testImportBasic() {
+        // @Import直接导入的类
         Cat cat = context.getBean(Cat.class);
         Bird bird = context.getBean(Bird.class);
         System.out.println(cat);
         System.out.println(bird);
+
+        // @Import导入ImportSelector接口实现导入的类
+        Parent parent = context.getBean(Parent.class);
+        Son son = context.getBean(Son.class);
+        System.out.println(parent);
+        System.out.println(son);
+
+        // @Import导入ImportBeanDefinitionRegistrar接口实现导入的类
+        Student student = context.getBean(Student.class);
+        System.out.println(student);
     }
 
 }

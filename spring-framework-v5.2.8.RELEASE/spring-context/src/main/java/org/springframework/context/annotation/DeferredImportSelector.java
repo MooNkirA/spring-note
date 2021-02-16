@@ -59,12 +59,14 @@ public interface DeferredImportSelector extends ImportSelector {
 		 * Process the {@link AnnotationMetadata} of the importing @{@link Configuration}
 		 * class using the specified {@link DeferredImportSelector}.
 		 */
+		// 处理流程，收集需要加入到Spring容器实例化的类
 		void process(AnnotationMetadata metadata, DeferredImportSelector selector);
 
 		/**
 		 * Return the {@link Entry entries} of which class(es) should be imported
 		 * for this group.
 		 */
+		// 将process收集到的数据(封装成Group.Entry对象)，返回
 		Iterable<Entry> selectImports();
 
 
