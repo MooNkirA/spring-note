@@ -330,6 +330,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			parser.parse(candidates);
 			parser.validate();
 
+			// 从configurationClasses容器中，获取上面解析完成的类后所包装成的ConfigurationClass对象
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
 			configClasses.removeAll(alreadyParsed);
 
@@ -339,9 +340,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			// 设置beanDefinition的属性值，具体执行 @Import/@ImportSource/@Bean 的逻辑。重要程度【5】
+			// 设置BeanDefinition的属性值，具体执行 @Import/@ImportSource/@Bean 的逻辑。重要程度【5】
 			this.reader.loadBeanDefinitions(configClasses);
-			// 已经解析完成了的类
+			// 将已经解析完成了的类放到一个set集合中
 			alreadyParsed.addAll(configClasses);
 
 			candidates.clear();

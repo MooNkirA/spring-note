@@ -43,6 +43,7 @@
         <module>19-spring-anno-propertysource</module>
         <module>20-spring-anno-componentscan</module>
         <module>21-spring-anno-import</module>
+        <module>22-spring-anno-conditional</module>
     </modules>
 
     <!-- 版本号管理 -->

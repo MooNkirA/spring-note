@@ -2,6 +2,7 @@ package com.moon.spring.test;
 
 import com.moon.spring.bean.Bird;
 import com.moon.spring.bean.Cat;
+import com.moon.spring.bean.Chocolate;
 import com.moon.spring.bean.Parent;
 import com.moon.spring.bean.Son;
 import com.moon.spring.bean.Student;
@@ -39,6 +40,19 @@ public class ImportTest {
         // @Import导入ImportBeanDefinitionRegistrar接口实现导入的类
         Student student = context.getBean(Student.class);
         System.out.println(student);
+    }
+
+    @Test
+    public void testDeferredImportSelectorBasic() {
+        Chocolate bean = context.getBean(Chocolate.class);
+        System.out.println(bean);
+        /*
+         * 调用方法的时序如下
+         * ImportSelectorDemo.selectImports() 方法执行了....
+         * DeferredImportSelectorGroupImpl.process()方法执行了....
+         * DeferredImportSelectorDemo.selectImports()方法执行了....
+         * DeferredImportSelectorGroupImpl.selectImports()方法执行了....
+         */
     }
 
 }

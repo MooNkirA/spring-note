@@ -329,7 +329,7 @@ class ConfigurationClassParser {
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
-		// 解析@ImportResource注解，其注解的作用是引入一个xml配置文件，没什么用
+		// 解析@ImportResource注解，其注解的作用是引入一个xml配置文件，目前的项目都是基于注解开发，所以没什么用
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
@@ -342,9 +342,9 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// 处理@Bean注解，重点
+		/* 处理@Bean注解，重要程度【5】 */
 		// Process individual @Bean methods
-		// 收集有@Bean 注解的方法
+		// 收集有@Bean注解的方法
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			// 加入到ConfigurationClass中
@@ -432,6 +432,7 @@ class ConfigurationClassParser {
 	 */
 	private Set<MethodMetadata> retrieveBeanMethodMetadata(SourceClass sourceClass) {
 		AnnotationMetadata original = sourceClass.getMetadata();
+		// 获取类中所有标识@Bean注解的方法
 		Set<MethodMetadata> beanMethods = original.getAnnotatedMethods(Bean.class.getName());
 		if (beanMethods.size() > 1 && original instanceof StandardAnnotationMetadata) {
 			// Try reading the class file via ASM for deterministic declaration order...
@@ -823,11 +824,14 @@ class ConfigurationClassParser {
 		 * @param importSelector the selector to handle
 		 */
 		public void handle(ConfigurationClass configClass, DeferredImportSelector importSelector) {
+			// 将方法的入参再包装成DeferredImportSelectorHolder对象
 			DeferredImportSelectorHolder holder = new DeferredImportSelectorHolder(configClass, importSelector);
 			if (this.deferredImportSelectors == null) {
 				// 创建DeferredImportSelectorGroup接口的处理类
 				DeferredImportSelectorGroupingHandler handler = new DeferredImportSelectorGroupingHandler();
+				// 注册并调用DeferredImportSelector接口的方法
 				handler.register(holder);
+				// 收集后调用
 				handler.processGroupImports();
 			}
 			else {
@@ -860,10 +864,11 @@ class ConfigurationClassParser {
 		private final Map<AnnotationMetadata, ConfigurationClass> configurationClasses = new HashMap<>();
 
 		public void register(DeferredImportSelectorHolder deferredImport) {
-			// 调用getImportGroup方法，返回实现了Group接口的类
+			// 首先调用getImportGroup方法，返回实现了Group接口的类
 			Class<? extends Group> group = deferredImport.getImportSelector().getImportGroup();
 			// 建立实现了Group接口类和DeferredImportSelectorGrouping的映射关系
 			DeferredImportSelectorGrouping grouping = this.groupings.computeIfAbsent(
+					// 这里如果getImportGroup方法没有返回实现Group接口的类，则后面调用就是父接口ImportSelector的selectImports方法
 					(group != null ? group : deferredImport),
 					key -> new DeferredImportSelectorGrouping(createGroup(group)));
 			grouping.add(deferredImport);
@@ -874,7 +879,7 @@ class ConfigurationClassParser {
 		public void processGroupImports() {
 			for (DeferredImportSelectorGrouping grouping : this.groupings.values()) {
 				Predicate<String> exclusionFilter = grouping.getCandidateFilter();
-				// 这里调用了 group.selectImports()
+				// 这里调用了Group接口的selectImports()方法
 				grouping.getImports().forEach(entry -> {
 					ConfigurationClass configurationClass = this.configurationClasses.get(entry.getMetadata());
 					try {
@@ -896,6 +901,7 @@ class ConfigurationClassParser {
 		}
 
 		private Group createGroup(@Nullable Class<? extends Group> type) {
+			// 判断是否空，空则会默认是DefaultDeferredImportSelectorGroup类
 			Class<? extends Group> effectiveType = (type != null ? type : DefaultDeferredImportSelectorGroup.class);
 			return ParserStrategyUtils.instantiateClass(effectiveType, Group.class,
 					ConfigurationClassParser.this.environment,
@@ -945,6 +951,7 @@ class ConfigurationClassParser {
 		 * @return each import with its associated configuration class
 		 */
 		public Iterable<Group.Entry> getImports() {
+			// 调用了实现了Group接口的process方法
 			for (DeferredImportSelectorHolder deferredImport : this.deferredImports) {
 				this.group.process(deferredImport.getConfigurationClass().getMetadata(),
 						deferredImport.getImportSelector());
