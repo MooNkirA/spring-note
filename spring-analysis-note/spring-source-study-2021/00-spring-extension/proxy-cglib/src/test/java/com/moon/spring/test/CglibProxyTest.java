@@ -18,8 +18,12 @@ public class CglibProxyTest {
     public void testCglibBasic() {
         // 获取代理
         GoodsService goodsService = (GoodsService) CglibBeanFactory.getInstance();
-        //
-        System.out.println(goodsService.fixedValue("MooN"));
+        // 调用相应的方法
+        System.out.println(goodsService.queryGoods("MooN"));
+        System.out.println(goodsService.addGoods("iPhone18"));
+        System.out.println(goodsService.editGoods("战神游戏本"));
+        System.out.println(goodsService.deleteGoods("机械键盘"));
+        System.out.println(goodsService.fixedValue("kirA"));
     }
 
 }

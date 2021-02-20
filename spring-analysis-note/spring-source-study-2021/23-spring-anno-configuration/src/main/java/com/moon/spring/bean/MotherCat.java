@@ -5,19 +5,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 用于测试手动注册到spring容器
+ * 测试素材
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2021-2-11 17:12
+ * @date 2021-2-20 21:49
  * @description
  */
 @Getter
 @Setter
 @ToString
-public class Cat {
+public class MotherCat {
 
-    private String name;
-    private String color;
+    private Cat cat;
 
 }

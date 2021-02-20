@@ -44,6 +44,7 @@ public class CglibBeanFactory {
         // 设置Callback回调数组（在CallbackFilter的accept方法返回值，相应此数组的下标，即会调用相应的Callback）
         Callback[] callbacks = {callback1, callback2, callback3, noop, fixdValueCallback};
         enhancer.setCallbacks(callbacks);
+        // 创建代理
         return enhancer.create();
     }
 

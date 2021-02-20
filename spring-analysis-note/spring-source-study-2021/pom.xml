@@ -44,6 +44,7 @@
         <module>20-spring-anno-componentscan</module>
         <module>21-spring-anno-import</module>
         <module>22-spring-anno-conditional</module>
+        <module>23-spring-anno-configuration</module>
     </modules>
 
     <!-- 版本号管理 -->

@@ -22,6 +22,7 @@ public class CglibCallbackFilter implements CallbackFilter {
     @Override
     public int accept(Method method) {
         String methodName = method.getName();
+        // 获取方法名相应的下标
         int i = methodList.indexOf(methodName);
         return i < 0 ? 4 : i;
     }
