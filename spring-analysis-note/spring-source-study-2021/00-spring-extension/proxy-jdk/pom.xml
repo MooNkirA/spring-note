@@ -3,22 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-source-study-2021</artifactId>
+        <artifactId>00-spring-extension</artifactId>
         <groupId>com.moon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>00-spring-extension</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>proxy-jdk</artifactId>
+    <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring Framework 应用扩展案例项目</description>
-
-    <modules>
-        <module>custom-scanner</module>
-        <module>jdk8-lambda</module>
-        <module>proxy-cglib</module>
-        <module>proxy-jdk</module>
-    </modules>
+    <description>JDK 动态代理基础使用示例</description>
 
 </project>

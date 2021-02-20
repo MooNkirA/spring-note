@@ -115,8 +115,10 @@ class ConfigurationClassBeanDefinitionReader {
 	 * with the registry based on its contents.
 	 */
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
+		// 创建跟踪条件处理器
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
 		for (ConfigurationClass configClass : configurationModel) {
+			// 循环每个类，判断是否需要处理封装成BeanDefinition或者解析xml
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
@@ -128,6 +130,7 @@ class ConfigurationClassBeanDefinitionReader {
 	private void loadBeanDefinitionsForConfigurationClass(
 			ConfigurationClass configClass, TrackedConditionEvaluator trackedConditionEvaluator) {
 
+		// 调用TrackedConditionEvaluator（跟踪条件处理器对象）方法，判断是否要跳过
 		if (trackedConditionEvaluator.shouldSkip(configClass)) {
 			String beanName = configClass.getBeanName();
 			if (StringUtils.hasLength(beanName) && this.registry.containsBeanDefinition(beanName)) {
@@ -137,14 +140,18 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
+		// 判断是否通过@Import注解导入的类或者是内部类，将封装成BeanDefinition
 		if (configClass.isImported()) {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
+		// 循环当前类中所有@Bean注解的方法，将方法返回封装成BeanDefinition
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
+		// 执行有@ImportResource注解的逻辑，主要是调用了xml配置文件的解析逻辑
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		// 调用ImportBeanDefinitionRegistra接口的方法
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
@@ -152,16 +159,20 @@ class ConfigurationClassBeanDefinitionReader {
 	 * Register the {@link Configuration} class itself as a bean definition.
 	 */
 	private void registerBeanDefinitionForImportedConfigurationClass(ConfigurationClass configClass) {
+		// 获取当前类的注解元信息
 		AnnotationMetadata metadata = configClass.getMetadata();
 		AnnotatedGenericBeanDefinition configBeanDef = new AnnotatedGenericBeanDefinition(metadata);
 
 		ScopeMetadata scopeMetadata = scopeMetadataResolver.resolveScopeMetadata(configBeanDef);
 		configBeanDef.setScope(scopeMetadata.getScopeName());
+		// 生成bean的名称
 		String configBeanName = this.importBeanNameGenerator.generateBeanName(configBeanDef, this.registry);
+		// 填充类的相关注解信息
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(configBeanDef, metadata);
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(configBeanDef, configBeanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+		// 注册ImportBeanDefinitionRegistrar
 		this.registry.registerBeanDefinition(definitionHolder.getBeanName(), definitionHolder.getBeanDefinition());
 		configClass.setBeanName(configBeanName);
 
@@ -181,6 +192,7 @@ class ConfigurationClassBeanDefinitionReader {
 		String methodName = metadata.getMethodName();
 
 		// Do we need to mark the bean as skipped by its condition?
+		// 判断是否需要跳过
 		if (this.conditionEvaluator.shouldSkip(metadata, ConfigurationPhase.REGISTER_BEAN)) {
 			configClass.skippedBeanMethods.add(methodName);
 			return;
@@ -194,6 +206,7 @@ class ConfigurationClassBeanDefinitionReader {
 
 		// Consider name and any aliases
 		List<String> names = new ArrayList<>(Arrays.asList(bean.getStringArray("name")));
+		// 设置beanName，取@Bean注解的name属性值，如无设置，则使用方法名（methodName）
 		String beanName = (!names.isEmpty() ? names.remove(0) : methodName);
 
 		// Register aliases even when overridden
@@ -226,7 +239,9 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 		else {
 			// instance @Bean method
+			// 设置factoryBeanName属性值为类名称
 			beanDef.setFactoryBeanName(configClass.getBeanName());
+			// 设置factoryMethodName属性值为方法名
 			beanDef.setUniqueFactoryMethodName(methodName);
 		}
 
@@ -237,7 +252,7 @@ class ConfigurationClassBeanDefinitionReader {
 		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		beanDef.setAttribute(org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor.
 				SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
-
+		// 填充@Lazy、@Primary、@DependsOn等注解的信息
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(beanDef, metadata);
 
 		Autowire autowire = bean.getEnum("autowire");
@@ -374,6 +389,7 @@ class ConfigurationClassBeanDefinitionReader {
 				}
 			}
 
+			// 调用xml解析方法（与xml方式配置的处理解析一样）
 			// TODO SPR-6310: qualify relative path locations as done in AbstractContextLoader.modifyLocations
 			reader.loadBeanDefinitions(resource);
 		});
