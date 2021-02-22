@@ -1,5 +1,6 @@
 package com.moon.spring.test;
 
+import com.moon.spring.bean.Bird;
 import com.moon.spring.bean.Cat;
 import com.moon.spring.bean.MotherCat;
 import com.moon.spring.util.ContextUtils;
@@ -21,10 +22,13 @@ public class ConfigurationTest {
     @Test
     public void testConfigurationFeature() {
         Cat cat = context.getBean(Cat.class);
-        System.out.println(cat.hashCode());
+        System.out.println("Cat实例hashCode: " + cat.hashCode());
 
         MotherCat motherCat = context.getBean(MotherCat.class);
-        System.out.println(motherCat.getCat().hashCode());
+        System.out.println("MotherCat实例hashCode: " + motherCat.getCat().hashCode());
+
+        Bird bird = context.getBean(Bird.class);
+        System.out.println("Bird实例hashCode: " + bird.hashCode());
     }
 
 

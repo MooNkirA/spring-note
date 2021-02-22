@@ -38,6 +38,7 @@ abstract class BeanAnnotationHelper {
 
 
 	public static boolean isBeanAnnotated(Method method) {
+		// 判断方法上是否有@Bean注解
 		return AnnotatedElementUtils.hasAnnotation(method, Bean.class);
 	}
 

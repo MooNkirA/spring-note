@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>00-spring-extension</artifactId>
+        <groupId>com.moon</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>enhance-autowired</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <!--suppress UnresolvedMavenProperty -->
+    <description>
+        自定义增强型依赖注入注解案例
+        案例需求：
+        1. 使 @Autowired、@Resource 注解可以一次性注入一个接口所有的实现类
+        2. 希望能通过注解的方式，可以一次性调用接口中方法对应的所有实现，
+        如果能实现跟dubbo里面的那个ExtensionLoader 这个里面的功能那就更好了，
+        可以批量找实现类，也可以单个找实现类，可以优先匹配某个实现类。
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>spring-commmon</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
