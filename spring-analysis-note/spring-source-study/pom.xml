@@ -2,14 +2,11 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>spring-analysis-note</artifactId>
-        <groupId>com.moon</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.moon</groupId>
     <artifactId>spring-source-study</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Framework 源码学习案例工程(包括基础使用示例、涉及设计模式示例) - 2019-2020年学习的版本</description>

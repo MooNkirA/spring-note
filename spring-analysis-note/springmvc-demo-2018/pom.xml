@@ -10,6 +10,14 @@
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>2018年Spring MVC使用示例项目</description>
+	
+	<!-- 版本号管理 -->
+    <properties>
+        <!-- JAVA 版本 -->
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <modules>
         <module>day01-springmvc-01-demo</module>
@@ -17,5 +25,22 @@
         <module>day02-springmvc-ssm</module>
         <module>day03-crm-ssm</module>
     </modules>
+	
+	<!-- 构建部分 -->
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
