@@ -43,6 +43,7 @@
         <module>22-spring-anno-conditional</module>
         <module>23-spring-anno-configuration</module>
         <module>24-spring-xml-aop</module>
+        <module>25-spring-anno-aop</module>
     </modules>
 
     <!-- 版本号管理 -->
@@ -70,6 +71,13 @@
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- Spring AOP 切面依赖 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- Spring MVC 依赖 -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
