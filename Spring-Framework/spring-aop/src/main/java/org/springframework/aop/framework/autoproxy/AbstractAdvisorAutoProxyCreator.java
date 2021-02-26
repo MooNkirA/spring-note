@@ -94,7 +94,6 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
 		// 找到候选的切面,其实就是寻找有@Aspectj注解的过程，把工程中所有加上了此注解的类封装成Advisor返回
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
-
 		// 判断候选的切面是否作用在当前beanClass上面，就是一个匹配过程
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
 		extendAdvisors(eligibleAdvisors);

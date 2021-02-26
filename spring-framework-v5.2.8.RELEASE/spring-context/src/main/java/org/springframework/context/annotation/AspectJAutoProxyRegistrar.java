@@ -50,13 +50,10 @@ class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 				AnnotationConfigUtils.attributesFor(importingClassMetadata, EnableAspectJAutoProxy.class);
 		if (enableAspectJAutoProxy != null) {
 			/*
-			 * 设置为true
-			 * 1、目标对象实现了接口 – 使用CGLIB代理机制
-			 * 2、目标对象没有接口(只有实现类) – 使用CGLIB代理机制
-			 *
-			 * 设置为false（默认值）
-			 * 1、目标对象实现了接口 – 使用JDK动态代理机制(代理所有实现了的接口)
-			 * 2、目标对象没有接口(只有实现类) – 使用CGLIB代理机制
+			 * 设置为true时，目标对象无论是否实现了接口，都使用CGLIB代理机制
+			 * 设置为false时（默认值）
+			 * 	1、目标对象实现了接口，则使用JDK动态代理机制(代理所有实现了的接口)；
+			 * 	2、目标对象没有实现接口（只有实现类），则使用CGLIB代理机制
 			 */
 			if (enableAspectJAutoProxy.getBoolean("proxyTargetClass")) {
 				AopConfigUtils.forceAutoProxyCreatorToUseClassProxying(registry);

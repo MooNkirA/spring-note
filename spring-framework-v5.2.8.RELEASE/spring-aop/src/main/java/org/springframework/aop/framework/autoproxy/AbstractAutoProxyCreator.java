@@ -364,6 +364,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			return proxy;
 		}
 
+		// 代码执行到这里，代表当前bean对象不需要生成代理，所以在这里设置了标识
 		this.advisedBeans.put(cacheKey, Boolean.FALSE);
 		return bean;
 	}

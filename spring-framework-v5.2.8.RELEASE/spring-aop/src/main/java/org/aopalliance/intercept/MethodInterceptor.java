@@ -52,6 +52,7 @@ public interface MethodInterceptor extends Interceptor {
 	 * @throws Throwable if the interceptors or the target object
 	 * throws an exception
 	 */
+	/* 切面方法调用时，会调用代理的这个invoke方法 */
 	Object invoke(MethodInvocation invocation) throws Throwable;
 
 }

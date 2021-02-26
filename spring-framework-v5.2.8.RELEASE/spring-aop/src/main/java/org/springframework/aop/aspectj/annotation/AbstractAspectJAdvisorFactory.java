@@ -130,7 +130,9 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected static AspectJAnnotation<?> findAspectJAnnotationOnMethod(Method method) {
+		// ASPECTJ_ANNOTATION_CLASSES容器的值：Pointcut.class, Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class
 		for (Class<?> clazz : ASPECTJ_ANNOTATION_CLASSES) {
+			// 找到ASPECTJ_ANNOTATION_CLASSES容器包含的注解的方法对象，并且把注解里面的信息封装成AspectJAnnotation对象
 			AspectJAnnotation<?> foundAnnotation = findAnnotation(method, (Class<Annotation>) clazz);
 			if (foundAnnotation != null) {
 				return foundAnnotation;
@@ -143,6 +145,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	private static <A extends Annotation> AspectJAnnotation<A> findAnnotation(Method method, Class<A> toLookFor) {
 		A result = AnnotationUtils.findAnnotation(method, toLookFor);
 		if (result != null) {
+			// 把注解里面的信息解析出来，然后包装成AspectJAnnotation对象
 			return new AspectJAnnotation<>(result);
 		}
 		else {
@@ -193,7 +196,13 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 			this.annotation = annotation;
 			this.annotationType = determineAnnotationType(annotation);
 			try {
+				/*
+				 * 解析注解上面的表达式，如
+				 * @Around("pc1()")
+				 * @AfterReturning(pointcut = "execution(public * com.moon.spring.service.*.*(..))")
+				 */
 				this.pointcutExpression = resolveExpression(annotation);
+				// 获取注解上的参数
 				Object argNames = AnnotationUtils.getValue(annotation, "argNames");
 				this.argumentNames = (argNames instanceof String ? (String) argNames : "");
 			}

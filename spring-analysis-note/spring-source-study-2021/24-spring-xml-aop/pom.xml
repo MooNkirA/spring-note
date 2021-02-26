@@ -19,6 +19,10 @@
             <groupId>com.moon</groupId>
             <artifactId>spring-commmon</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
