@@ -78,6 +78,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		// @AfterThrowing methods due to the fact that AspectJAfterAdvice.invoke(MethodInvocation)
 		// invokes proceed() in a `try` block and only invokes the @After advice method
 		// in a corresponding `finally` block.
+		// 先按注解类型排序
 		Comparator<Method> adviceKindComparator = new ConvertingComparator<>(
 				new InstanceComparator<>(
 						Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class),
@@ -85,7 +86,9 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 					AspectJAnnotation<?> ann = AbstractAspectJAdvisorFactory.findAspectJAnnotationOnMethod(method);
 					return (ann != null ? ann.getAnnotation() : null);
 				});
+		// 再按方法名称自然排序
 		Comparator<Method> methodNameComparator = new ConvertingComparator<>(Method::getName);
+		// 两次排序
 		METHOD_COMPARATOR = adviceKindComparator.thenComparing(methodNameComparator);
 	}
 
@@ -206,7 +209,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	}
 
 
-	/* candidateAdviceMethod 候选的Advice方法，候选的增强方法 */
+	/* 参数 candidateAdviceMethod 是候选的Advice方法，候选的增强方法 */
 	@Override
 	@Nullable
 	public Advisor getAdvisor(Method candidateAdviceMethod, MetadataAwareAspectInstanceFactory aspectInstanceFactory,

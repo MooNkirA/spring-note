@@ -129,7 +129,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 		ProxyCreationContext.setCurrentProxiedBeanName(beanName);
 		try {
-			// 看看当前类是否在这些切面的pointCut中，调用类和方法的match匹配的过程
+			// 判断当前类实例是否在这些切面的PointCut中，是调用类和方法的match匹配的过程
 			return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
 		}
 		finally {

@@ -46,15 +46,19 @@ public abstract class AspectJProxyUtils {
 		// Don't add advisors to an empty list; may indicate that proxying is just not required
 		if (!advisors.isEmpty()) {
 			boolean foundAspectJAdvice = false;
+			// 循环所有切面
 			for (Advisor advisor : advisors) {
 				// Be careful not to get the Advice without a guard, as this might eagerly
 				// instantiate a non-singleton AspectJ aspect...
+				// 判断是否为使用@Aspect注解的切面
 				if (isAspectJAdvice(advisor)) {
 					foundAspectJAdvice = true;
 					break;
 				}
 			}
+			// 判断当前的切面集合中是否包含DefaultPointcutAdvisor类型的切面
 			if (foundAspectJAdvice && !advisors.contains(ExposeInvocationInterceptor.ADVISOR)) {
+				// 如果没有，则往集合首位置增加默认切面DefaultPointcutAdvisor
 				advisors.add(0, ExposeInvocationInterceptor.ADVISOR);
 				return true;
 			}
@@ -67,6 +71,10 @@ public abstract class AspectJProxyUtils {
 	 * @param advisor the Advisor to check
 	 */
 	private static boolean isAspectJAdvice(Advisor advisor) {
+		/*
+		 * InstantiationModelAwarePointcutAdvisor 类型就是在前面查找@Aspect注解切面。
+		 * 在调用BeanFactoryAspectJAdvisorsBuilder.buildAspectJAdvisors()方法时创建
+		 */
 		return (advisor instanceof InstantiationModelAwarePointcutAdvisor ||
 				advisor.getAdvice() instanceof AbstractAspectJAdvice ||
 				(advisor instanceof PointcutAdvisor &&

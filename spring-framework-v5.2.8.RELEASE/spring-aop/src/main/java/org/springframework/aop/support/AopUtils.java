@@ -316,12 +316,13 @@ public abstract class AopUtils {
 			}
 		}
 		boolean hasIntroductions = !eligibleAdvisors.isEmpty();
-		// 调用pointCut中的ClassFilter 和methodMatcher的match方法的过程
+		// 循环所有切面Advisor
 		for (Advisor candidate : candidateAdvisors) {
 			if (candidate instanceof IntroductionAdvisor) {
 				// already processed
 				continue;
 			}
+			// 调用pointCut中的ClassFilter和MethodMatcher的match方法进行匹配
 			if (canApply(candidate, clazz, hasIntroductions)) {
 				eligibleAdvisors.add(candidate);
 			}

@@ -143,6 +143,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 
 	@Nullable
 	private static <A extends Annotation> AspectJAnnotation<A> findAnnotation(Method method, Class<A> toLookFor) {
+		// 查找的规则就是找注解的父注解，以递归的方式去寻找，直到找到目标注解为止
 		A result = AnnotationUtils.findAnnotation(method, toLookFor);
 		if (result != null) {
 			// 把注解里面的信息解析出来，然后包装成AspectJAnnotation对象

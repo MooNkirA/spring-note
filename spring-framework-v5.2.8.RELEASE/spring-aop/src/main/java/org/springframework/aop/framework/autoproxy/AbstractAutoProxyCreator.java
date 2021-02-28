@@ -357,7 +357,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// 判断获取到了要切面增强的方法，如果有，则需要针对这些需要增强的方法创建该bean的代理对象
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
-			// 把被代理对象bean实例封装到SingletonTargetSource对象中
+			// 把被代理对象bean实例封装到SingletonTargetSource对象中，然后再创建代理
 			Object proxy = createProxy(
 					bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
 			this.proxyTypes.put(cacheKey, proxy.getClass());

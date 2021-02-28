@@ -109,7 +109,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						if (this.advisorFactory.isAspect(beanType)) {
 							// 将有@Aspect注解的bean的名称加入到 aspectNames 集合中
 							aspectNames.add(beanName);
-							// 将实现封装成AspectMetadata对象
+							// 将实例封装成AspectMetadata对象
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);
 							if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
 								// 创建获取有@Aspect注解类的实例工厂，负责获取有@Aspect注解类的实例

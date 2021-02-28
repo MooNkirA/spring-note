@@ -15,9 +15,10 @@
     <description>Spring Framework 涉及的设计模式基础使用示例工程</description>
 
     <modules>
-        <module>01-design-patterns-template-method</module>
-        <module>02-design-patterns-entrust</module>
-        <module>03-spi-basic</module>
+        <module>design-patterns-template-method</module>
+        <module>design-patterns-entrust</module>
+        <module>spi-basic</module>
+        <module>design-patterns-decorator</module>
     </modules>
 
 </project>
