@@ -69,9 +69,15 @@ public class AspectJAwareAdvisorAutoProxyCreator extends AbstractAdvisorAutoProx
 	protected List<Advisor> sortAdvisors(List<Advisor> advisors) {
 		List<PartiallyComparableAdvisorHolder> partiallyComparableAdvisors = new ArrayList<>(advisors.size());
 		for (Advisor advisor : advisors) {
+			/*
+			 * 针对@Aspect注解的排序
+			 * 将每个Advisor包装成PartiallyComparableAdvisorHolder对象，
+			 * DEFAULT_PRECEDENCE_COMPARATOR 是一个排序比较器
+			 */
 			partiallyComparableAdvisors.add(
 					new PartiallyComparableAdvisorHolder(advisor, DEFAULT_PRECEDENCE_COMPARATOR));
 		}
+		// 排序
 		List<PartiallyComparableAdvisorHolder> sorted = PartialOrder.sort(partiallyComparableAdvisors);
 		if (sorted != null) {
 			List<Advisor> result = new ArrayList<>(advisors.size());
@@ -81,6 +87,7 @@ public class AspectJAwareAdvisorAutoProxyCreator extends AbstractAdvisorAutoProx
 			return result;
 		}
 		else {
+			// 调用父类的排序方法
 			return super.sortAdvisors(advisors);
 		}
 	}

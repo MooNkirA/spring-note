@@ -1,11 +1,12 @@
 package com.moon.spring.aop.aspectj;
 
-import org.aopalliance.intercept.MethodInvocation;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.aop.interceptor.ExposeInvocationInterceptor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +29,48 @@ public class AspectOnAnnotation {
     @Pointcut("execution(public * com.moon.spring.service.*.*(..))")
     public void pc1() {
     }
+
+    // ****************************************************
+    //                 测试切面排序专用 - start
+    // ****************************************************
+    @Before("pc1()")
+    public void Abefore13() {
+        System.out.println("==============AspectOnAnnotation Abefore13=========");
+
+    }
+
+    @Before("pc1()")
+    public void before13() {
+        System.out.println("==============AspectOnAnnotation before13=========");
+
+    }
+
+    @Before("pc1()")
+    public void before132() {
+        System.out.println("==============AspectOnAnnotation before132=========");
+
+    }
+
+    @Before("pc1()")
+    public void before1() {
+        System.out.println("==============AspectOnAnnotation before1=========");
+
+    }
+
+    @Before(value = "pc1()", argNames = "joinPoint")
+    public void before2(JoinPoint joinPoint) {
+        System.out.println("==============AspectOnAnnotation before2=========");
+
+    }
+
+    @After(value = "pc1()")
+    public void AAfter() {
+        System.out.println("==============AspectOnAnnotation AAfter=========");
+
+    }
+    // ****************************************************
+    //                 测试切面排序专用 - end
+    // ****************************************************
 
     /**
      * 环绕通知（增强）

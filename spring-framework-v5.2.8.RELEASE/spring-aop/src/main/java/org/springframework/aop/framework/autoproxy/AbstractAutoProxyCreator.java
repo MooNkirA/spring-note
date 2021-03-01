@@ -462,10 +462,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			AutoProxyUtils.exposeTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName, beanClass);
 		}
 
+		// 创建代理工厂
 		ProxyFactory proxyFactory = new ProxyFactory();
-		// 把AnnotationAwareAspectJAutoProxyCreator中的某些属性copy到proxyFactory中
+		// 把AnnotationAwareAspectJAutoProxyCreator中的某些属性copy到proxyFactory对象中，如proxyTargetClass、exposeProxy等
 		proxyFactory.copyFrom(this);
 
+		// 对代理的方式做处理，例如使用者将proxyTargetClass属性设置为false，代表使用jdk代理，
+		// 但工程内的所有需要被代理的类都没有实现接口，所以此时在这里对proxyTargetClass属性做相应的处理转换
 		if (!proxyFactory.isProxyTargetClass()) {
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);
@@ -474,7 +477,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-		// 组装advisor
+		// Advisor切面对象重新包装，会把自定义的 MethodInterceptor 类型的类包装成 Advisor 切面类并加入到代理工厂中
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		// 把advisor加入到proxyFactory
 		proxyFactory.addAdvisors(advisors);
@@ -528,13 +531,16 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	protected Advisor[] buildAdvisors(@Nullable String beanName, @Nullable Object[] specificInterceptors) {
 		// Handle prototypes correctly...
-		// 设置自定义的MethodInterceptor 和 Advice
+		// 设置自定义的 MethodInterceptor 和 Advice，
+		// 获取AnnotationAwareAspectJAutoProxyCreator对象调用setInterceptorNames方法
 		Advisor[] commonInterceptors = resolveInterceptorNames();
 
 		List<Object> allInterceptors = new ArrayList<>();
 		if (specificInterceptors != null) {
+			// 加入当前实例相应的拦截器
 			allInterceptors.addAll(Arrays.asList(specificInterceptors));
 			if (commonInterceptors.length > 0) {
+				// 设置自定义的公共拦截器
 				if (this.applyCommonInterceptorsFirst) {
 					allInterceptors.addAll(0, Arrays.asList(commonInterceptors));
 				}
@@ -552,6 +558,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		Advisor[] advisors = new Advisor[allInterceptors.size()];
 		for (int i = 0; i < allInterceptors.size(); i++) {
+			// 将所有拦截器都转成Advisor，包括对自定义的Advice进行包装，把adivce包装成Advisor切面对象
 			advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
 		}
 		return advisors;
@@ -565,10 +572,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		BeanFactory bf = this.beanFactory;
 		ConfigurableBeanFactory cbf = (bf instanceof ConfigurableBeanFactory ? (ConfigurableBeanFactory) bf : null);
 		List<Advisor> advisors = new ArrayList<>();
+		// 循环interceptorNames数组，该数组是存放通用拦截器，初始值为空。
 		for (String beanName : this.interceptorNames) {
 			if (cbf == null || !cbf.isCurrentlyInCreation(beanName)) {
 				Assert.state(bf != null, "BeanFactory required for resolving interceptor names");
+				// 将自定义拦截器实例化，实例的类型是MethodInterceptor
 				Object next = bf.getBean(beanName);
+				// 将自定义拦截器MethodInterceptor包装成Advisor（具体是DefaultPointcutAdvisor）
 				advisors.add(this.advisorAdapterRegistry.wrap(next));
 			}
 		}

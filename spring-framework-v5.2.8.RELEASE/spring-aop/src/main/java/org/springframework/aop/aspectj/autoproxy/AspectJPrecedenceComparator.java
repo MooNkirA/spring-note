@@ -77,10 +77,12 @@ class AspectJPrecedenceComparator implements Comparator<Advisor> {
 		this.advisorComparator = advisorComparator;
 	}
 
-
+	/* 具体排序的逻辑 */
 	@Override
 	public int compare(Advisor o1, Advisor o2) {
+		// 针对@Order注解与实现Ordered接口的排序，如果是@Aspect注解类的切面，则会返回0
 		int advisorPrecedence = this.advisorComparator.compare(o1, o2);
+		// 针对@Aspect注解类的切面排序，当前两个比较的Advisor是在同一个@Aspect注解标识的类中，进入此if代码块
 		if (advisorPrecedence == SAME_PRECEDENCE && declaredInSameAspect(o1, o2)) {
 			advisorPrecedence = comparePrecedenceWithinAspect(o1, o2);
 		}
@@ -90,6 +92,7 @@ class AspectJPrecedenceComparator implements Comparator<Advisor> {
 	private int comparePrecedenceWithinAspect(Advisor advisor1, Advisor advisor2) {
 		boolean oneOrOtherIsAfterAdvice =
 				(AspectJAopUtils.isAfterAdvice(advisor1) || AspectJAopUtils.isAfterAdvice(advisor2));
+		// 如果是同一个@Aspect注解标识的类的两个切面，getAspectDeclarationOrder这个方法永远返回是0（Spring 5.2.7以后的版本）
 		int adviceDeclarationOrderDelta = getAspectDeclarationOrder(advisor1) - getAspectDeclarationOrder(advisor2);
 
 		if (oneOrOtherIsAfterAdvice) {
@@ -100,6 +103,7 @@ class AspectJPrecedenceComparator implements Comparator<Advisor> {
 				return LOWER_PRECEDENCE;
 			}
 			else if (adviceDeclarationOrderDelta == 0) {
+				// adviceDeclarationOrderDelta为0的时候，返回也是0，即不会排序
 				return SAME_PRECEDENCE;
 			}
 			else {
