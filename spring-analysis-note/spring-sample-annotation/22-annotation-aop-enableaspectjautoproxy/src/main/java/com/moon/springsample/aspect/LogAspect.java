@@ -27,9 +27,9 @@ public class LogAspect {
 
     /*
      * 定义切入点表达式
-     *   表达式意思是：匹配 任意返回值 com.moon.springsample.sevice.impl包下 任意类 任意方法 任意类型参数列表
+     *   表达式意思是：匹配 任意返回值 com.moon.springsample.service.impl包下 任意类 任意方法 任意类型参数列表
      */
-    // @Pointcut("execution(* com.moon.springsample.sevice.impl.*.*(..))")
+    // @Pointcut("execution(* com.moon.springsample.service.impl.*.*(..))")
     /*
      * 修改为切入点只包含某些方法，其他方法在调用该切入点方法时，也想被实现此增强的逻辑
      *  此时就需要通过暴露代理对象，再使用代理对象调用相应的切入点方法即可
