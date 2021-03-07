@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2021-2-28 16:59
  * @description
  */
-@Component
+// @Component
 public class GlobleAdvicePostProcessor implements BeanPostProcessor, PriorityOrdered {
 
     @Override

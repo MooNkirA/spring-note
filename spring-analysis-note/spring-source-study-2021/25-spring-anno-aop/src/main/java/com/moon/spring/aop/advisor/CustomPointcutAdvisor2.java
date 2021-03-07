@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @date 2021-2-28 09:37
  * @description
  */
-@Component
+// @Component
 public class CustomPointcutAdvisor2 implements PointcutAdvisor, Ordered {
 
     @Override

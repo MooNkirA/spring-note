@@ -44,6 +44,7 @@
         <module>23-spring-anno-configuration</module>
         <module>24-spring-xml-aop</module>
         <module>25-spring-anno-aop</module>
+        <module>26-spring-aop-targetsource</module>
     </modules>
 
     <!-- 版本号管理 -->

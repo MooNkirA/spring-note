@@ -44,9 +44,12 @@ public class AspectJAfterAdvice extends AbstractAspectJAdvice
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		try {
+			// 先回调ReflectiveMethodInvocation的proceed方法，
+			// 即如果执行链数组已经执行完，则会调用被代理的方法，最后再执行finally代码块中的方法
 			return mi.proceed();
 		}
 		finally {
+			// 最后再反射调用@After注解的通知方法
 			invokeAdviceMethod(getJoinPointMatch(), null, null);
 		}
 	}

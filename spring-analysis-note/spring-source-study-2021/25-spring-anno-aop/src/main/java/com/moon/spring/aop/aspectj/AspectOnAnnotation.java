@@ -3,6 +3,8 @@ package com.moon.spring.aop.aspectj;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -33,40 +35,34 @@ public class AspectOnAnnotation {
     // ****************************************************
     //                 测试切面排序专用 - start
     // ****************************************************
-    @Before("pc1()")
+    // @Before("pc1()")
     public void Abefore13() {
         System.out.println("==============AspectOnAnnotation Abefore13=========");
-
     }
 
-    @Before("pc1()")
+    // @Before("pc1()")
     public void before13() {
         System.out.println("==============AspectOnAnnotation before13=========");
-
     }
 
-    @Before("pc1()")
+    // @Before("pc1()")
     public void before132() {
         System.out.println("==============AspectOnAnnotation before132=========");
-
     }
 
     @Before("pc1()")
     public void before1() {
         System.out.println("==============AspectOnAnnotation before1=========");
-
     }
 
-    @Before(value = "pc1()", argNames = "joinPoint")
+    // @Before(value = "pc1()", argNames = "joinPoint")
     public void before2(JoinPoint joinPoint) {
         System.out.println("==============AspectOnAnnotation before2=========");
-
     }
 
     @After(value = "pc1()")
     public void AAfter() {
         System.out.println("==============AspectOnAnnotation AAfter=========");
-
     }
     // ****************************************************
     //                 测试切面排序专用 - end
@@ -85,6 +81,22 @@ public class AspectOnAnnotation {
         Object result = joinPoint.proceed();
         System.out.println("==============AspectOnAnnotation类的 @Around环绕通知的后置通知=========");
         return result;
+    }
+
+    /**
+     * 返回值后置通知
+     *
+     * @param joinPoint
+     * @param retVal
+     */
+    @AfterReturning(value = "pc1()", returning = "retVal")
+    public void afterReturning(JoinPoint joinPoint, Object retVal) {
+        System.out.println("==============AspectOnAnnotation类的 @AfterReturning后置通知，获取返回值 :: " + retVal);
+    }
+
+    @AfterThrowing(value = "pc1()", throwing = "e")
+    public void afterThrowing(JoinPoint joinPoint, Throwable e) {
+        System.out.println("==============AspectOnAnnotation类的 @AfterReturning异常通知，获取异常 :: " + e);
     }
 
 }

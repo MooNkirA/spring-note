@@ -67,7 +67,7 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
 				// 如果切面的pointCut和被代理对象是匹配的，说明是切面要拦截的对象。先进行类匹配 pointcutAdvisor.getPointcut().getClassFilter().matches
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
-					// 先类匹配后，然后再方法匹配
+					// 先类匹配后，然后再方法匹配，通过MethodMatcher的matches方法匹配
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					boolean match;
 					if (mm instanceof IntroductionAwareMethodMatcher) {
@@ -83,6 +83,8 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 					if (match) {
 						// 获取到切面advisor中的advice，并且包装成MethodInterceptor类型的对象
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
+						// mm.isRuntime() 用于判断是否自定义的MethodMatcher，如果是生成动态的Interceptor，
+						// 即包装成InterceptorAndDynamicMethodMatcher类型，匹配的粒度大一点
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method
 							// isn't a problem as we normally cache created chains.

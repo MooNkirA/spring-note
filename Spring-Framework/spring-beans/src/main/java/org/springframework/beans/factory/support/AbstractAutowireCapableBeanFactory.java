@@ -417,9 +417,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object result = existingBean;
 		/*
 		 * 循环容器中所有BeanPostProcessor，着重理解以下几个实现类
-		 *  1、ApplicationContextAwareProcessor  对某个Aware接口方法的调用
+		 *  1、ApplicationContextAwareProcessor  对某些Aware接口方法的调用
 		 *  2、InitDestroyAnnotationBeanPostProcessor  @PostConstruct注解方法的调用
-		 *  3、ImportAwareBeanPostProcessor  对ImportAware类型实例setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
+		 *  3、ImportAwareBeanPostProcessor  对ImportAware接口类型实例的setImportMetadata方法调用。（这个对理解springboot有很大帮助。此时暂时不深入了解）
+		 * 	4、BeanValidationPostProcessor 对象创建完成，在bean对象属性赋值后进行校验
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
@@ -439,6 +440,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		/*
 		 * 这里又是BeanPostProcessor接口的运用，这里主要理解以下实现类
 		 * 	1、AbstractAutoProxyCreator 主要处理AOP代理生成的逻辑
+		 *  2、ApplicationListenerDetector 主要将所有实现ApplicationListener接口的事件监听类加入到监听集合中
 		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
@@ -495,12 +497,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			/*
-			 * TargetSource接口的运用，可以在用改一个类实现该接口，然后在里面定义实例化对象的方式，然后返回
+			 * TargetSource接口的运用，可以创建一个类实现该接口，然后在里面定义实例化对象的方式，然后返回
 			 * 也就是说不需要spring帮助实例化对象(即自己实现)
 			 *
-			 * 这里可以直接返回实例本身
-			 *
-			 * 这个代码不用深入研究，实际开发过程中用不到
+			 * 这里可以直接返回实例本身（这个代码不用深入研究，实际开发过程中用不到）
 			 */
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
@@ -556,9 +556,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 创建实例，重要程度【5】，但还没有涉及DI（依赖注入）
+			// 缓存中没有，则创建实例，但还没有涉及DI（依赖注入）。重要程度【5】
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
+		// 从包装对象中获取实例对象
 		final Object bean = instanceWrapper.getWrappedInstance();
 		Class<?> beanType = instanceWrapper.getWrappedClass();
 		if (beanType != NullBean.class) {
@@ -581,15 +582,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 							"Post-processing of merged bean definition failed", ex);
 				}
-				mbd.postProcessed = true;
+				mbd.postProcessed = true; // 更新标识，表示当前创建中的实例已经使用MergedBeanDefinitionPostProcessor
 			}
 		}
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
-		/* 判断单例的bean是否需要提前暴露 */
+		/*
+		 * 判断单例的bean是否需要提前暴露
+		 * 	判断依据是：当前实例化的bean是否为单例、是否允许循环依赖、是否正在创建中
+		 *
+		 * isSingletonCurrentlyInCreation(beanName) 方法的作用是：
+		 * 	判断singletonsCurrentlyInCreation容器中，是否存在当前bean的名称，从而判断当前bean是否正在创建中
+		 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
-				// 判断singletonsCurrentlyInCreation容器中，是否存在当前bean的名称，从而判断当前bean是否正在创建中
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
@@ -622,6 +628,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		/* TODO: 暂时不研究，是生成多个切面时会进入此代码块 */
 		if (earlySingletonExposure) {
 			Object earlySingletonReference = getSingleton(beanName, false);
 			if (earlySingletonReference != null) {
@@ -651,7 +658,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Register bean as disposable.
 		try {
-			// 注册bean销毁时的处理类DisposableBeanAdapter
+			// 注册bean销毁时的处理类DisposableBeanAdapter，注册此类是为了等tomcat这些应用服务器进行调用
 			registerDisposableBeanIfNecessary(beanName, bean, mbd);
 		}
 		catch (BeanDefinitionValidationException ex) {
@@ -967,6 +974,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
+					/*
+					 * 此处调用BeanPostProcessor其实是直接将bean返回。
+					 * 为什么要设计成使用BeanPostProcessor接口的方式调用再返回对象，原因是为什么以后的扩展。
+					 * 如果需要对象这些bean实例做增强的处理操作，只需要实现SmartInstantiationAwareBeanPostProcessor接口，
+					 * 在getEarlyBeanReference方法增加一些增加处理即可，所以这种设计就是为了灵活的扩展
+					 */
 					exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);
 				}
 			}
@@ -1165,11 +1178,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
-		// 判断是否有FactoryMethodName属性
+		/*
+		 * 判断是否有FactoryMethodName属性并进行处理，有以下两种情况：
+		 * 	1. 在类上方法上标识了 @Bean 注解
+		 *  2. 使用xml配置，在bean标签里配置属性factory-method
+		 */
 		if (mbd.getFactoryMethodName() != null) {
+			// 根据配置的factory-method生成实例并返回
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
+		// 没有配置 factory-method 或 @Bean 注解
 		// Shortcut when re-creating the same bean...
 		boolean resolved = false;
 		boolean autowireNecessary = false;
@@ -1282,7 +1301,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
 					SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
 					/*
-					 * 此处只有AutowiredAnnotationBeanPostProcessor类会启作用，其他的实现类（不关注此功能的）只需要返回null即可
+					 * 此处只有AutowiredAnnotationBeanPostProcessor类会起作用，其他的实现类（不关注此功能的）只需要返回null即可
 					 * 	这里是spring进行了功能的埋点，日后如果需要进行功能扩展，
 					 * 	只需要实现SmartInstantiationAwareBeanPostProcessor接口，将业务逻辑写在determineCandidateConstructors方法中
 					 */
@@ -1428,7 +1447,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		PropertyDescriptor[] filteredPds = null;
 
-		/* 重点关注此部分代码，重要程度【5】 */
+		/* 依赖注入核心代码，重要程度【5】 */
 		if (hasInstAwareBpps) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
@@ -1801,7 +1820,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			// 对类中某些特殊方法的调用，比如@PostConstruct，Aware接口。重要程度【5】
+			/*
+			 * 对类中某些特殊方法的调用，比如@PostConstruct，Aware接口。重要程度【5】（此处又是BeanPostProcessor接口的运用）
+			 * ApplicationContextAwareProcessor 对Aware接口的调用如：
+			 * 	EnvironmentAware EmbeddedValueResolverAware  ResourceLoaderAware ApplicationEventPublisherAware MessageSourceAware  ApplicationContextAware
+			 * ImportAwareBeanPostProcessor 对ImportAware的支持
+			 * InitDestroyAnnotationBeanPostProcessor  对@PostConstruct注解方法的调用
+			 */
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 

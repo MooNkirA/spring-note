@@ -159,10 +159,15 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	@Nullable
 	public Object proceed() throws Throwable {
 		// We start with an index of -1 and increment early.
+		/*
+		 * currentInterceptorIndex此索引初始值为-1，如果索引等于拦截器集合-1时，则终止链式调用
+		 * 如果执行链中的advice全部执行完，则反射调用被代理方法
+		 */
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
 			return invokeJoinpoint();
 		}
 
+		// 索引+1后，获取拦截器链上相应位置的拦截器对象
 		Object interceptorOrInterceptionAdvice =
 				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
 		if (interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher) {
@@ -171,18 +176,22 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			InterceptorAndDynamicMethodMatcher dm =
 					(InterceptorAndDynamicMethodMatcher) interceptorOrInterceptionAdvice;
 			Class<?> targetClass = (this.targetClass != null ? this.targetClass : this.method.getDeclaringClass());
+			// 调用InterceptorAndDynamicMethodMatcher的matches方法，判断方法是否匹配
 			if (dm.methodMatcher.matches(this.method, targetClass, this.arguments)) {
+				// 若匹配，则调用拦截器的invoke方法，并且传入当前类实例本身
 				return dm.interceptor.invoke(this);
 			}
 			else {
 				// Dynamic matching failed.
 				// Skip this interceptor and invoke the next in the chain.
+				// InterceptorAndDynamicMethodMatcher 的 matches 为 false，递归调用执行链下一个拦截器
 				return proceed();
 			}
 		}
 		else {
 			// It's an interceptor, so we just invoke it: The pointcut will have
 			// been evaluated statically before this object was constructed.
+			// 转成MethodInterceptor类型后，调用拦截器的invoke方法，并且传入当前类实例本身
 			return ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(this);
 		}
 	}
