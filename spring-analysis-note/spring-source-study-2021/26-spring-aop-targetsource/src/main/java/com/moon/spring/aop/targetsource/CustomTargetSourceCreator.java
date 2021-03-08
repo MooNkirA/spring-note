@@ -1,6 +1,5 @@
 package com.moon.spring.aop.targetsource;
 
-import com.moon.spring.service.LogService;
 import com.moon.spring.service.impl.LogServiceImpl;
 import org.springframework.aop.framework.autoproxy.target.AbstractBeanFactoryBasedTargetSourceCreator;
 import org.springframework.aop.target.AbstractBeanFactoryBasedTargetSource;
@@ -30,5 +29,20 @@ public class CustomTargetSourceCreator extends AbstractBeanFactoryBasedTargetSou
         }
         return null;
     }
+
 }
+
+/*public class CustomTargetSourceCreator implements TargetSourceCreator {
+
+    @Override
+    public TargetSource getTargetSource(Class<?> beanClass, String beanName) {
+        // 判断是否为需要代理的类型
+        if (beanClass.isAssignableFrom(LogServiceImpl.class)) {
+            // 创建自定义的TargetSource
+            return new CustomTargetSource();
+        }
+        return null;
+    }
+
+}*/
 

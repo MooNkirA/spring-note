@@ -23,6 +23,7 @@ public class CustomTargetSourceTest {
     public void testTargetSourceBasic() {
         LogService logService = context.getBean(LogService.class);
         logService.logErrorMessage("You have an error!");
+        System.out.println(logService);
     }
 
 }

@@ -45,6 +45,7 @@
         <module>24-spring-xml-aop</module>
         <module>25-spring-anno-aop</module>
         <module>26-spring-aop-targetsource</module>
+        <module>27-spring-aop-scopedproxy</module>
     </modules>
 
     <!-- 版本号管理 -->
