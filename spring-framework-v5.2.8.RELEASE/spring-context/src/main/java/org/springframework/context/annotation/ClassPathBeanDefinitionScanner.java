@@ -287,6 +287,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			// 循环并将BeanDefinition对象中其余属性值补全
 			for (BeanDefinition candidate : candidates) {
+				// 解析类上的@Scope注解
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				// 从metadata对象中获取此类的作用范围，是单例还是多例
 				candidate.setScope(scopeMetadata.getScopeName());
@@ -301,7 +302,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 
-					// 判断是否需要生成代理（不需要研究）
+					// 判断是否需要生成代理
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);

@@ -97,6 +97,7 @@ public class ScopedProxyFactoryBean extends ProxyConfig
 		pf.setTargetSource(this.scopedTargetSource);
 
 		Assert.notNull(this.targetBeanName, "Property 'targetBeanName' is required");
+		// 根据bean的名称，获取到bean的类型（Class）。此API比较实用
 		Class<?> beanType = beanFactory.getType(this.targetBeanName);
 		if (beanType == null) {
 			throw new IllegalStateException("Cannot create scoped proxy for bean '" + this.targetBeanName +

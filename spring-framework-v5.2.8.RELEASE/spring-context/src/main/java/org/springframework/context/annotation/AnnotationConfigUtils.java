@@ -277,10 +277,13 @@ public abstract class AnnotationConfigUtils {
 			ScopeMetadata metadata, BeanDefinitionHolder definition, BeanDefinitionRegistry registry) {
 
 		ScopedProxyMode scopedProxyMode = metadata.getScopedProxyMode();
+		// 如果ScopedProxyMode是NO，则直接返回原BeanDefinition
 		if (scopedProxyMode.equals(ScopedProxyMode.NO)) {
 			return definition;
 		}
+		// 判断作用域代理模式是否为TARGET_CLASS
 		boolean proxyTargetClass = scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS);
+		// 生成代理并返回
 		return ScopedProxyCreator.createScopedProxy(definition, registry, proxyTargetClass);
 	}
 
