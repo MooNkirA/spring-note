@@ -3,17 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-sample-annotation</artifactId>
+        <artifactId>spring-source-study-5.2.8</artifactId>
         <groupId>com.moon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>sample-common</artifactId>
-    <name>${project.artifactId}</name>
+    <artifactId>19-spring-anno-propertysource</artifactId>
     <packaging>jar</packaging>
-    <description>
-        Spring sample annotation 注解示例项目的公共资源模块（主要目的只是想减少示例工程重复的文件^_^）
-    </description>
+    <name>${project.artifactId}</name>
+    <description>Spring @PropertySource 注解使用示例</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>spring-commmon</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
