@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.moon</groupId>
+    <artifactId>spring-sample</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>
+        Spring 框架示例项目
+    </description>
+
+    <modules>
+        <!-- 示例公共模块 -->
+        <module>sample-common</module>
+        <!-- Spring 基础使用示例 -->
+        <module>01-spring-factory</module>
+        <module>02-spring-basic</module>
+        <module>03-spring-inject</module>
+        <module>04-spring-annotation</module>
+        <module>05-spring-annotation-no-xml</module>
+        <module>06-spring-annotation-import-propertysource</module>
+        <module>07-spring-junit-xml</module>
+        <module>08-spring-junit-annotation</module>
+        <module>09-spring-proxy</module>
+        <module>10-spring-aop-xml</module>
+        <module>11-spring-aop-annotation</module>
+        <module>12-spring-aop-annotation-noXML</module>
+        <module>13-spring-aop-hibernate</module>
+        <module>14-spring-aop-hibernate-annotation</module>
+        <module>15-spring-jdbcTemplate</module>
+        <module>16-spring-jdbcTemplateOnDao</module>
+        <module>17-spring-jdbcTemplateOnDao2</module>
+        <module>18-spring-tx</module>
+        <module>19-spring-tx-annotation</module>
+        <!-- Spring 高级使用 - 纯注解驱动开发示例 -->
+        <module>20-spring-annotation-quickstart</module>
+        <module>21-annotation-configuration</module>
+        <module>22-annotation-componentscan</module>
+        <module>23-annotation-componentscan-filter</module>
+        <module>24-annotation-bean</module>
+        <module>25-annotation-import</module>
+        <module>26-annotation-import-importselector</module>
+        <module>27-annotation-import-importbeandefinitionregistrar</module>
+        <module>28-annotation-propertysource</module>
+        <module>29-annotation-propertysource-propertysourcefactory</module>
+        <module>30-annotation-dependson</module>
+        <module>31-annotation-lazy</module>
+        <module>32-annotation-conditional</module>
+        <module>33-annotation-profile</module>
+        <module>34-annotation-component-composite-sample</module>
+        <module>35-annotation-autowired</module>
+        <module>36-annotation-value</module>
+        <module>37-annotation-jsr-resource-inject</module>
+        <module>38-annotation-primary</module>
+        <module>39-annotation-lifecycle</module>
+        <module>40-spring-aop-proxy</module>
+        <module>41-annotation-aop-quickstart</module>
+        <module>42-annotation-aop-enableaspectjautoproxy</module>
+        <module>43-annotation-aop-aspect</module>
+        <module>44-annotation-aop-pointcut</module>
+        <module>45-annotation-aop-advicetype-general</module>
+        <module>46-annotation-aop-advicetype-sequence</module>
+        <module>47-annotation-aop-around</module>
+        <module>48-annotation-aop-declareparents</module>
+        <module>49-annotation-aop-enableloadtimeweaving</module>
+        <module>50-spring-tx-jdbctemplate-quickstart</module>
+        <module>51-spring-tx-custom-jdbctemplate</module>
+        <module>52-spring-tx-custom-jdbctemplate-test</module>
+        <module>53-annotation-tx-transaction-quickstart</module>
+    </modules>
+
+    <!-- 版本号管理 -->
+    <properties>
+        <spring.version>5.1.6.RELEASE</spring.version>
+        <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
+        <junit.version>4.12</junit.version>
+        <druid.version>1.1.9</druid.version>
+        <snakeyaml.version>1.23</snakeyaml.version>
+        <aspectj.version>1.8.13</aspectj.version>
+        <log4j.version>1.2.16</log4j.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <hibernate.version>5.0.12.Final</hibernate.version>
+        <c3p0.version>0.9.5.2</c3p0.version>
+        <!-- 项目模块版本号 -->
+        <project.module.version>1.0-SNAPSHOT</project.module.version>
+        <!-- JAVA 版本 -->
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <!-- 版本控制 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- spring核心依赖 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- mysql驱动 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <!-- 阿里druid数据源 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- spring框架测试包 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- junit测试框架 -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- yaml文件解析器 -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+            <!-- AspectJ 依赖 -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <!-- hibernate核心依赖 -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <!-- hibernate-c3p0数据源整合包依赖 -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-c3p0</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <!-- c3p0数据源 -->
+            <dependency>
+                <groupId>com.mchange</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>${c3p0.version}</version>
+            </dependency>
+
+            <!-- 日志框架 -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.22</version>
+            </dependency>
+
+            <!-- 项目模块版本控制 -->
+            <dependency>
+                <groupId>com.moon</groupId>
+                <artifactId>sample-common</artifactId>
+                <version>${project.module.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 构建部分 -->
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
