@@ -71,6 +71,7 @@
         <module>51-spring-tx-custom-jdbctemplate</module>
         <module>52-spring-tx-custom-jdbctemplate-test</module>
         <module>53-annotation-tx-transaction-quickstart</module>
+        <module>54-spring-beanfactory-applicationcontext</module>
     </modules>
 
     <!-- 版本号管理 -->
