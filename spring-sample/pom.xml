@@ -72,11 +72,14 @@
         <module>52-spring-tx-custom-jdbctemplate-test</module>
         <module>53-annotation-tx-transaction-quickstart</module>
         <module>54-spring-beanfactory-applicationcontext</module>
+        <module>55-spring-beanpostprocessor</module>
     </modules>
 
     <!-- 版本号管理 -->
     <properties>
         <spring.version>5.1.6.RELEASE</spring.version>
+        <spring-boot.version>2.5.13</spring-boot.version>
+
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <junit.version>4.12</junit.version>
         <druid.version>1.1.9</druid.version>

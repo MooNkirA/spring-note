@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
  * @date 2020-9-2 22:11
  * @description
  */
-@Service
+// @Service
 public class UserService implements InitializingBean, DisposableBean {
 
     public UserService() {
-        System.out.println("UserService构造方法执行了");
+        System.out.println("UserService 构造方法执行了");
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("UserService实现InitializingBean接口实现初始化的afterPropertiesSet()方法执行了");
+        System.out.println("UserService 实现 InitializingBean 接口实现初始化的 afterPropertiesSet() 方法执行了");
     }
 
     @Override
     public void destroy() throws Exception {
-        System.out.println("UserService实现DisposableBean接口实现销毁的destroy()方法执行了");
+        System.out.println("UserService 实现 DisposableBean 接口实现销毁的 destroy() 方法执行了");
     }
 }

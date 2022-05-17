@@ -1,10 +1,17 @@
 package com.moon.springsample.test;
 
+import com.moon.springsample.SpringSampleApp;
+import com.moon.springsample.bean.Cat;
 import com.moon.springsample.config.SpringConfiguration;
+import com.moon.springsample.config.WebConfig;
 import com.moon.springsample.event.MyEventPublisher;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 
@@ -19,7 +26,46 @@ import java.util.Locale;
  * @date 2022-05-14 17:34
  * @description
  */
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationContextTest {
+
+    /* ApplicationContext 实现类 ClassPathXmlApplicationContext 测试 */
+    @Test
+    public void testClassPathXmlApplicationContext() {
+        // 较为经典的容器, 基于 classpath 下 xml 格式的配置文件来创建容器
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        System.out.println(context.getBean(Cat.class));
+    }
+
+    /* ApplicationContext 实现类 FileSystemXmlApplicationContext 测试 */
+    @Test
+    public void testFileSystemXmlApplicationContext() {
+        // 基于磁盘路径(绝对或者相对路径)下 xml 格式的配置文件来创建容器
+        FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext("src\\main\\resources\\applicationContext.xml");
+        System.out.println(context.getBean(Cat.class));
+    }
+
+    /* ApplicationContext 实现类 AnnotationConfigApplicationContext 测试 */
+    @Test
+    public void testAnnotationConfigApplicationContext() {
+        // 较为经典的容器, 基于 java 配置类来创建容器
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+        for (String name : context.getBeanDefinitionNames()) {
+            System.out.println("BeanDefinitionName: " + name);
+        }
+    }
+
+    // TODO: 目前启动报错，Unable to start web server
+    /* ApplicationContext 实现类 AnnotationConfigServletWebServerApplicationContext 测试 */
+    @Test
+    public void testAnnotationConfigServletWebServerApplicationContext() {
+        // 较为经典的容器, 基于 java 配置类来创建, 用于 web 环境，在 Spring Boot 中应用
+        AnnotationConfigServletWebServerApplicationContext context =
+                new AnnotationConfigServletWebServerApplicationContext(WebConfig.class);
+        for (String name : context.getBeanDefinitionNames()) {
+            System.out.println("BeanDefinitionName: " + name);
+        }
+    }
 
     /* ApplicationContext 国际化功能测试 */
     @Test
@@ -74,6 +120,5 @@ public class ApplicationContextTest {
         MyEventPublisher myEventPublisher = context.getBean(MyEventPublisher.class);
         myEventPublisher.doEventPublish("1", "这是一个事件消息");
     }
-
 
 }

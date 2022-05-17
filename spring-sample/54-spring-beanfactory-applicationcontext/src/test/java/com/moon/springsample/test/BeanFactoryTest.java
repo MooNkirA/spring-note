@@ -1,9 +1,7 @@
 package com.moon.springsample.test;
 
-import com.moon.springsample.bean.Cat;
 import com.moon.springsample.config.SpringConfiguration;
 import org.junit.Test;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -26,7 +24,10 @@ public class BeanFactoryTest {
         // 获取 BeanFactory 实现 DefaultListableBeanFactory
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         // BeanFactory 刚创建后，里面是没有任务实例对象
-        printBeanDefinitionNames(beanFactory);
+        for (String bdName : beanFactory.getBeanDefinitionNames()) {
+            System.out.println(bdName);
+        }
+        System.out.println("======================= 分隔线 =====================");
 
         // 创建 bean 的定义对象 BeanDefinition（用于封装待创建的类实例的 class, scope, 初始化, 销毁等信息）
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
@@ -35,8 +36,15 @@ public class BeanFactoryTest {
                 .getBeanDefinition();
         // 注册 bean
         beanFactory.registerBeanDefinition("springConfiguration", beanDefinition);
-        printBeanDefinitionNames(beanFactory);
+        for (String bdName : beanFactory.getBeanDefinitionNames()) {
+            System.out.println(bdName);
+        }
+        System.out.println("======================= 分隔线 =====================");
 
+        /*
+         * 当使用一个 BeanFactory 的实现 就要明确的注册一些 BeanFactoryPostProcessor，必须编写类似以下的代码：
+         * 因此使用 ApplicationContext 的各种实现都优于 BeanFactory 实现
+         */
         // 使用 AnnotationConfigUtils 工具类，给 BeanFactory 添加一些常用的后处理器，用于扩展功能
         AnnotationConfigUtils.registerAnnotationConfigProcessors(beanFactory);
 
@@ -55,17 +63,9 @@ public class BeanFactoryTest {
                     beanFactory.addBeanPostProcessor(beanPostProcessor);
                 });
         System.out.println("======================= 分隔线 =====================");
-        printBeanDefinitionNames(beanFactory);
-
-        // beanFactory.preInstantiateSingletons(); // 准备好所有单例
-    }
-
-    private void printBeanDefinitionNames(ListableBeanFactory beanFactory) {
         for (String bdName : beanFactory.getBeanDefinitionNames()) {
             System.out.println(bdName);
         }
-        System.out.println("======================= 分隔线 =====================");
     }
-
 
 }

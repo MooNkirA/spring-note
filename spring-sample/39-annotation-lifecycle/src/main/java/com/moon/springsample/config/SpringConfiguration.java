@@ -19,8 +19,12 @@ import org.springframework.context.annotation.Scope;
 @ComponentScan("com.moon.springsample")
 public class SpringConfiguration {
 
+    public SpringConfiguration() {
+        System.out.println("SpringConfiguration 类构造方法执行");
+    }
+
     /* 通过@Bean 注解方式创建对象并注册到IOC容器中，实现initMethod与destroyMethod方法 */
-    @Bean(value = "customBean", initMethod = "init", destroyMethod = "destory")
+    // @Bean(value = "customBean", initMethod = "init", destroyMethod = "destory")
     // @Scope("prototype") // 设置多例，用于测试生命周期
     public CustomBean createCustomBean() {
         return new CustomBean();

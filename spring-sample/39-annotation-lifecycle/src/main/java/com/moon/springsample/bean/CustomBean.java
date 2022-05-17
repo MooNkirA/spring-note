@@ -11,15 +11,15 @@ package com.moon.springsample.bean;
 public class CustomBean {
 
     public CustomBean() {
-        System.out.println("CustomBean构造方法执行了...");
+        System.out.println("CustomBean 构造方法执行了...");
     }
 
     public void init() {
-        System.out.println("CustomBean基于@Bean注解initMethod方式实现的初始化方法");
+        System.out.println("CustomBean 基于 @Bean 注解 initMethod 方式实现的初始化方法");
     }
 
     public void destory() {
-        System.out.println("CustomBean基于@Bean注解destroyMethod方式实现的销毁方法");
+        System.out.println("CustomBean 基于 @Bean 注解 destroyMethod 方式实现的销毁方法");
     }
 
 }
