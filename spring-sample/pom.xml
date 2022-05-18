@@ -73,6 +73,7 @@
         <module>53-annotation-tx-transaction-quickstart</module>
         <module>54-spring-beanfactory-applicationcontext</module>
         <module>55-spring-beanpostprocessor</module>
+        <module>56-spring-beanfactorypostprocessor</module>
     </modules>
 
     <!-- 版本号管理 -->
@@ -89,6 +90,8 @@
         <commons-logging.version>1.2</commons-logging.version>
         <hibernate.version>5.0.12.Final</hibernate.version>
         <c3p0.version>0.9.5.2</c3p0.version>
+        <mybatis.version>3.5.9</mybatis.version>
+        <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <!-- 项目模块版本号 -->
         <project.module.version>1.0-SNAPSHOT</project.module.version>
         <!-- JAVA 版本 -->
@@ -167,6 +170,19 @@
                 <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
                 <version>${c3p0.version}</version>
+            </dependency>
+
+            <!-- MyBatis 核心依赖 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <!-- MyBatis 与 Spring 整合的核心包 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
             </dependency>
 
             <!-- 日志框架 -->
