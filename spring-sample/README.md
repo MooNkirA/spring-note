@@ -88,3 +88,5 @@
 | 55-spring-beanpostprocessor                        | Spring 容器扩展点之 BeanPostProcessor 接口（未完成） |
 | 56-spring-beanfactorypostprocessor                 | Spring 容器扩展点之 BeanFactoryPostProcessor 接口    |
 | 57-spring-factorybean                              | Spring 容器扩展点之 FactoryBean（未开始）            |
+| 58-spring-aware-interfaces                         | Spring 的 Aware 系列接口基础示例使用（陆续完善）     |
+| 59-spring-bean-scopes                              | Spring Bean 作用范围示例                             |

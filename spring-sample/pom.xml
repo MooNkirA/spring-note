@@ -74,6 +74,8 @@
         <module>54-spring-beanfactory-applicationcontext</module>
         <module>55-spring-beanpostprocessor</module>
         <module>56-spring-beanfactorypostprocessor</module>
+        <module>57-spring-factorybean</module>
+        <module>58-spring-aware-interfaces</module>
     </modules>
 
     <!-- 版本号管理 -->
