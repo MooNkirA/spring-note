@@ -1,10 +1,10 @@
 package cglib;
 
-import java.lang.reflect.Method;
-
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
+import java.lang.reflect.Method;
 
 /**
  * 使用cglib，基于子类的动态代理
@@ -12,6 +12,7 @@ import net.sf.cglib.proxy.MethodProxy;
  * @author MoonZero
  */
 public class Client_Cglib {
+
     public static void main(String[] args) {
         // 获取被代理对象
         Actor actor = new Actor();
@@ -34,7 +35,7 @@ public class Client_Cglib {
              *          proxy:代理对象的引用【一般不用】
              *          method:拦截的方法
              *          args: 拦截的方法中的参数
-             *          methodProxy : 方法代理对象的引用【一般不用】
+             *          methodProxy: 方法代理对象的引用，它可以避免反射调用
              */
             @Override
             public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
@@ -51,13 +52,21 @@ public class Client_Cglib {
                     // 对象调用了basicAct方法
                     if (money > 1000F) {
                         // 满足条件才执行方法
-                        result = method.invoke(actor, money / 2);
+                        // result = method.invoke(actor, money / 2);
+                        // 内部没有用反射, 需要目标，spring 框架采用这种方式
+                        result = methodProxy.invoke(actor, new Object[]{money / 2});
+                        // 内部没有用反射, 需要代理
+                        // result = methodProxy.invokeSuper(proxy, new Object[]{money / 2});
                     }
                 } else if ("wonderfulAct".equals(methodName)) {
                     // 对象调用了wonderfulAct方法
                     if (money > 2000F) {
                         // 满足条件才执行方法
-                        result = method.invoke(actor, money / 4);
+                        // result = method.invoke(actor, money / 4);
+                        // 内部没有用反射, 需要目标，spring 框架采用这种方式
+                        result = methodProxy.invoke(actor, new Object[]{money / 4});
+                        // 内部没有用反射, 需要代理
+                        // result = methodProxy.invokeSuper(proxy, new Object[]{money / 4});
                     }
                 }
                 // 返回执行方法后的对象

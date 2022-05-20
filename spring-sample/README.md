@@ -39,7 +39,7 @@
 | 06-spring-annotation-import-propertysource         |                                                      |
 | 07-spring-junit-xml                                |                                                      |
 | 08-spring-junit-annotation                         |                                                      |
-| 09-spring-proxy                                    |                                                      |
+| 09-spring-proxy                                    | Jdk 动态代理与 CGlib 动态代理示例                    |
 | 10-spring-aop-xml                                  |                                                      |
 | 11-spring-aop-annotation                           |                                                      |
 | 12-spring-aop-annotation-noXML                     |                                                      |
@@ -72,6 +72,8 @@
 | 39-annotation-lifecycle                            | Spring Bean 生命周期各种回调实现示例                 |
 | 40-spring-aop-proxy                                |                                                      |
 | 41-annotation-aop-quickstart                       | Spring 基于注解方式实现 AOP 示例                     |
+| 41-aspectj-aop-extension-ajc                       | 基于 ajc 编译器实现 AOP 扩展示例                     |
+| 41-aspectj-aop-extension-agent                     | 基于 agent 类加载实现 AOP 扩展示例                   |
 | 42-annotation-aop-enableaspectjautoproxy           |                                                      |
 | 43-annotation-aop-aspect                           |                                                      |
 | 44-annotation-aop-pointcut                         |                                                      |

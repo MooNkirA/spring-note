@@ -65,6 +65,8 @@
         <module>39-annotation-lifecycle</module>
         <module>40-spring-aop-proxy</module>
         <module>41-annotation-aop-quickstart</module>
+        <module>41-aspectj-aop-extension-ajc</module>
+        <module>41-aspectj-aop-extension-agent</module>
         <module>42-annotation-aop-enableaspectjautoproxy</module>
         <module>43-annotation-aop-aspect</module>
         <module>44-annotation-aop-pointcut</module>
@@ -91,7 +93,6 @@
 
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <druid.version>1.1.9</druid.version>
-        <aspectj.version>1.8.13</aspectj.version>
         <log4j.version>1.2.16</log4j.version>
         <commons-logging.version>1.2</commons-logging.version>
         <hibernate.version>5.0.12.Final</hibernate.version>
@@ -120,13 +121,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
-            </dependency>
-
-            <!-- AspectJ 依赖 -->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${aspectj.version}</version>
             </dependency>
 
             <!-- hibernate核心依赖 -->

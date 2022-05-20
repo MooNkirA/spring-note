@@ -17,8 +17,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class SpringAOPTest {
 
+    /* 常规 Spring 实现 AOP 测试 */
     @Test
-    public void aopBasicTest() {
+    public void testSpringBasicAop() {
         // 1. 创建注解扫描的容器
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         // 2.获取对象

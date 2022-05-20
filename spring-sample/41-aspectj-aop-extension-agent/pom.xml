@@ -9,18 +9,13 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>41-annotation-aop-quickstart</artifactId>
+    <artifactId>41-aspectj-aop-extension-agent</artifactId>
     <name>${project.artifactId}</name>
-    <packaging>jar</packaging>
-    <description>Spring aop 快速入门示例</description>
+    <description>
+        扩展：基于 agent 类加载实现 AOP 功能示例
+    </description>
 
     <dependencies>
-        <!-- 依赖项目公共模块 -->
-        <dependency>
-            <groupId>com.moon</groupId>
-            <artifactId>sample-common</artifactId>
-        </dependency>
-
         <!-- spring核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -30,6 +25,11 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <!-- 扩展内容：基于 ajc 编译器与基于 agent 类加载实现的 AOP 的依赖 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
         </dependency>
 
         <dependency>
