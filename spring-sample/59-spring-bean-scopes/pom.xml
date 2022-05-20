@@ -9,35 +9,22 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>54-spring-beanfactory-applicationcontext</artifactId>
+    <artifactId>59-spring-bean-scopes</artifactId>
     <name>${project.artifactId}</name>
     <description>
-        Spring 的 BeanFactory 与 ApplicationContext 接口示例
+        Spring Bean 作用范围示例
     </description>
 
     <dependencies>
-        <!-- 为了测试 AnnotationConfigServletWebServerApplicationContext 容器专门引入 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>com.moon</groupId>
-            <artifactId>sample-common</artifactId>
-        </dependency>-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

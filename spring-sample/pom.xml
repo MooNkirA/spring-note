@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 引入 Spring Boot 一些示例技术实现 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.13</version>
+    </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.moon</groupId>
@@ -76,17 +82,15 @@
         <module>56-spring-beanfactorypostprocessor</module>
         <module>57-spring-factorybean</module>
         <module>58-spring-aware-interfaces</module>
+        <module>59-spring-bean-scopes</module>
     </modules>
 
     <!-- 版本号管理 -->
     <properties>
-        <spring.version>5.1.6.RELEASE</spring.version>
-        <spring-boot.version>2.5.13</spring-boot.version>
+        <spring.version>5.3.19</spring.version>
 
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
-        <junit.version>4.12</junit.version>
         <druid.version>1.1.9</druid.version>
-        <snakeyaml.version>1.23</snakeyaml.version>
         <aspectj.version>1.8.13</aspectj.version>
         <log4j.version>1.2.16</log4j.version>
         <commons-logging.version>1.2</commons-logging.version>
@@ -105,17 +109,6 @@
     <!-- 版本控制 -->
     <dependencyManagement>
         <dependencies>
-            <!-- spring核心依赖 -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
             <!-- mysql驱动 -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -128,26 +121,7 @@
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-            <!-- spring框架测试包 -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <!-- junit测试框架 -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
 
-            <!-- yaml文件解析器 -->
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
-            </dependency>
             <!-- AspectJ 依赖 -->
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -192,12 +166,6 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
             </dependency>
 
             <!-- 项目模块版本控制 -->

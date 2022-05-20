@@ -11,11 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2022-05-16 10:17
  * @description
  */
-// @SpringBootApplication
+@SpringBootApplication
 public class SpringSampleApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootApplication.class, args);
+        SpringApplication.run(SpringSampleApp.class, args);
     }
 
 }

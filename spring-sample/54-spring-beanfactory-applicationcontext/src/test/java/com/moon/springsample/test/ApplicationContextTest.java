@@ -55,7 +55,6 @@ public class ApplicationContextTest {
         }
     }
 
-    // TODO: 目前启动报错，Unable to start web server
     /* ApplicationContext 实现类 AnnotationConfigServletWebServerApplicationContext 测试 */
     @Test
     public void testAnnotationConfigServletWebServerApplicationContext() {
