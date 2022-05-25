@@ -92,3 +92,4 @@
 | 57-spring-factorybean                              | Spring 容器扩展点之 FactoryBean（未开始）            |
 | 58-spring-aware-interfaces                         | Spring 的 Aware 系列接口基础示例使用（陆续完善）     |
 | 59-spring-bean-scopes                              | Spring Bean 作用范围示例                             |
+| 60-spring-aop-analysis                             | Spring 基于编程式实现 AOP 示例与功能实现分析         |

@@ -18,8 +18,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 // @EnableAspectJAutoProxy
 /*
  * proxyTargetClass属性，指定代理的方式
- *   默认是false，使用jdk的代理；基于接口生成代理类
- *   如果设置为true，则使用cglib方式是基于子类生成代理，此时业务的实现类不能用final修饰（因为final修饰的类不能被继承）
+ *   默认是false，此时分两种情况
+ *      1. 如果目标实现了接口，则使用 jdk 生成代理
+ *      2. 如果目标没有实现接口，则使用 cglib 生成代理
+ *   如果设置为true，则使用 cglib 方式生成代理。
+ *   因为是基于子类生成代理，此时业务的实现类不能用final修饰（因为final修饰的类不能被继承）
  */
 // @EnableAspectJAutoProxy(proxyTargetClass = true)
 // 指定是否暴露代理对象，默认值是false。如果暴露则通过AopContext可以进行访问

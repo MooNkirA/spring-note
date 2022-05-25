@@ -9,31 +9,20 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>41-aspectj-aop-extension-agent</artifactId>
+    <artifactId>60-spring-aop-analysis</artifactId>
     <name>${project.artifactId}</name>
-    <description>
-        扩展：基于 agent 类加载实现 AOP 功能示例
-    </description>
+    <description>Spring 基于编程式实现 AOP 示例与实现分析</description>
 
     <dependencies>
         <!-- spring核心依赖 -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <!-- AspectJ 依赖 -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-        </dependency>
-        <!-- 扩展内容：基于 ajc 编译器与基于 agent 类加载实现的 AOP 的依赖 -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
         </dependency>
 
         <dependency>

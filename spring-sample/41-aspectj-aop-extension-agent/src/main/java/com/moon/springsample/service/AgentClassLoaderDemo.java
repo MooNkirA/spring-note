@@ -1,11 +1,14 @@
 package com.moon.springsample.service;
 
+import org.springframework.stereotype.Service;
+
 /**
  * @author MooNkirA
  * @version 1.0
  * @date 2022-05-20 20:40
  * @description
  */
+@Service
 public class AgentClassLoaderDemo {
 
     public AgentClassLoaderDemo() {
