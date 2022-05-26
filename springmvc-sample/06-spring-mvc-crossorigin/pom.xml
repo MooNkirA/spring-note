@@ -3,34 +3,32 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>springmvc-sample-annotation</artifactId>
+        <artifactId>springmvc-sample</artifactId>
         <groupId>com.moon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>01-annotation-crossorigin-test</artifactId>
+    <artifactId>06-spring-mvc-crossorigin</artifactId>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
-    <description>SpringMVC @CrossOrigin 注解测试工程，用于使用js发送ajax请求</description>
+    <description>
+        Spring MVC @CrossOrigin 注解示例工程，用于使用js发送ajax请求
+    </description>
 
     <dependencies>
-        <!-- Spring 核心依赖 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
         <!-- Spring MVC 核心依赖 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
 
-        <!-- servlet 支持 -->
+        <!-- servlet 支持 (在 spring boot 中依赖管理) -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+        <!-- servlet jsp 支持 -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
@@ -40,8 +38,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
         </dependency>
-
     </dependencies>
-
 
 </project>

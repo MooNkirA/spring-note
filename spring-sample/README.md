@@ -30,7 +30,6 @@
 | Module 名称                                        | Module 介绍                                          |
 | -------------------------------------------------- | ---------------------------------------------------- |
 | sample-common                                      | Spring 示例项目公共模块                              |
-| sample-common                                      |                                                      |
 | 01-spring-factory                                  |                                                      |
 | 02-spring-basic                                    |                                                      |
 | 03-spring-inject                                   |                                                      |

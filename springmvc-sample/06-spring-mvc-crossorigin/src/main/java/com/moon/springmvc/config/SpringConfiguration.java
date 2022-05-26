@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 
 /**
  * Spring核心配置类
+ *
  * @author MooNkirA
  * @version 1.0
  * @date 2020-9-21 08:41
