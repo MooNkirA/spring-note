@@ -36,4 +36,5 @@
 | 04-spring-mvc-crm         | 基于 web.xml 传统配置的 SSM 整合实现 CRM 系统示例            |
 | 05-spring-mvc-annotation  | 基于纯注解实现的 Spring MVC 示例                             |
 | 06-spring-mvc-crossorigin | 基于纯注解的 Spring MVC @CrossOrigin 注解处理跨域示例，用于使用js发送ajax请求 |
+| 07-spring-mvc-            |                                                              |
 |                           |                                                              |

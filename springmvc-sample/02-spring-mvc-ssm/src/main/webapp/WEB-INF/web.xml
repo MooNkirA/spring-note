@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-	<display-name>day99-springmvc-02-ssm</display-name>
+	<display-name>02-spring-mvc-ssm</display-name>
 	
 	<!-- 1.配置加载spring配置文件 -->
 	<context-param>
