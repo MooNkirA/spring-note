@@ -21,6 +21,11 @@
         <module>04-spring-mvc-crm</module>
         <module>05-spring-mvc-annotation</module>
         <module>06-spring-mvc-crossorigin</module>
+        <module>sample-common</module>
+        <module>07-dispatcherservlet-init</module>
+        <module>08-dispatcherservlet-init-xml</module>
+        <module>09-handlermapping</module>
+        <module>10-handleradapter</module>
     </modules>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
@@ -142,6 +147,12 @@
                 <version>2.0</version>
                 <scope>provided</scope>
             </dependency>-->
+            <!-- 公共模块 -->
+            <dependency>
+                <groupId>com.moon</groupId>
+                <artifactId>sample-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

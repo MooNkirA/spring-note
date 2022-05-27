@@ -27,14 +27,18 @@
 
 ## 项目模块介绍
 
-| Module 名称               | Module 介绍                                                  |
-| ------------------------- | ------------------------------------------------------------ |
-| sample-common             | Spring 示例项目公共模块                                      |
-| 01-spring-mvc-quickstart  | 基于 web.xml 传统配置的 Spring MVC 快速入门                  |
-| 02-spring-mvc-ssm         | 基于 web.xml 传统配置的 SSM 整合示例1                        |
-| 03-spring-mvc-ssm         | 基于 web.xml 传统配置的 SSM 整合示例2                        |
-| 04-spring-mvc-crm         | 基于 web.xml 传统配置的 SSM 整合实现 CRM 系统示例            |
-| 05-spring-mvc-annotation  | 基于纯注解实现的 Spring MVC 示例                             |
-| 06-spring-mvc-crossorigin | 基于纯注解的 Spring MVC @CrossOrigin 注解处理跨域示例，用于使用js发送ajax请求 |
-| 07-spring-mvc-            |                                                              |
-|                           |                                                              |
+| Module 名称                     | Module 介绍                                                  |
+| ------------------------------- | ------------------------------------------------------------ |
+| sample-common                   | Spring 示例项目公共模块                                      |
+| 01-spring-mvc-quickstart        | 基于 web.xml 传统配置的 Spring MVC 快速入门                  |
+| 02-spring-mvc-ssm               | 基于 web.xml 传统配置的 SSM 整合示例1                        |
+| 03-spring-mvc-ssm               | 基于 web.xml 传统配置的 SSM 整合示例2                        |
+| 04-spring-mvc-crm               | 基于 web.xml 传统配置的 SSM 整合实现 CRM 系统示例            |
+| 05-spring-mvc-annotation        | 基于纯注解实现的 Spring MVC 示例                             |
+| 06-spring-mvc-crossorigin       | 基于纯注解的 Spring MVC @CrossOrigin 注解处理跨域示例，用于使用js发送ajax请求 |
+| 07-dispatcherservlet-init       | 基于编程式 DispatcherServlet 前端控制器初始化示例            |
+| 08-dispatcherservlet-init-xml   | 基于 web.xml 配置 DispatcherServlet 前端控制器初始化示例     |
+| 09-handlermapping               | HandlerMapping（处理器映射器）组件示例                       |
+| 09-handlermapping-xml（未实现） | 基于 xml 配置 HandlerMapping 示例                            |
+| 10-handleradapter               | HandlerAdapter（处理器适配器）组件示例                       |
+|                                 |                                                              |

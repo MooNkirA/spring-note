@@ -75,6 +75,12 @@
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
 
+        <!-- servlet 支持 (在 spring boot 中依赖管理) -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- servlet jsp 支持 只在编译时需要 -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
