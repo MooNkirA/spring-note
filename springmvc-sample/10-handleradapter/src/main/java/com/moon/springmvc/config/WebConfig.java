@@ -20,6 +20,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public class WebConfig {
 
     /*
+     * DispatcherServlet 初始化时默认添加 RequestMappingHandlerMapping 组件，但只保存在 DispatcherServlet 类的属性中
+     * 为了方便测试，因此不使用默认创建，手动创建并加入到 Spring 容器
+     */
+    @Bean
+    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+        return new RequestMappingHandlerMapping();
+    }
+
+    /*
      * DispatcherServlet 初始化时默认添加 RequestMappingHandlerAdapter 组件，但只保存在 DispatcherServlet 类的属性中
      * 为了方便测试，因此不使用默认创建，手动创建并加入到 Spring 容器
      */
