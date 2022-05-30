@@ -41,4 +41,6 @@
 | 09-handlermapping               | HandlerMapping（处理器映射器）组件示例                       |
 | 09-handlermapping-xml（未实现） | 基于 xml 配置 HandlerMapping 示例                            |
 | 10-handleradapter               | HandlerAdapter（处理器适配器）组件示例                       |
+| 11-argument-resolver            | ArgumentResolver（参数解析器）示例，包括 Spring MVC 内置、自定义参数解析器 |
+| 12-return-value-handler         | ReturnValueHandler（返回值解析器）示例，包括 Spring MVC 内置、自定义返回值解析器 |
 |                                 |                                                              |

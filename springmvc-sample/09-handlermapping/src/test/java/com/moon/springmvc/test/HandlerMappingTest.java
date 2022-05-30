@@ -1,6 +1,7 @@
-package com.moon.springmvc;
+package com.moon.springmvc.test;
 
 import com.moon.springmvc.config.SpringConfiguration;
+import org.junit.Test;
 import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.method.HandlerMethod;
@@ -11,16 +12,17 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.Map;
 
 /**
- * HandlerMapping 示例
+ * HandlerMapping 示例测试
  *
  * @author MooNkirA
  * @version 1.0
- * @date 2022-05-27 20:03
+ * @date 2022-05-29 8:50
  * @description
  */
-public class HandlerMappingDemo {
+public class HandlerMappingTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void testBasic() throws Exception {
         // 创建 Spring boot 中 servlet web 环境容器，在配置类中手动创建 tomcat 实例
         AnnotationConfigServletWebServerApplicationContext context =
                 new AnnotationConfigServletWebServerApplicationContext(SpringConfiguration.class);

@@ -26,6 +26,8 @@
         <module>08-dispatcherservlet-init-xml</module>
         <module>09-handlermapping</module>
         <module>10-handleradapter</module>
+        <module>11-argument-resolver</module>
+        <module>12-return-value-handler</module>
     </modules>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>

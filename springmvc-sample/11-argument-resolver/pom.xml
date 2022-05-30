@@ -9,11 +9,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>10-handleradapter</artifactId>
+    <artifactId>11-argument-resolver</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>
-        Spring MVC HandlerAdapter（处理器适配器）组件示例
+        Spring MVC ArgumentResolver（参数解析器）示例，包括 Spring MVC 内置、自定义参数解析器
         使用 Spring Boot 内嵌 web 容器做测试。
     </description>
 

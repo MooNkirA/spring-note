@@ -31,7 +31,7 @@ public class MyHandlerAdapter extends RequestMappingHandlerAdapter {
      */
     @Override
     public ModelAndView invokeHandlerMethod(HttpServletRequest request, HttpServletResponse response,
-                                               HandlerMethod handlerMethod) throws Exception {
+                                            HandlerMethod handlerMethod) throws Exception {
         return super.invokeHandlerMethod(request, response, handlerMethod);
     }
 }
