@@ -1,14 +1,13 @@
 package com.moon.springmvc.config;
 
 import com.moon.springmvc.handler.MyHandlerAdapter;
-import com.moon.springmvc.resolver.CustomArgumentResolver;
+import com.moon.springmvc.handler.CustomReturnValueHandler;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletRegistrationBean;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.Arrays;
@@ -41,7 +40,7 @@ public class SpringMvcConfig {
     @Bean
     public MyHandlerAdapter requestMappingHandlerAdapter() {
         MyHandlerAdapter handlerAdapter = new MyHandlerAdapter();
-        handlerAdapter.setCustomArgumentResolvers(Arrays.asList(new CustomArgumentResolver()));
+        handlerAdapter.setCustomReturnValueHandlers(Arrays.asList(new CustomReturnValueHandler()));
         return handlerAdapter;
     }
 
