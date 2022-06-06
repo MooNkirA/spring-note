@@ -1,4 +1,4 @@
-package com.moon.springsample.beans;
+package com.moon.springmvc.beans;
 
 import java.util.Date;
 import java.util.StringJoiner;

@@ -86,7 +86,6 @@
         <module>58-spring-aware-interfaces</module>
         <module>59-spring-bean-scopes</module>
         <module>60-spring-aop-analysis</module>
-        <module>61-spring-type-conversion</module>
     </modules>
 
     <!-- 版本号管理 -->

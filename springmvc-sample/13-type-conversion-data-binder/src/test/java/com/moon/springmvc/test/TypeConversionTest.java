@@ -1,13 +1,16 @@
-package com.moon.springsample.test;
+package com.moon.springmvc.test;
 
-import com.moon.springsample.beans.BeanNoSetter;
-import com.moon.springsample.beans.NormalBean;
+import com.moon.springmvc.beans.BeanNoSetter;
+import com.moon.springmvc.beans.NormalBean;
 import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.DirectFieldAccessor;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.SimpleTypeConverter;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.ServletRequestParameterPropertyValues;
 
 import java.util.Date;
 
@@ -32,7 +35,7 @@ public class TypeConversionTest {
         System.out.println(date);
     }
 
-    // BeanWrapperImpl 类实现类型转换测试
+    // BeanWrapperImpl 类实现类型转换与数据绑定测试
     @Test
     public void testBeanWrapperImpl() {
         // 利用反射原理，通过 setter 方法为 bean 的属性赋值
@@ -44,7 +47,7 @@ public class TypeConversionTest {
         System.out.println(target);
     }
 
-    // DirectFieldAccessor 类实现类型转换测试
+    // DirectFieldAccessor 类实现类型转换与数据绑定测试
     @Test
     public void testDirectFieldAccessor() {
         // 利用反射原理，直接设置 Field 值（无需提供 setter 方法）
@@ -56,7 +59,7 @@ public class TypeConversionTest {
         System.out.println(target);
     }
 
-    // DataBinder 类实现类型转换测试
+    // DataBinder 类实现类型转换与数据绑定测试
     @Test
     public void testDataBinder() {
         // 利用反射原理，直接设置 Field 值（无需提供 setter 方法）
@@ -77,9 +80,25 @@ public class TypeConversionTest {
         System.out.println(target);
     }
 
-    // TODO: ServletDataBinder 与 ServletDataBinderFactory 类实现类型转换测试详见 springmvc-sample 项目
+    // ServletDataBinder 类实现类型转换与数据绑定测试
     @Test
-    public void testServletDataBinderAndServletDataBinderFactory() {
+    public void testServletDataBinder() {
+        // web 环境下数据绑定
+        NormalBean target = new NormalBean();
+        ServletRequestDataBinder dataBinder = new ServletRequestDataBinder(target);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setParameter("a", "10");
+        request.setParameter("b", "hello");
+        request.setParameter("c", "1999/03/04");
+
+        dataBinder.bind(new ServletRequestParameterPropertyValues(request));
+
+        System.out.println(target);
+    }
+
+    // ServletDataBinderFactory 类实现类型转换与数据绑定测试
+    @Test
+    public void testServletDataBinderFactory() {
         // see springmvc-sample project
     }
 
