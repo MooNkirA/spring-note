@@ -1,5 +1,8 @@
 package com.moon.springmvc.beans;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.Date;
 import java.util.StringJoiner;
 
@@ -11,19 +14,12 @@ import java.util.StringJoiner;
  * @date 2022-06-01 15:59
  * @description
  */
+@ToString
+@Getter
 public class BeanNoSetter {
 
     private int a;
     private String b;
     private Date c;
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", BeanNoSetter.class.getSimpleName() + "[", "]")
-                .add("a=" + a)
-                .add("b='" + b + "'")
-                .add("c=" + c)
-                .toString();
-    }
 
 }
