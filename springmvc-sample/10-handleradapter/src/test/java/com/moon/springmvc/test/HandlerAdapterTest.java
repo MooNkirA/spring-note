@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class HandlerAdapterTest {
 
+    // 模拟基础处理器适配器调用流程
     @Test
     public void testBasic() throws Exception {
         // 创建 Spring boot 中 servlet web 环境容器，在配置类中手动创建 tomcat 实例

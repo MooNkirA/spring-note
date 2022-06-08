@@ -10,7 +10,6 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.DirectFieldAccessor;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.SimpleTypeConverter;
-import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -19,12 +18,10 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.ServletRequestParameterPropertyValues;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
-import org.springframework.web.bind.support.WebBindingInitializer;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.InvocableHandlerMethod;
 import org.springframework.web.servlet.mvc.method.annotation.ServletRequestDataBinderFactory;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -249,7 +246,6 @@ public class TypeConversionTest {
         dataBinder.bind(new ServletRequestParameterPropertyValues(request));
         // 对特殊的日期格式实现转换与绑定
         System.out.println(target);
-        Type superclass = User.class.getGenericSuperclass();
     }
 
     private MockHttpServletRequest initRequest() {
