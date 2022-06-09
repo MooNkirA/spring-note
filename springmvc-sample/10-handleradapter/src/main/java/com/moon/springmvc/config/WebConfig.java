@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @date 2022-05-27 19:33
  * @description
  */
-// @Configuration("com.")
+@Configuration
 public class WebConfig {
 
     /*

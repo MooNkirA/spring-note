@@ -2,8 +2,8 @@ package com.moon.springmvc.controller;
 
 import com.moon.springmvc.annotations.Yml;
 import com.moon.springmvc.pojo.User;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 自定义返回值处理器测试控制类
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022-05-31 15:16
  * @description
  */
-@RestController
+@Controller
 public class ReturnValueHandlerController {
 
     @RequestMapping("/customReturnValueHandler")

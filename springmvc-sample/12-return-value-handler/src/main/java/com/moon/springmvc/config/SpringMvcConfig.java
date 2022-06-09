@@ -1,7 +1,7 @@
 package com.moon.springmvc.config;
 
-import com.moon.springmvc.handler.MyHandlerAdapter;
 import com.moon.springmvc.handler.CustomReturnValueHandler;
+import com.moon.springmvc.handler.MyHandlerAdapter;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletRegistrationBean;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +9,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.view.AbstractUrlBasedView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.Arrays;
 
@@ -40,6 +44,7 @@ public class SpringMvcConfig {
     @Bean
     public MyHandlerAdapter requestMappingHandlerAdapter() {
         MyHandlerAdapter handlerAdapter = new MyHandlerAdapter();
+        // 加入自定义返回值处理器
         handlerAdapter.setCustomReturnValueHandlers(Arrays.asList(new CustomReturnValueHandler()));
         return handlerAdapter;
     }
@@ -62,5 +67,40 @@ public class SpringMvcConfig {
         DispatcherServletRegistrationBean registrationBean = new DispatcherServletRegistrationBean(dispatcherServlet, "/");
         registrationBean.setLoadOnStartup(1);
         return registrationBean;
+    }
+
+    /*
+     * ************************************************
+     *   配置 FreeMarker
+     * ************************************************
+     */
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        configurer.setDefaultEncoding("utf-8");
+        configurer.setTemplateLoaderPath("classpath:templates");
+        return configurer;
+    }
+
+    @Bean // FreeMarkerView 在借助 Spring 初始化时，会要求 web 环境才会走 setConfiguration, 这里想办法去掉了 web 环境的约束
+    public FreeMarkerViewResolver viewResolver(FreeMarkerConfigurer configurer) {
+        FreeMarkerViewResolver resolver = new FreeMarkerViewResolver() {
+            @Override
+            protected AbstractUrlBasedView instantiateView() {
+                FreeMarkerView view = new FreeMarkerView() {
+                    @Override
+                    protected boolean isContextRequired() {
+                        return false;
+                    }
+                };
+                view.setConfiguration(configurer.getConfiguration());
+                return view;
+            }
+        };
+        resolver.setContentType("text/html;charset=utf-8");
+        resolver.setPrefix("/");
+        resolver.setSuffix(".ftl");
+        resolver.setExposeSpringMacroHelpers(false);
+        return resolver;
     }
 }

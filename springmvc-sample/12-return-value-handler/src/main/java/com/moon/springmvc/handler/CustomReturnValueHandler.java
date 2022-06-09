@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 自定义返回值解析
- * 示例：解析自定义注解 @Token，当请求方法参数标识此注解后，
- * 从请求头中 token 参数数中获取相应的值
+ * 示例：解析自定义注解 @Yml，当请求方法上标识此注解后，
+ * 将方法的返回值转换成 yml 格式的字条串
  *
  * @author MooNkirA
  * @version 1.0
  * @date 2022-05-29 10:21
  * @description
  */
-// Spring MVC 自定义参数解析需要实现 HandlerMethodReturnValueHandler 接口
+// Spring MVC 自定义返回值处理器需要实现 HandlerMethodReturnValueHandler 接口
 public class CustomReturnValueHandler implements HandlerMethodReturnValueHandler {
 
     /**

@@ -32,6 +32,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- 使用 freemarker 技术来测试返回值处理后效果 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.moon</groupId>
             <artifactId>sample-common</artifactId>

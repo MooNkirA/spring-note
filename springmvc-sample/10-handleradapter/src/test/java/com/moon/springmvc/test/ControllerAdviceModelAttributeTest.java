@@ -41,8 +41,6 @@ import java.util.Arrays;
  */
 public class ControllerAdviceModelAttributeTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ControllerAdviceModelAttributeTest.class);
-
     @Test
     public void test() throws Exception {
         // 创建基于注解的容器
@@ -81,7 +79,7 @@ public class ControllerAdviceModelAttributeTest {
         // 初始化 ModelAndViewContainer
         ModelAndViewContainer container = new ModelAndViewContainer();
 
-        // 获取模型工厂方法
+        // 获取模型工厂方法，因为 getModelFactory 方法是私有，此处使用反射调用
         Method getModelFactory = RequestMappingHandlerAdapter.class.getDeclaredMethod("getModelFactory", HandlerMethod.class, WebDataBinderFactory.class);
         getModelFactory.setAccessible(true);
         ModelFactory modelFactory = (ModelFactory) getModelFactory.invoke(adapter, handlerMethod, factory);
@@ -92,7 +90,6 @@ public class ControllerAdviceModelAttributeTest {
         handlerMethod.invokeAndHandle(new ServletWebRequest(request), container);
 
         System.out.println(container.getModel());
-
         context.close();
     }
 

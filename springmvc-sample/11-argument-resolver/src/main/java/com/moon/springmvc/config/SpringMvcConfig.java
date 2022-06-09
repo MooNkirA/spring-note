@@ -41,6 +41,7 @@ public class SpringMvcConfig {
     @Bean
     public MyHandlerAdapter requestMappingHandlerAdapter() {
         MyHandlerAdapter handlerAdapter = new MyHandlerAdapter();
+        // 加入自定义参数处理器
         handlerAdapter.setCustomArgumentResolvers(Arrays.asList(new CustomArgumentResolver()));
         return handlerAdapter;
     }

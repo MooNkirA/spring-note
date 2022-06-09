@@ -46,16 +46,11 @@ public class ReturnValueHandlerTest {
         // 获取 RequestMappingHandlerAdapter
         MyHandlerAdapter handlerAdapter = context.getBean(MyHandlerAdapter.class);
         // 通过处理器适配器调用相应的控制器方法
-        /*
-         * TODO: 目前报错，待排查
-         *  org.springframework.web.HttpMediaTypeNotAcceptableException: Could not find acceptable representation
-         */
         handlerAdapter.invokeHandlerMethod(mockRequest, mockResponse, (HandlerMethod) chain.getHandler());
 
         // 检查响应
         byte[] content = mockResponse.getContentAsByteArray();
         System.out.println(new String(content, StandardCharsets.UTF_8));
-
     }
 
 }
