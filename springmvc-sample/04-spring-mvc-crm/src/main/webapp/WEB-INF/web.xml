@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>04-spring-mvc-crm</display-name>
+	
+	<!-- 元素之间的加载顺序，说明：
+  		1.加载全局的配置context-param
+	  	2.加载监听器配置
+	  	3.加载过滤器配置：内部加载顺序，按照配置的顺序加载
+	  	4.加载servlet配置：内部加载顺序，根据load-on-startup指定的优先级进行加载。
+ 			load-on-startup大于0的整数值，越小优先级越高
+   -->
+	
+	<!-- 1.配置加载spring配置文件 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext-*.xml</param-value>
+	</context-param>
+	
+	<!-- 2.	配置spring监听器（ContextLoaderListener），容器开启时加载配置  -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- 3.	配置字符集编码过滤器（CharacterEncodingFilter） -->
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		
+		<!-- 指定编码UTF-8 -->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<!-- 配置过滤的拦截的url -->
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<!-- 配置拦截所有请求 -->
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 4.	配置前端控制器（DispatcherServlet） -->
+	<servlet>
+		<servlet-name>springMVC</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		
+		<!-- 加载springmvc主配置文件 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/springmvc.xml</param-value>
+		</init-param>
+		
+		<!-- 配置web容器启动时的加载springmvc配置文件顺序 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- 配置前端控制器拦截的url -->
+	<servlet-mapping>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

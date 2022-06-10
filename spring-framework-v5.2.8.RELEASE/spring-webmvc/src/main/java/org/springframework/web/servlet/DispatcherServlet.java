@@ -285,6 +285,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// This is currently strictly internal and not meant to be customized
 		// by application developers.
 		try {
+			// 在静态代码块中读取 DispatcherServlet.properties 文件
 			ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 		}
@@ -500,11 +501,16 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
 	protected void initStrategies(ApplicationContext context) {
+		// 初始化文件上传的处理器
 		initMultipartResolver(context);
+		// 初始化本地化处理器
 		initLocaleResolver(context);
 		initThemeResolver(context);
+		// 初始化处理器映射器
 		initHandlerMappings(context);
+		// 初始化处理器适配器
 		initHandlerAdapters(context);
+		// 初始化异常处理器
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
@@ -593,6 +599,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
 
+		// 判断是否查询所有容器查找映射，默认值 true
 		if (this.detectAllHandlerMappings) {
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
 			Map<String, HandlerMapping> matchingBeans =
@@ -616,6 +623,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
 		if (this.handlerMappings == null) {
+			// 如果容器中没有找到映射，则查询 DispatcherServlet.properties 文件配置的默认的接口的映射
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +

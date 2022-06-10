@@ -9,10 +9,6 @@
 
 ```
 |- spring-analysis-note
-  |-- springmvc-demo-2018 	# springmvc入门示例项目（2018年）
-  |-- spring-demo-2018 	    # spring入门示例项目（2018年）
-  |-- spring-sample-annotation	    # spring全注解使用示例项目（2020.07）
-  |-- springmvc-sample-annotation	# springMVC全注解使用示例项目（2020.09）
   |-- spring-source-study		    # spring源码项目（2019年） -- 待删除
   |-- spring-source-study-2021		# spring源码学习示例项目（2021年）
 ```

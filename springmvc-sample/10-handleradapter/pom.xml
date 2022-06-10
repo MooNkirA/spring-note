@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>springmvc-sample</artifactId>
+        <groupId>com.moon</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>10-handleradapter</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>
+        Spring MVC HandlerAdapter（处理器适配器）组件示例；
+        模拟 ControllerAdvice 注解配合 InitBinder注解、ModelAttribute 注解的控制方法调用流程。
+        模拟 ControllerAdvice 注解对 ResponseBody 返回值的增加示例。
+        使用 Spring Boot 内嵌 web 容器做测试。
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.moon</groupId>
+            <artifactId>sample-common</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
