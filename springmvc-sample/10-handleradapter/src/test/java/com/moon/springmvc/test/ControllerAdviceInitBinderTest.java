@@ -1,6 +1,6 @@
 package com.moon.springmvc.test;
 
-import com.moon.springmvc.config.SpringConfiguration;
+import com.moon.springmvc.common.Constants;
 import com.moon.springmvc.controller.InitBinderController1;
 import com.moon.springmvc.controller.InitBinderController2;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class ControllerAdviceInitBinderTest {
             1. @ControllerAdvice 中 @InitBinder 标注的方法，由 RequestMappingHandlerAdapter 在初始化时解析并记录
             2. @Controller 中 @InitBinder 标注的方法，由 RequestMappingHandlerAdapter 会在控制器方法首次执行时解析并记录
          */
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Constants.BASE_PACKAGES);
         // 手动创建 RequestMappingHandlerAdapter
         RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
         handlerAdapter.setApplicationContext(context);

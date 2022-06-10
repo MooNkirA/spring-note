@@ -1,11 +1,9 @@
 package com.moon.springmvc.test;
 
-import com.moon.springmvc.config.SpringConfiguration;
+import com.moon.springmvc.common.Constants;
 import com.moon.springmvc.controller.ModelAttributeController;
 import com.moon.springmvc.pojo.User;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -44,7 +42,7 @@ public class ControllerAdviceModelAttributeTest {
     @Test
     public void test() throws Exception {
         // 创建基于注解的容器
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Constants.BASE_PACKAGES);
         // 手动创建 RequestMappingHandlerAdapter
         RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
         adapter.setApplicationContext(context);

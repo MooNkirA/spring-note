@@ -1,6 +1,6 @@
 package com.moon.springmvc.test;
 
-import com.moon.springmvc.config.SpringConfiguration;
+import com.moon.springmvc.common.Constants;
 import com.moon.springmvc.handler.MyHandlerAdapter;
 import org.junit.Test;
 import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
@@ -29,7 +29,7 @@ public class HandlerAdapterTest {
     public void testBasic() throws Exception {
         // 创建 Spring boot 中 servlet web 环境容器，在配置类中手动创建 tomcat 实例
         AnnotationConfigServletWebServerApplicationContext context =
-                new AnnotationConfigServletWebServerApplicationContext(SpringConfiguration.class);
+                new AnnotationConfigServletWebServerApplicationContext(Constants.BASE_PACKAGES);
         // 从容器中获取 RequestMappingHandlerMapping
         // 该对象用于解析 @RequestMapping 以及派生注解，生成路径与控制器方法的映射关系, 在 web 容器初始化时就生成
         RequestMappingHandlerMapping handlerMapping = context.getBean(RequestMappingHandlerMapping.class);

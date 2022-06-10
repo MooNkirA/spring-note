@@ -9,18 +9,28 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>09-handlermapping</artifactId>
+    <artifactId>15-exceptionhandler</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>
-        Spring MVC HandlerMapping（处理器映射器）组件示例
-        使用 Spring Boot 内嵌 web 容器做测试。
+        Spring MVC 的异常解析器 ExceptionHandlerExceptionResolver 与 @ExceptionHandler 使用示例
     </description>
 
     <dependencies>
+        <!-- Spring MVC 核心依赖 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <!-- json 对象转换需要的 jackson 的依赖（参考 spring-boot-starter-web 的依赖）-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!-- servlet 支持 (在 spring boot 中依赖管理) -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

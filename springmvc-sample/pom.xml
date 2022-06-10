@@ -29,6 +29,8 @@
         <module>11-argument-resolver</module>
         <module>12-return-value-handler</module>
         <module>13-type-conversion-data-binder</module>
+        <module>14-message-converter</module>
+        <module>15-exceptionhandler</module>
     </modules>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>

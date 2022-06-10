@@ -40,11 +40,11 @@
 | 08-dispatcherservlet-init-xml   | 基于 web.xml 配置 DispatcherServlet 前端控制器初始化示例     |
 | 09-handlermapping               | HandlerMapping（处理器映射器）组件示例                       |
 | 09-handlermapping-xml（未实现） | 基于 xml 配置 HandlerMapping 示例                            |
-| 10-handleradapter               | HandlerAdapter（处理器适配器）组件示例；模拟 @ControllerAdvice 配合 @InitBinder、@ModelAttribute 的控制方法调用流程 |
+| 10-handleradapter               | HandlerAdapter（处理器适配器）组件示例；模拟 @ControllerAdvice 配合 @InitBinder、@ModelAttribute 、ResponseBodyAdvice的控制方法调用流程 |
 | 11-argument-resolver            | ArgumentResolver（参数解析器）示例，包括 Spring MVC 内置、自定义参数解析器 |
 | 12-return-value-handler         | ReturnValueHandler（返回值解析器）示例，包括 Spring MVC 内置、自定义返回值解析器 |
 | 13-type-conversion-data-binder  | Spring 各种类型转换与数据绑定的实现示例                      |
+| 14-message-converter            | Spring MVC 的 MessageConverter 默认实现示例                  |
+| 15-exceptionhandler             | Spring MVC 的异常解析器 ExceptionHandlerExceptionResolver 与 @ExceptionHandler 使用示例 |
 |                                 |                                                              |
-|                                 |                                                              |
-|                                 | @ExceptionHandler、ResponseBodyAdvice 等调用流程示例         |
 |                                 |                                                              |

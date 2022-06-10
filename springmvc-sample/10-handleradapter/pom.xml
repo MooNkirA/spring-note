@@ -15,6 +15,7 @@
     <description>
         Spring MVC HandlerAdapter（处理器适配器）组件示例；
         模拟 ControllerAdvice 注解配合 InitBinder注解、ModelAttribute 注解的控制方法调用流程。
+        模拟 ControllerAdvice 注解对 ResponseBody 返回值的增加示例。
         使用 Spring Boot 内嵌 web 容器做测试。
     </description>
 

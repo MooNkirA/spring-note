@@ -17,9 +17,16 @@
     </description>
 
     <dependencies>
+        <!-- Spring MVC 核心依赖 -->
         <dependency>
-            <groupId>com.moon</groupId>
-            <artifactId>sample-common</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <!-- servlet 支持 (在 spring boot 中依赖管理) -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
     </dependencies>
 

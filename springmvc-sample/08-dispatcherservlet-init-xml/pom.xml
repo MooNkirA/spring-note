@@ -17,9 +17,10 @@
     </description>
 
     <dependencies>
+        <!-- Spring MVC 核心依赖 -->
         <dependency>
-            <groupId>com.moon</groupId>
-            <artifactId>sample-common</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
     </dependencies>
 

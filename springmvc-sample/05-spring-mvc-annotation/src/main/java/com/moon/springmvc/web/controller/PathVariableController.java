@@ -34,7 +34,6 @@ public class PathVariableController {
      *  在@RequestMapping中使用“{xxx}”占位符
      *  @PathVariable注解获取映射占位符的值，
      *  如果方法形参的名称与占位符一致，则可以直接映射值
-     *
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public String update(@PathVariable Integer id, @RequestBody User user) {
