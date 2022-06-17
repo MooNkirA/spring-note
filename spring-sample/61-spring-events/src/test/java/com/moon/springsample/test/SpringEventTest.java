@@ -25,10 +25,6 @@ public class SpringEventTest {
 
     private static final Logger log = LoggerFactory.getLogger(SpringEventTest.class);
 
-    // // 创建基于注解的 spring 容器
-    // private final AnnotationConfigApplicationContext context =
-    //         new AnnotationConfigApplicationContext("com.moon.springsample");
-
     // 注入 Spring 事件发布器
     @Autowired
     private ApplicationEventPublisher publisher;
