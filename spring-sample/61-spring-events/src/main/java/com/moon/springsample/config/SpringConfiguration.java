@@ -67,8 +67,9 @@ public class SpringConfiguration {
         };
     }
 
-    @Bean
+    // 自定义模拟事件发布器实现，需要测试时放开 @Bean 注解
+    // @Bean
     public ApplicationEventMulticaster applicationEventMulticaster(ConfigurableApplicationContext context, ThreadPoolTaskExecutor executor) {
-        return new MyApplicationEventMulticaster(context);
+        return new MyApplicationEventMulticaster(context, executor);
     }
 }
