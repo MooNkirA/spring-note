@@ -1,4 +1,4 @@
-package com.moon.springannotation.test;
+package com.moon.springsample.test;
 
 import com.moon.springsample.config.SpringConfiguration;
 import com.moon.springsample.service.UserService;
