@@ -58,3 +58,6 @@ settings.gradle.projectsLoaded {
 		}
 	}
 }
+// 自定义源码分析测试模块
+include "spring-analysis-note"
+

@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'org.springframework'
+version '5.3.10'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // spring 核心依赖
+    // compile(project(':spring-context')) // 注意：compile 语句已弃用，并已在 Gradle 7.0 中删除。
+    // 后面版本改用 implementation 或 api
+    implementation(project(':spring-context'))
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
