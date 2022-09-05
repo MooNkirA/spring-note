@@ -1,7 +1,10 @@
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
-		maven { url 'https://maven.aliyun.com/repository/public' }
+		// 阿里云仓库 spring-plugin (旧版)
+        // maven { url 'https://maven.aliyun.com/repository/public' }
+        // 阿里云仓库 spring-plugin (新版)
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin' }
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
 }
@@ -12,7 +15,7 @@ plugins {
 }
 
 include "spring-aop"
-include "spring-aspects"
+//include "spring-aspects"
 include "spring-beans"
 include "spring-context"
 include "spring-context-indexer"
@@ -55,3 +58,6 @@ settings.gradle.projectsLoaded {
 		}
 	}
 }
+// 自定义源码分析测试模块
+include "spring-analysis-note"
+

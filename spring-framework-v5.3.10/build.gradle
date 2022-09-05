@@ -289,8 +289,14 @@ configure(allprojects) { project ->
 			cacheChangingModulesFor 0, "seconds"
 		}
 		repositories {
-			maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-			maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+			// 添加 maven 本地仓库
+			mavenLocal()
+			// 阿里云仓库地址(老版)
+			// maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+			// maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+			// 阿里云仓库地址(新版)
+			maven { url 'https://maven.aliyun.com/repository/public' }
+			maven { url 'https://maven.aliyun.com/repository/central'}
 			mavenCentral()
 			maven { url "https://repo.spring.io/libs-spring-framework-build" }
 		}

@@ -1,7 +1,8 @@
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        // 阿里云仓库地址 spring-plugin
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin' }
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 }
