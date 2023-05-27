@@ -10,6 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ContextAnnotationAutowireCandidateResolver;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 /**
@@ -22,17 +26,32 @@ import java.lang.reflect.Field;
  */
 public class SpringValueTest {
     // 1. 创建注解扫描的容器
-    private final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+    private final AnnotationConfigApplicationContext context =
+            new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
     // @Value 基础测试
     @Test
-    public void valueBasicTest() {
+    public void valueBasicTest() throws IOException {
         // 2. 获取配置类对象对象
         SpringConfiguration configuration = context.getBean("springConfiguration", SpringConfiguration.class);
         // 3. 输出使用@Value注入的相关属性值
         System.out.println(configuration.getColor());
         System.out.println(configuration.getName());
         System.out.println(configuration.getNumber());
+        System.out.println(configuration.getFooService());
+        System.out.println(configuration.getVersion());
+
+        // 获取读取文件资源
+        InputStream is = configuration.getResource().getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        while (true){
+            String line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+            System.out.println(line);
+        }
+        reader.close();
     }
 
     // 模拟解析流程 - 测试读取系统变量

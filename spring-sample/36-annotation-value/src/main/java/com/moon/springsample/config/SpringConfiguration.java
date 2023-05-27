@@ -1,9 +1,12 @@
 package com.moon.springsample.config;
 
+import com.moon.springsample.service.FooService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.Resource;
+
 
 /**
  * Spring项目的配置类
@@ -32,6 +35,18 @@ public class SpringConfiguration {
     @Value("${project.name}")
     private String name;
 
+    // 使用 ${key:default_value} 语法读取配置文件，找不到匹配时使用默认值
+    @Value("${project.version:1.0.0}")
+    private String version;
+
+    // 使用Spring的el表达式，自动装配指定名称的 bean 对象
+    @Value("#{fooService}")
+    private FooService fooService;
+
+    // 读取类路径的资源，自动装配在 Resource 对象
+    @Value("classpath:banner.txt")
+    private Resource resource;
+
     public String getColor() {
         return color;
     }
@@ -42,5 +57,17 @@ public class SpringConfiguration {
 
     public String getName() {
         return name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public FooService getFooService() {
+        return fooService;
+    }
+
+    public Resource getResource() {
+        return resource;
     }
 }
